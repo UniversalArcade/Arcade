@@ -17,6 +17,8 @@ int buttonPins[BUTTON_SIZE] = {
   19  // Button Menu
 };
 
+
+// TODO M2 : Build dynamic allocation via serial input
 int buttonFunctions[BUTTON_SIZE] = {
   KEY_E, // Button 5
   KEY_F, // Button 3
@@ -31,6 +33,9 @@ int buttonFunctions[BUTTON_SIZE] = {
   KEY_Y, // Button Menu
 };
 
+
+// Debounce all the pins
+// TODO M3: build a factory for this
 Bounce buttons[BUTTON_SIZE] = {
   Bounce(buttonPins[0], DEBOUNCE_TIME),
   Bounce(buttonPins[1], DEBOUNCE_TIME),
@@ -52,17 +57,18 @@ void setup() {
 
 void loop() {
   int i;
-  for(i=0; i < BUTTON_SIZE; i = i + 1){
-    buttons[i].update();
-    if (buttons[i].fallingEdge()) {
-      Keyboard.press(buttonFunctions[i]);
+  for(i=0; i < BUTTON_SIZE; i = i + 1){       // for all buttons do:
+    buttons[i].update();                      // update state of button
+    if (buttons[i].fallingEdge()) {           // normally input (button pin) is high due to the internal pull up, so a falling edge means that the button is pressed
+      Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode
     }
-    else if (buttons[i].risingEdge()) {
-      Keyboard.release(buttonFunctions[i]);
+    else if (buttons[i].risingEdge()) {       // when button is released
+      Keyboard.release(buttonFunctions[i]);   // release corresponding keycode
     }
   } 
 }
 
+// Pulls up the button pins
 void initPullups(){  
   int i;
   for(i = 0; i < BUTTON_SIZE; i = i + 1){
