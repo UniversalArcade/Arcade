@@ -15,11 +15,16 @@ public class GameController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     
-        int gameID = 0; 
+        int gameID = -1; 
         String responseMsg = "";
-    
+        
         try{
             gameID = Integer.parseInt( request.getParameter( "gameID" ) );
+            
+            //rufe Model auf und starte Game mit ID gameID
+            GameModel gameModel = new GameModel();
+            gameModel.executeGameByID( gameID );
+
             //responseMsg nur zu demozwecken hier, soll eigentlich nach Ausführung des Models die Erfolgsmeldung werfen.
             //Msg soll dann auch eher "success" oder "failure", also 1/0 sein falls Frontend dies benötigt
             responseMsg = "Game " + gameID + " erfolgreich gestartet";
@@ -28,10 +33,6 @@ public class GameController extends HttpServlet {
             responseMsg = "GameID ist keine Zahl";
             //LOGGING
         }
-         
-        //rufe Model auf und starte Game mit ID gameID
-        GameModel gameModel = new GameModel();
-        gameModel.executeGameByID( gameID );
         
         // Antwort an Aufrufer
         response.setContentType("text/plain");  

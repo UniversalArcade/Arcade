@@ -1,11 +1,19 @@
 package app.model;
 
-import GameProcessor.Taskmanager; 
+import GameProcessor.Taskmanager;
+import helper.SQLHelper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameModel {
   
-    public GameModel(){
+    private static final Logger log = Logger.getLogger( GameModel.class.getName() );
     
+    SQLHelper sql;
+    public GameModel(){
+        sql = new SQLHelper();
     }
     
     public void getGameInfoByID(int id){
@@ -20,15 +28,28 @@ public class GameModel {
     
     public void executeGameByID(int id){
         
-        // MYSQL Abfrage Pfad vom Spiel
-        String path = "C:/Program Files (x86)/To the Moon/To the Moon.exe";
-        // Zeit nehmen starten
-        Taskmanager task = new Taskmanager();
-        task.executeGame( path );
+        //get path of game with id 'id' 
+        sql.openCon();
+            ResultSet rs = sql.execQuery( "SELECT CONCAT(SpieleRoot, ExecutePath) AS ExecutePath FROM generell, games WHERE games.id = "+ id );
+            String path = "";
+            try {
+                rs.next();
+                path = rs.getString( "ExecutePath" );
+                log.info("found path: " + path);
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "no valid resultset", ex);
+            }
+        sql.closeCon(); 
         
-        // Zeit nehmen beenden
-        // bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
-        //  return false loggen
-    }
-    
+        
+        
+        if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
+            // TODO Zeit nehmen starten
+            Taskmanager task = new Taskmanager();
+            task.executeGame( path );
+            // TODO Zeit nehmen beenden
+            // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
+            // TODO return false loggen
+        }    
+    }   
 }

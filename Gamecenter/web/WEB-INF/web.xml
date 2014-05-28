@@ -4,9 +4,17 @@
         <servlet-name>GameController</servlet-name>
         <servlet-class>app.controller.GameController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegistrationController</servlet-name>
+        <servlet-class>admin.controller.RegistrationController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistrationController</servlet-name>
+        <url-pattern>/RegistrationController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
