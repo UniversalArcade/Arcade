@@ -30,7 +30,7 @@ int buttonFunctions[BUTTON_SIZE] = {
   KEY_SPACE, // Button 0
   KEY_L, // Button 2
   KEY_O, // Button 4
-  KEY_Y, // Button Menu
+  KEY_ENTER, // Button Menu
 };
 
 
