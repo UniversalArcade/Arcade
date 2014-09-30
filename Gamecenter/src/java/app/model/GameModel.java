@@ -29,6 +29,8 @@ public class GameModel {
     public void executeGameByID(int id){
         
         //get path of game with id 'id' 
+        
+        
         sql.openCon();
             ResultSet rs = sql.execQuery( "SELECT CONCAT(SpieleRoot, ExecutePath) AS ExecutePath FROM generell, games WHERE games.id = "+ id );
             String path = "";
@@ -41,6 +43,15 @@ public class GameModel {
             }
         sql.closeCon(); 
         
+        /*
+        String path = "";
+        
+        if(id == 1){
+            path = "C:/Users/Public/Arcade/Mame/startLinkForDefender.bat";
+        }
+        else if(id == 2){
+            path = "C:/Users/Public/Arcade/Mame/startLinkForDigDug.bat";
+        }*/
         
         
         if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <context-param>
+        <param-name>SQL_URL</param-name>
+        <param-value>jdbc:mysql://localhost/arcade</param-value>
+    </context-param>
+    <context-param>
+        <param-name>SQL_User</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>SQL_Password</param-name>
+        <param-value/>
+    </context-param>
     <servlet>
         <servlet-name>GameController</servlet-name>
         <servlet-class>app.controller.GameController</servlet-class>
@@ -8,17 +20,31 @@
         <servlet-name>RegistrationController</servlet-name>
         <servlet-class>admin.controller.RegistrationController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>admin.controller.LoginController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GameManager</servlet-name>
+        <servlet-class>admin.controller.GameManager</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RegistrationController</servlet-name>
-        <url-pattern>/RegistrationController</url-pattern>
+        <url-pattern>/admin/RegistrationController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/admin/LoginController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameManager</servlet-name>
+        <url-pattern>/admin/GameManager</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
 </web-app>

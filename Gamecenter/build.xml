@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="JSPServer" default="default" basedir=".">
-    <description>Builds, tests, and runs the project JSPServer.</description>
+<project name="Gamecenter" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Gamecenter.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
