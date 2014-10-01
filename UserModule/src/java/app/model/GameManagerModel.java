@@ -1,28 +1,54 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 package app.model;
-import helper.SQLHelper;
+import app.helper.SQLHelper;
+import app.helper.FileUpload;
+import app.helper.UnZip;
+import app.beans.FileStatus;
+
 import app.beans.Game;
-/**
- *
- * @author KM
- */
+import javax.servlet.http.HttpServletRequest;
+
+
 public class GameManagerModel {
     SQLHelper sql;
     public GameManagerModel(){
         sql = new SQLHelper();
     }
     
-    public void insertNewGame(Game g, int userID){
-        //int userID = 1;
+    
+    public void uploadGame(HttpServletRequest req){
+        //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "c:\\FileUploadTest\\", "c:\\temp");
+        FileStatus file = upload.uploadFile(req);
+        UnZip unZip = new UnZip();
+        unZip.unZipIt(file.getFullPath(), file.getFilePath());
+    }
+    
+    public void uploadPicture(HttpServletRequest req){
+        //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "c:\\FileUploadTest\\", "c:\\temp");
+        FileStatus file = upload.uploadFile(req);
+        
+    }
+    
+    
+    public int insertNewGame(int userID){
+        
+        
+        sql.openCon();
+            sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
+          int gameID = sql.getLastID();
+            
+        sql.closeCon();
+        
+        return gameID;
+    }
+    
+    public void updateDetails(){
+        /*
         sql.openCon();
             sql.execNonQuery("INSERT INTO `games` (userID,title,description,credits) VALUES ('"+userID+"', '"+g.getTitle()+"', '"+g.getDescription()+"', '"+g.getCredits()+"')");
-        sql.closeCon();
+        sql.closeCon(); */
     }
     
     public void updateGame(){

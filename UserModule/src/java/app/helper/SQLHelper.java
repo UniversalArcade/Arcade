@@ -1,6 +1,6 @@
 // Stellt app.model und admin.model SQL-Funktionen zur Verfügung
 
-package helper;
+package app.helper;
 
 import java.sql.DriverManager;
 import java.sql.Connection;

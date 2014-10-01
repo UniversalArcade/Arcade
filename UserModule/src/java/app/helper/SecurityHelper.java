@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Helper;
+package app.helper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

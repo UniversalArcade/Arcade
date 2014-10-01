@@ -9,13 +9,37 @@ import java.util.HashMap;
 
 public class Game implements Serializable {
     
+    private int gameID, newGameStep;
+
+   
     private String title, credits, description;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
     public Game() {
+        newGameStep = 1;
         error = new HashMap();
-        System.out.println("GAME CONSTRUCTOR");
+    }
+    
+     public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        if(gameID > 0){
+            this.gameID = gameID;
+        }
+        else{
+            error.put("gameID", "Fehler beim erstellen des Spiels");
+        }
+    }
+    
+    public int getNewGameStep() {
+        return newGameStep;
+    }
+
+    public void setNewGameStep(int newGameStep) {
+        this.newGameStep = newGameStep;
     }
     
     public String getTitle() {

@@ -4,7 +4,7 @@ package app.model;
 
 
 import app.beans.Costumer;
-import helper.SQLHelper;
+import app.helper.SQLHelper;
 import java.security.MessageDigest;
 
 public class RegistrationModel {

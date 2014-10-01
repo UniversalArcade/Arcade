@@ -3,7 +3,7 @@
 package app.model;
 
 import app.beans.Costumer;
-import helper.SQLHelper;
+import app.helper.SQLHelper;
 import java.sql.ResultSet;
 
 public class LoginModel {

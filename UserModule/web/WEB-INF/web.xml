@@ -25,8 +25,8 @@
         <servlet-class>app.controller.LoginController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GameManager</servlet-name>
-        <servlet-class>app.controller.GameManager</servlet-class>
+        <servlet-name>GameManagerController</servlet-name>
+        <servlet-class>app.controller.GameManagerController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
@@ -41,8 +41,8 @@
         <url-pattern>/LoginController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GameManager</servlet-name>
-        <url-pattern>/GameManager</url-pattern>
+        <servlet-name>GameManagerController</servlet-name>
+        <url-pattern>/GameManagerController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
