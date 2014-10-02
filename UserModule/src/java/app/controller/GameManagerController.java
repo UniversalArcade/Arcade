@@ -6,13 +6,9 @@ package app.controller;
 
 import app.beans.Game;
 import java.io.*;
-import java.util.HashMap;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
-import app.model.GameUploadModel;
-//import Helper.SecurityHelper;
-
 
 public class GameManagerController extends HttpServlet
 {
@@ -27,6 +23,8 @@ public class GameManagerController extends HttpServlet
                 
                 int userID = (int)req.getSession().getAttribute("userID");
                 Game newGame = (Game)req.getSession().getAttribute("game");
+                newGame.deleteErrors();
+                
                 view = req.getRequestDispatcher("newGame.jsp");
                 String contentType;
                 
@@ -75,21 +73,12 @@ public class GameManagerController extends HttpServlet
 
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(newGame.getErrors().isEmpty()){
-
                             GameManagerModel model = new GameManagerModel();
-                            
-                            //model.insertNewGame(newGame,userID);
-                            
-                            newGame.setNewGameStep(3);
-                            
-                            //view = req.getRequestDispatcher("exePath.jsp");  
+                            if( model.updateDetails(newGame) ){
+                                newGame.setNewGameStep(4);
+                            }
                         }
-                        // ansonsten rücksprung zum Formular mit Fehlermeldung
-                        else{
-                            System.out.println("FEHLER");
-                            //view = req.getRequestDispatcher("newGame.jsp");
-                            //req.setAttribute("game", game);
-                        }
+                        
                     break;
                     case 4:
                     

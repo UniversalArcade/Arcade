@@ -68,13 +68,6 @@
                         <c:out value="${game.errors['credits']}"/>
                    </td>
                </tr>
-                <tr>
-                   <td width="15%">Cover</td>
-                   <td width="85%"><input type="file"  name="cover" />
-
-                   </td>
-
-               </tr>
                <tr>
                    <td colspan="2"><input type="submit" name="send" value="weiter" />
                </tr>

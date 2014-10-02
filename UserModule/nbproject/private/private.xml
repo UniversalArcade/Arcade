@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/beans/ButtonLayout.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/model/GameManagerModel.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/beans/Game.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/web/newGame.jsp</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/helper/FileUpload.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/model/GameUploadModel.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/controller/GameManagerController.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/helper/SQLHelper.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -87,4 +87,8 @@ public class Game implements Serializable {
     public HashMap getErrors(){
         return error;
     }
+    
+    public void deleteErrors(){
+        error.clear();
+    }
 }

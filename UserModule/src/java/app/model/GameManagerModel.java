@@ -1,11 +1,12 @@
 
 package app.model;
+
 import app.helper.SQLHelper;
 import app.helper.FileUpload;
 import app.helper.UnZip;
 import app.beans.FileStatus;
-
 import app.beans.Game;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -37,18 +38,21 @@ public class GameManagerModel {
         
         sql.openCon();
             sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
-          int gameID = sql.getLastID();
-            
+            int gameID = sql.getLastID();
         sql.closeCon();
         
         return gameID;
     }
     
-    public void updateDetails(){
-        /*
+    public boolean updateDetails(Game g){
+        
         sql.openCon();
-            sql.execNonQuery("INSERT INTO `games` (userID,title,description,credits) VALUES ('"+userID+"', '"+g.getTitle()+"', '"+g.getDescription()+"', '"+g.getCredits()+"')");
-        sql.closeCon(); */
+          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
+        
+        return success;
+        
+        
     }
     
     public void updateGame(){
