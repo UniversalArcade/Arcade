@@ -59,7 +59,7 @@ public class GameManagerController extends HttpServlet
                             contentType = req.getContentType();
                             if ((contentType.indexOf("multipart/form-data") >= 0)) {
                                  GameManagerModel model = new GameManagerModel();
-                                 model.uploadPicture(req);
+                                 model.uploadImage(req, newGame);
                                  newGame.setNewGameStep(3);
                             }else{
                                 // Fehler beim hochladen
