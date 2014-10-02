@@ -5,7 +5,7 @@
 
 
 <p>
-    TODO : Übersicht Games
+    TODO : Übersicht Games, wenn User noch kein Game angelegt hat, redirect zu newGame.jsp
 </p>
 
 <form method="POST" action="newGame.jsp">

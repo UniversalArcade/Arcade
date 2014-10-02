@@ -176,6 +176,8 @@
      </c:when>    
      <c:when test="${game.newGameStep == 5}">
          
+         ${game.reset()}
+
          Sie haben das Spiel erfolgreich in die Datenbank eingetragen
      
      </c:when>    

@@ -21,6 +21,17 @@ public class Game implements Serializable {
         error = new HashMap();
     }
     
+    public void reset(){
+        this.gameID = -1;
+        this.newGameStep = 1;
+        this.title = "";
+        this.credits = "";
+        this.description = "";
+        this.error.clear();
+        
+    }
+    
+    
      public int getGameID() {
         return gameID;
     }

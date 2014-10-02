@@ -28,7 +28,6 @@ public class GameManagerController extends HttpServlet
                 view = req.getRequestDispatcher("newGame.jsp");
                 String contentType;
                 
-                
                 switch (newGame.getNewGameStep()) {
                     // Game Upload
                     case 1:  
@@ -89,24 +88,31 @@ public class GameManagerController extends HttpServlet
                        int buttonAmount = 10; 
                       
                        String buttons = "";
-        
+                       boolean valid = true;
+                       
                        for(int i = 1; i <= buttonAmount; i++){
+                           String button = req.getParameter("button" + i);
+                           if (button.isEmpty()){
+                               valid = false;
+                               break;
+                           }
+                           
+                           
                            buttons += req.getParameter("button" + i);
                            if(i < buttonAmount){
                                buttons += ";"; 
                            }
                        }
-                        
-                       //String button1 = req.getParameter("button1");
                        
-                       GameManagerModel model = new GameManagerModel();
-                       
-                       if (model.updateButtonLayout(buttons, newGame) ){
-                           newGame.setNewGameStep(5);
+                       if(valid){
+                            GameManagerModel model = new GameManagerModel();
+
+                            if (model.updateButtonLayout(buttons, newGame) ){
+                                //newGame = null;
+                                newGame.setNewGameStep(5);
+                            }
                        }
-                        
-                        
-                        
+                          
                     break;
                         
                         
