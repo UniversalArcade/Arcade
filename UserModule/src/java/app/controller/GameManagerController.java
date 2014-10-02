@@ -86,13 +86,8 @@ public class GameManagerController extends HttpServlet
                     // Button Config    
                     case 4:
                        
-                       int buttonAmount = 2; 
-                       /*String[] buttons = new String[buttonAmount];
-                       
-                       for(int i = 0; i < buttonAmount; i++){
-                           buttons[i] = req.getParameter("button" + i);
-                       }
-                       */
+                       int buttonAmount = 10; 
+                      
                        String buttons = "";
         
                        for(int i = 1; i <= buttonAmount; i++){

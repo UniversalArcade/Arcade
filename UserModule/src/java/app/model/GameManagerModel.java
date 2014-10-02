@@ -54,6 +54,8 @@ public class GameManagerModel {
     
     public boolean updateButtonLayout(String buttons, Game g){
         
+       
+        
         sql.openCon();
           boolean success = sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttons+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
