@@ -17,8 +17,8 @@ public class GameManagerController extends HttpServlet
        throws ServletException, IOException
        {
     	  try{
-              
-                res.setContentType("text/html");
+
+              res.setContentType("text/html");
                 RequestDispatcher view;
                 
                 int userID = (int)req.getSession().getAttribute("userID");
@@ -30,6 +30,7 @@ public class GameManagerController extends HttpServlet
                 
                 
                 switch (newGame.getNewGameStep()) {
+                    // Game Upload
                     case 1:  
                             
                         
@@ -53,6 +54,7 @@ public class GameManagerController extends HttpServlet
                                 // Fehler beim hochladen
                             }  
                     break;
+                    // Bild upload    
                     case 2:  
                             System.out.println("step = 0");
                             contentType = req.getContentType();
@@ -65,6 +67,7 @@ public class GameManagerController extends HttpServlet
                             } 
                         
                     break;
+                    // Description
                     case 3:
                         //Game game = new Game();
                         newGame.setTitle(req.getParameter("title"));
@@ -80,12 +83,39 @@ public class GameManagerController extends HttpServlet
                         }
                         
                     break;
+                    // Button Config    
                     case 4:
-                    
+                       
+                       int buttonAmount = 2; 
+                       /*String[] buttons = new String[buttonAmount];
+                       
+                       for(int i = 0; i < buttonAmount; i++){
+                           buttons[i] = req.getParameter("button" + i);
+                       }
+                       */
+                       String buttons = "";
+        
+                       for(int i = 1; i <= buttonAmount; i++){
+                           buttons += req.getParameter("button" + i);
+                           if(i < buttonAmount){
+                               buttons += ";"; 
+                           }
+                       }
+                        
+                       //String button1 = req.getParameter("button1");
+                       
+                       GameManagerModel model = new GameManagerModel();
+                       
+                       if (model.updateButtonLayout(buttons, newGame) ){
+                           newGame.setNewGameStep(5);
+                       }
+                        
+                        
+                        
                     break;
                         
                         
-                    default: ;
+                    default: 
                     break;
                 }
                 

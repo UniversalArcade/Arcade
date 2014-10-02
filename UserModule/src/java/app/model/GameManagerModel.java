@@ -45,15 +45,23 @@ public class GameManagerModel {
     }
     
     public boolean updateDetails(Game g){
-        
         sql.openCon();
           boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
         
         return success;
+    }
+    
+    public boolean updateButtonLayout(String buttons, Game g){
         
+        sql.openCon();
+          boolean success = sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttons+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
+        
+        return success;
         
     }
+    
     
     public void updateGame(){
     

@@ -77,6 +77,9 @@
      
      </c:when>
      <c:when test="${game.newGameStep == 4}">
+         
+         <jsp:useBean id="buttons" class="app.beans.ButtonLayout" scope="page"/>
+         
          <p>
                 Schritt 4 : Buttonlayout erstellen
          </p>
@@ -86,27 +89,52 @@
             <table width="100%" border="0" cellspacing="1" cellpadding="3">
 
                 <tr>
-                   <td width="15%">ButtonLayout</td>
+                   <td width="15%">Button 1</td>
                    <td width="85%"> 
-                       <select name="button0" size="1">                
-                               <option value="A">A</option>
-                               <option value="B">B</option>
-                               <option value="C">C</option>
-                       </select>
-                       <select name="button1" size="1">                
-                               <option value="A">A</option>
-                               <option value="B">B</option>
-                               <option value="C">C</option>
-                       </select>
+                        <select name="button1" size="1">                
+                            <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
+                                <option value="unused"> Unbenutzt </option>
+                                <optgroup label="${device}">
+                                    <c:forEach var="item" items="${buttons.buttons[device]}" varStatus="bb">
+                                        <option value="${item}"> 
+                                            <c:out value="${item}" /> 
+                                        </option>
+                                    </c:forEach>
+                                </optgroup>
+                            </c:forEach>
+                        </select>
                    </td>
                  </tr>
+                 
+                 <tr>
+                   <td width="15%">Button 2</td>
+                   <td width="85%"> 
+                        <select name="button2" size="1">                
+                            <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
+                                <option value="unused"> Unbenutzt </option>
+                                <optgroup label="${device}">
+                                    <c:forEach var="item" items="${buttons.buttons[device]}" varStatus="bb">
+                                        <option value="${item}"> 
+                                            <c:out value="${item}" /> 
+                                        </option>
+                                    </c:forEach>
+                                </optgroup>
+                            </c:forEach>
+                        </select>
+                   </td>
+                 </tr>
+                 
                <tr>
                    <td colspan="2"><input type="submit" name="send" value="Fertig" />
                </tr>
             </table>
         </form>
      </c:when>    
+     <c:when test="${game.newGameStep == 5}">
          
+         Sie haben das Spiel erfolgreich in die Datenbank eingetragen
+     
+     </c:when>    
        <c:otherwise>
            Fehler
        </c:otherwise>
