@@ -22,12 +22,12 @@
                     
                             <li>
                                 <p>
-                                    <a class="navilink" href="index.jsp">Login</a>
+                                    <a href="index.jsp">Login</a>
                                 </p>
                             </li>
                             <li>
                                 <p>
-                                    <a class="navilink" href="register.jsp">Registrieren</a>
+                                    <a href="register.jsp">Registrieren</a>
                                 </p>
                             </li>
                     
@@ -38,12 +38,12 @@
                     
                             <li>
                                 <p>
-                                    <a class="navilink" href="games.jsp">Spiele Verwalten</a>
+                                    <a href="games.jsp">Spiele Verwalten</a>
                                 </p>
                             </li>
                             <li>
                                 <p>
-                                    <a class="navilink" href="profil.jsp">Profil</a>
+                                    <a href="profil.jsp">Profil</a>
                                 </p>
                             </li>
                             
@@ -51,7 +51,7 @@
 
                                     <li>
                                         <p>
-                                            <a class="navilink" href="admin.jsp">User Verwalten</a>
+                                            <a href="admin.jsp">User Verwalten</a>
                                         </p>
                                     </li>
 
@@ -59,7 +59,7 @@
                             
                              <li>
                                 <p>
-                                    <a class="navilink" href="LoginController?action=logout">Logout</a>
+                                    <a href="LoginController?action=logout">Logout</a>
                                 </p>
                             </li>
                             
