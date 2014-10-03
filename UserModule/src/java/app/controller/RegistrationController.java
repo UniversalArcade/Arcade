@@ -6,7 +6,6 @@ import app.model.RegistrationModel;
 
 import app.beans.Costumer;
 import java.io.*;
-import java.util.HashMap;
 import javax.servlet.*;
 import javax.servlet.http.*;
 //import Helper.SecurityHelper;
@@ -22,7 +21,8 @@ public class RegistrationController extends HttpServlet
               
                 //SecurityHelper sec = new SecurityHelper();
                 //System.out.println(sec.getSHAHash("abc"));
-                
+                boolean error = false;
+              
                 MessageDigest md = MessageDigest.getInstance( "SHA" );
                 byte[] digest = md.digest( "ABCDEFGHIJKLMNO".getBytes() );
                 String msg = "";
@@ -41,19 +41,20 @@ public class RegistrationController extends HttpServlet
                 cust.setPassword(req.getParameter("password"));
                 cust.setPasswordWDH(req.getParameter("passwordWDH"));
         
-                // Wenn keine fehlerhaften Eingaben vorhanden, Bestellung abschicken
-                if(cust.getErrors().isEmpty()){
-                    //Basket b = (Basket)req.getSession().getAttribute("basket");
+                
+                if( cust.getErrors().isEmpty() ){
                     RegistrationModel register = new RegistrationModel();
-                    register.newRegistration(cust);
-                    req.setAttribute("success", 1);
-                    view = req.getRequestDispatcher("registrationSuccess.jsp");  
+                    cust = register.newRegistration(cust) ;
+                    
+                    if ( cust.getErrors().isEmpty() ){
+                        cust.setRegistrationComplete();
+                    }
+                    
                 }
-                // ansonsten rücksprung zum Formular mit Fehlermeldung
-                else{
-                    view = req.getRequestDispatcher("register.jsp");
-                    req.setAttribute("customer", cust);
-                }
+                
+                view = req.getRequestDispatcher("register.jsp");
+                req.setAttribute("customer", cust);
+                
                 view.forward(req, res);
                       
           }

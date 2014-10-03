@@ -16,16 +16,13 @@ public class LoginModel {
     }
     
     public User login(Costumer c) throws Exception{
-       
-        int id = 0;
-        int userLvl = 0;
         
         User user = new User();
         
         sql.openCon();
             
-           
-            ResultSet rs = sql.execQuery("SELECT id, userlvl FROM user WHERE mail = "+ c.getMail() +" AND password = "+ c.getPassword());
+            ResultSet rs = sql.execQuery("SELECT id, userlvl FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
+        
             if(rs.next()){
                 user.setUserID( rs.getInt("id") );
                 user.setUserLvl( rs.getInt("userlvl") );
@@ -35,6 +32,4 @@ public class LoginModel {
         
         return user;
     }
-    
-    public void logout(){}
 }

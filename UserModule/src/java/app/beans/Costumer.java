@@ -12,9 +12,13 @@ public class Costumer implements Serializable {
     private String mail, password, passwordWDH;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
+    private boolean registrationComplete;
+
+   
     
     public Costumer() {
-        error = new HashMap();
+        this.registrationComplete = false;
+        this.error = new HashMap();
     }
     
     public String getMail() {
@@ -65,8 +69,22 @@ public class Costumer implements Serializable {
         }
     }
     
+    public boolean isRegistrationComplete() {
+        return registrationComplete;
+    }
 
+    public void setRegistrationComplete() {
+        this.registrationComplete = true;
+    }
+    
+   
+    public void addError(String key, String value){
+        error.put(key,value);
+    }
+    
     public HashMap getErrors(){
         return error;
     }
+    
+    
 }

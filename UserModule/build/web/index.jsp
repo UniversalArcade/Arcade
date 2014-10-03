@@ -4,7 +4,7 @@
 <%@include file="header.jsp"%>
 
 
-<jsp:useBean id="customer" class="app.beans.Costumer" scope="request"/>
+<jsp:useBean id="customer" class="app.beans.Costumer" scope="request" />
 
 <p>
     Login
@@ -33,6 +33,5 @@
         </tr>
      </table>
   </form>
-
 
 <%@include file="footer.jsp"%>

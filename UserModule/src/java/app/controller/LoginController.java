@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet
                 }
                 // ansonsten rücksprung zum Formular mit Fehlermeldung
                 else{
-                    view = req.getRequestDispatcher("register.jsp");
+                    view = req.getRequestDispatcher("login.jsp");
                     req.setAttribute("customer", cust);
                 }
                 view.forward(req, res);
