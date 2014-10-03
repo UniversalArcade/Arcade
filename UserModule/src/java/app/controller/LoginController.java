@@ -3,8 +3,9 @@
 package app.controller;
 
 import app.model.LoginModel;
-
 import app.beans.Costumer;
+import app.beans.User;
+
 import java.io.*;
 import java.util.HashMap;
 import javax.servlet.*;
@@ -33,12 +34,15 @@ public class LoginController extends HttpServlet
                     System.out.println("EMPTY");
                     //Basket b = (Basket)req.getSession().getAttribute("basket");
                     LoginModel login = new LoginModel();
-                    int id = login.login(cust);
+                    User user = login.login(cust);
+                    System.out.println("USERID: " + user.getUserID());
                     
-                    if(id > 0){
+                    
+                    if(user.getUserID() > 0){
                         System.out.println("ID > 0");
                         //Basket b = (Basket)req.getSession().getAttribute("basket");
-                        req.getSession().setAttribute("userID", id);
+                        req.getSession().setAttribute("user", user);
+                        //req.getSession().setAttribute("userLvl", id);
                         //req.getSession().setAttribute("userLvl", id);
                     }
                     
@@ -56,8 +60,21 @@ public class LoginController extends HttpServlet
     }
     
      @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
- 
+         try{
+                res.setContentType("text/html");
+                RequestDispatcher view;
+             
+                User user = (User)req.getSession().getAttribute("user");
+                user.reset();
+                
+                view = req.getRequestDispatcher("index.jsp");  
+                view.forward(req, res);
+                      
+          }
+          catch(Exception e){}
+            
+        
     }
 }

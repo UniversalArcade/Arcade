@@ -3,8 +3,9 @@
 package app.controller;
 
 
-
+import app.beans.User;
 import app.beans.Game;
+
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +22,7 @@ public class GameManagerController extends HttpServlet
               res.setContentType("text/html");
                 RequestDispatcher view;
                 
-                int userID = (int)req.getSession().getAttribute("userID");
+                User user = (User)req.getSession().getAttribute("user");
                 Game newGame = (Game)req.getSession().getAttribute("game");
                 newGame.deleteErrors();
                 
@@ -37,7 +38,7 @@ public class GameManagerController extends HttpServlet
                             contentType = req.getContentType();
                             if ((contentType.indexOf("multipart/form-data") >= 0)) {
                                  GameManagerModel model = new GameManagerModel();
-                                 int gameID = model.insertNewGame(userID);
+                                 int gameID = model.insertNewGame(user.getUserID());
                                  newGame.setGameID(gameID);   
                                  
                                  if(newGame.getErrors().isEmpty()){
@@ -55,7 +56,6 @@ public class GameManagerController extends HttpServlet
                     break;
                     // Bild upload    
                     case 2:  
-                            System.out.println("step = 0");
                             contentType = req.getContentType();
                             if ((contentType.indexOf("multipart/form-data") >= 0)) {
                                  GameManagerModel model = new GameManagerModel();

@@ -3,6 +3,8 @@
 package app.model;
 
 import app.beans.Costumer;
+import app.beans.User;
+
 import app.helper.SQLHelper;
 import java.sql.ResultSet;
 
@@ -13,21 +15,25 @@ public class LoginModel {
         sql = new SQLHelper();
     }
     
-    public int login(Costumer c) throws Exception{
+    public User login(Costumer c) throws Exception{
        
         int id = 0;
+        int userLvl = 0;
+        
+        User user = new User();
         
         sql.openCon();
             
            
-            ResultSet rs = sql.execQuery("SELECT id FROM user WHERE mail = "+ c.getMail() +" AND password = "+ c.getPassword());
+            ResultSet rs = sql.execQuery("SELECT id, userlvl FROM user WHERE mail = "+ c.getMail() +" AND password = "+ c.getPassword());
             if(rs.next()){
-                id = rs.getInt("id");
+                user.setUserID( rs.getInt("id") );
+                user.setUserLvl( rs.getInt("userlvl") );
             }
            
         sql.closeCon();
         
-        return id;
+        return user;
     }
     
     public void logout(){}

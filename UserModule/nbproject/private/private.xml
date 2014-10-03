@@ -6,11 +6,11 @@
             <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/beans/ButtonLayout.java</file>
             <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/model/GameManagerModel.java</file>
             <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/beans/Game.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/web/loginSuccess.jsp</file>
             <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/web/newGame.jsp</file>
-            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/helper/FileUpload.java</file>
-            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/model/GameUploadModel.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/web/games.jsp</file>
             <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/controller/GameManagerController.java</file>
-            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/src/java/app/helper/SQLHelper.java</file>
+            <file>file:/C:/Users/Martin/Documents/Projects/Arcade/UserModule/web/registrationSuccess.jsp</file>
         </group>
     </open-files>
 </project-private>

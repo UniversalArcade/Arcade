@@ -12,5 +12,72 @@
     <body>
         <div class="holder">
             <div class="top"></div>
-            <div class="navi"><%@include file="navi.jsp"%></div>
+            <div class="navi">
+                
+                <jsp:useBean id="user" class="app.beans.User" scope="session"/>
+                
+                <ul>
+                     
+                    <c:if test="${user.userLvl == 0}">
+                    
+                            <li>
+                                <p>
+                                    <a class="navilink" href="index.jsp">Login</a>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <a class="navilink" href="register.jsp">Registrieren</a>
+                                </p>
+                            </li>
+                    
+                    </c:if>
+               
+                            
+                <c:if test="${user.userLvl > 0}">
+                    
+                            <li>
+                                <p>
+                                    <a class="navilink" href="games.jsp">Spiele Verwalten</a>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <a class="navilink" href="profil.jsp">Profil</a>
+                                </p>
+                            </li>
+                            
+                                <c:if test="${user.userLvl >= 200}">
+
+                                    <li>
+                                        <p>
+                                            <a class="navilink" href="admin.jsp">User Verwalten</a>
+                                        </p>
+                                    </li>
+
+                                </c:if>
+                            
+                             <li>
+                                <p>
+                                    <a class="navilink" href="LoginController?action=logout">Logout</a>
+                                </p>
+                            </li>
+                            
+                </c:if>             
+                            
+                
+                            
+                            
+                            
+                <c:if test="${user.userLvl > 0}">
+                    
+                           
+                            
+                </c:if>            
+                            
+                            
+                </ul>          
+
+   
+            </div>
             <div class="pad">
