@@ -1,17 +1,35 @@
-<%-- 
-    Document   : exePath.jsp
-    Created on : 29.09.2014, 13:01:48
-    Author     : KM
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        
+        <script src="Scripts/d3.js" charset="utf-8"></script>
+        <script src="Scripts/exeChooser.js"></script>
+        
+        <style>            
+            .axis text {
+                font: 10px sans-serif;
+            }
+
+            .axis path,
+            .axis line {
+              fill: none;
+              stroke: #000;
+              shape-rendering: crispEdges;
+            }
+            
+            .x path {
+                 display: none;
+            }
+        </style>
+        
     </head>
-    <body>
-        <h1>Hello World!</h1>
+    <body onload="init()">
+        
+        <form action="bla.jsp">
+            <input type="hidden" name="exePath" class="exePath" value=""> 
+        </form>
     </body>
 </html>

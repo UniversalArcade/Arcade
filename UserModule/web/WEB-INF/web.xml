@@ -28,6 +28,10 @@
         <servlet-name>GameManagerController</servlet-name>
         <servlet-class>app.controller.GameManagerController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ExeChooserController</servlet-name>
+        <servlet-class>app.controller.ExeChooserController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
@@ -43,6 +47,10 @@
     <servlet-mapping>
         <servlet-name>GameManagerController</servlet-name>
         <url-pattern>/GameManagerController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExeChooserController</servlet-name>
+        <url-pattern>/ExeChooserController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
