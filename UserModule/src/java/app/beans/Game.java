@@ -6,6 +6,7 @@ package app.beans;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import org.json.simple.JSONArray;
 
 public class Game implements Serializable {
     
@@ -13,6 +14,13 @@ public class Game implements Serializable {
 
    
     private String title, credits, description;
+    private JSONArray filePathJSON;
+
+    
+
+    
+
+    
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
@@ -31,6 +39,13 @@ public class Game implements Serializable {
         
     }
     
+    public JSONArray getFilePathJSON() {
+        return filePathJSON;
+    }
+
+    public void setFilePathJSON(JSONArray filePathJSON) {
+        this.filePathJSON = filePathJSON;
+    }
     
      public int getGameID() {
         return gameID;

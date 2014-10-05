@@ -1,12 +1,16 @@
-function init(){
+function init(fileArray){
    //bla = [{dir1:[{dir2:["fuenf.txt"]},"drei.txt","vier.txt"]},"eins.txt","zwei.txt"];
    //bla = [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
-   bla = [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[{"type":"file","name":"blubb.bmp"}]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
+   //bla = [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[{"type":"file","name":"blubb.bmp"}]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
+   //bla =  [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[{"type":"file","name":"blubb.bmp"}]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
+    bla = fileArray;
+
+   console.log(bla); 
 
    stack = new Array();
    
    
-   bread = d3.select("body")
+   bread = d3.select(".fileChooser")
            .append("div")
            .attr("class","fileChooserBreadCrumb")
            .append("p");
@@ -17,21 +21,29 @@ function init(){
            .attr("class","bcBase")
            .on("click",onBreadCrumbBase);
    
-   div = d3.select("body").append("div").attr("class","fileChooser");
+   div = d3.select(".fileChooser")
+           .append("div")
+           .attr("class","fileChooserExplorer");
     
    construct(bla);  
 }
 
 function updateFormField(){
     var concatPath = "";
+    
     if(stack[stack.length -1].type == "file"){
-        stack.forEach(function(x){concatPath = concatPath + "/" + x.name});
+        stack.forEach(function(x){concatPath = concatPath + "/" + x.name});    
+        d3.select(".exePathSubmit").attr("disabled",null);
+    }
+    else{
+        d3.select(".exePathSubmit").attr("disabled","");
     }
 
-    console.log(concatPath);
+    d3.select(".exePath")
+          .attr("value",concatPath);
     
-    p = d3.select(".exePath")
-            .attr("value",concatPath);    
+    
+    console.log(concatPath);
 }
 
 

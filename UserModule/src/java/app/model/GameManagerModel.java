@@ -9,11 +9,14 @@ import app.helper.UnZip;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import org.imgscalr.Scalr;
+import org.json.simple.JSONArray;
 
 
 public class GameManagerModel {
@@ -56,8 +59,6 @@ public class GameManagerModel {
     
     
     public int insertNewGame(int userID){
-        
-        
         sql.openCon();
             sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
             int gameID = sql.getLastID();
@@ -75,15 +76,54 @@ public class GameManagerModel {
     }
     
     public boolean updateButtonLayout(String buttons, Game g){
-        
-       
-        
         sql.openCon();
           boolean success = sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttons+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
         
         return success;
+    }
+    
+    public boolean updateExePath(String path, Game g){
+        sql.openCon();
+          boolean success = sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
         
+        return success;
+    }
+    
+    public Game getFileStructureAsJSON(Game g){
+        
+        JSONArray jsonarr = listfJSON("C:\\FileUploadTest\\list");
+        g.setFilePathJSON(jsonarr);
+        return g;
+    }
+    
+    
+    public JSONArray listfJSON(String directoryName) {
+        JSONArray files = new JSONArray();
+        File directory = new File(directoryName);
+
+        // get all the files from a directory
+        File[] fList = directory.listFiles();
+        for (File file : fList) {
+            if (file.isFile()) {
+                Map f = new LinkedHashMap();
+                f.put("type", "file");
+                f.put("name", file.getName());
+                files.add(f);
+            } 
+            
+            else if (file.isDirectory()) {
+                Map folder = new LinkedHashMap();
+                folder.put("type", "folder");
+                folder.put("name", file.getName());
+                folder.put("child", listfJSON(file.getAbsolutePath()));
+                //folder.put(file.getName(), listfJSON(file.getAbsolutePath()));
+                files.add(folder);
+            }
+        }
+        
+        return files;
     }
     
     

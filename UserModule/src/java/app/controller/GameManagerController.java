@@ -44,12 +44,7 @@ public class GameManagerController extends HttpServlet
                                  if(newGame.getErrors().isEmpty()){
                                      model.uploadGame(req);
                                      newGame.setNewGameStep(2);    
-                                 }
-                                 
-                                 
-                                 
-                                 
-                                 
+                                 } 
                             }else{
                                 // Fehler beim hochladen
                             }  
@@ -108,13 +103,25 @@ public class GameManagerController extends HttpServlet
                             GameManagerModel model = new GameManagerModel();
 
                             if (model.updateButtonLayout(buttons, newGame) ){
-                                //newGame = null;
                                 newGame.setNewGameStep(5);
+                                newGame = model.getFileStructureAsJSON(newGame);
+                                System.out.println(newGame.getFilePathJSON());
                             }
                        }
                           
                     break;
+                    //ExePath
+                    case 5:
+                        String path = req.getParameter("exePath");
                         
+                        GameManagerModel model = new GameManagerModel();
+                        
+                        if (model.updateExePath(path, newGame) ){
+                            newGame.setNewGameStep(6);
+                        }
+                        
+                        
+                    break;
                         
                     default: 
                     break;

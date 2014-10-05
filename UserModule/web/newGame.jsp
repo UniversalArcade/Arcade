@@ -4,7 +4,7 @@
 <%@include file="header.jsp"%>
 
 
-<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
+
 
 <p>
     Neues Spiel anlegen
@@ -169,17 +169,26 @@
                  </tr>
                  
                <tr>
-                   <td colspan="2"><input type="submit" name="send" value="Fertig" />
+                   <td colspan="2"><input type="submit" name="send" value="weiter" />
                </tr>
             </table>
         </form>
      </c:when>    
      <c:when test="${game.newGameStep == 5}">
+         <p> Ausführbare Datei auswählen </p>
          
-         ${game.reset()}
+        <div class="fileChooser"></div>
+         <form method="POST" action="GameManagerController">
+            <input type="hidden" name="exePath" class="exePath" value=""> 
+            <input type="submit" value="Fertig" class="exePathSubmit" disabled="" />
+        </form>
+     
+     </c:when>
+     <c:when test="${game.newGameStep == 6}">
+         
+          ${game.reset()}
 
          Sie haben das Spiel erfolgreich in die Datenbank eingetragen
-     
      </c:when>    
        <c:otherwise>
            Fehler

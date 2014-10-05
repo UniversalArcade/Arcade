@@ -6,15 +6,17 @@
 <html>
     <head>
         <meta name="description" content="Mafiatorte" />
-        <title>Mafiatorte</title>
+        <title>Arcade</title>
+        <script src="Scripts/d3.js" charset="utf-8"></script>
+        <script src="Scripts/exeChooser.js"></script>
         <link href="_stylesheet.css" rel="stylesheet" type="text/css" />
     </head>
-    <body>
+    <body onload = 'init(${game.filePathJSON})' >
         <div class="holder">
             <div class="top"></div>
             <div class="navi">
                 
-                <jsp:useBean id="user" class="app.beans.User" scope="session"/>
+                
                 
                 <ul>
                      
