@@ -26,10 +26,13 @@ public class GameManagerModel {
     }
     
     
-    public void uploadGame(HttpServletRequest req){
+    public void uploadGame(HttpServletRequest req, Game g){
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "c:\\FileUploadTest\\", "c:\\temp");
+        
+        
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID(), "C:\\Users\\Public\\Arcade\\Tmp\\" + g.getGameID() + "\\Game");
         FileStatus file = upload.uploadFile(req);
+        System.out.println(file.getFullPath());
         UnZip unZip = new UnZip();
         unZip.unZipIt(file.getFullPath(), file.getFilePath());
     }
@@ -39,7 +42,7 @@ public class GameManagerModel {
         int height = 800;
 
         //Bild upload
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "c:\\FileUploadTest\\", "c:\\temp");
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\Assets", "C:\\Users\\Public\\Arcade\\Tmp\\" + g.getGameID() + "\\Assets");
         FileStatus fileStatus = upload.uploadFile(req);
         
         // Bild umwandeln
@@ -63,6 +66,12 @@ public class GameManagerModel {
             sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
             int gameID = sql.getLastID();
         sql.closeCon();
+        
+        File folder = new File("C:\\Users\\Public\\Arcade\\Games\\" + gameID);
+    	if(!folder.exists()){
+    		folder.mkdir();
+    	}
+        
         
         return gameID;
     }
@@ -93,7 +102,7 @@ public class GameManagerModel {
     
     public Game getFileStructureAsJSON(Game g){
         
-        JSONArray jsonarr = listfJSON("C:\\FileUploadTest\\list");
+        JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID());
         g.setFilePathJSON(jsonarr);
         return g;
     }

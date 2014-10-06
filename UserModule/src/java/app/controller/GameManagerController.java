@@ -32,9 +32,6 @@ public class GameManagerController extends HttpServlet
                 switch (newGame.getNewGameStep()) {
                     // Game Upload
                     case 1:  
-                            
-                        
-                            System.out.println("step = 0");
                             contentType = req.getContentType();
                             if ((contentType.indexOf("multipart/form-data") >= 0)) {
                                  GameManagerModel model = new GameManagerModel();
@@ -42,7 +39,7 @@ public class GameManagerController extends HttpServlet
                                  newGame.setGameID(gameID);   
                                  
                                  if(newGame.getErrors().isEmpty()){
-                                     model.uploadGame(req);
+                                     model.uploadGame(req, newGame);
                                      newGame.setNewGameStep(2);    
                                  } 
                             }else{
