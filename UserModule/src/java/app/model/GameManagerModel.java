@@ -28,13 +28,11 @@ public class GameManagerModel {
     
     public void uploadGame(HttpServletRequest req, Game g){
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
-        
-        
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\", "C:\\Users\\Public\\Arcade\\Tmp\\");
-        FileStatus file = upload.uploadFile(req);
-        System.out.println("BLA: " + file.getFullPath());
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
+        File file = upload.uploadFile(req);
         UnZip unZip = new UnZip();
-        unZip.unZipIt(file.getFullPath(), file.getFilePath());
+        unZip.unZipIt(file, file.getParent() + "/game/");
+        file.delete();
     }
     
     public void uploadImage(HttpServletRequest req, Game g){
@@ -42,24 +40,36 @@ public class GameManagerModel {
         int height = 800;
 
         //Bild upload
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\", "C:\\Users\\Public\\Arcade\\Tmp");
-        FileStatus fileStatus = upload.uploadFile(req);
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/assets", "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
+        File fileStatus = upload.uploadFile(req);
         
         // Bild umwandeln
-        File file = new File(fileStatus.getFullPath());
+        File file = new File(fileStatus.getAbsolutePath());
         
         try {
             BufferedImage img = ImageIO.read(file);
             if(img.getWidth() != width || img.getHeight() != height){ 
                 img = Scalr.resize(img, Scalr.Method.SPEED,Scalr.Mode.FIT_EXACT , 500, 800);
             }
-            File destFile = new File(fileStatus.getFilePath() + g.getGameID() +".jpg");
+            File destFile = new File(fileStatus.getParent() + "/" + g.getGameID() +".jpg");
             ImageIO.write(img, "jpg", destFile);
         } catch (IOException ex) {
             Logger.getLogger(GameManagerModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        fileStatus.delete();
     }
     
+    
+    public String mkDir(String path){
+        File folder = new File(path);
+    	if(!folder.exists()){
+    		folder.mkdir();
+    	}
+        
+        return path;
+        
+    }
     
     public int insertNewGame(int userID){
         sql.openCon();
@@ -67,10 +77,24 @@ public class GameManagerModel {
             int gameID = sql.getLastID();
         sql.closeCon();
         
-        File folder = new File("C:\\Users\\Public\\Arcade\\Games\\" + gameID);
+        String baseDir = mkDir("C:/Users/Public/Arcade/Games/" + gameID);
+        mkDir(baseDir + "/game");
+        mkDir(baseDir + "/assets");
+        mkDir(baseDir + "/tmp");
+        
+        
+        
+        
+        
+        /*
+        File folder = new File("C:/Users/Public/Arcade/Games/" + gameID);
     	if(!folder.exists()){
     		folder.mkdir();
     	}
+        */
+        
+        
+        //System.out.println("Folder: " + folder.getAbsolutePath());
         
         
         return gameID;

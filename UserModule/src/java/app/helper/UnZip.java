@@ -33,7 +33,7 @@ public class UnZip
      * @param zipFile input zip file
      * @param output zip file output folder
      */
-    public void unZipIt(String zipFile, String outputFolder){
+    public void unZipIt(File zipFile, String outputFolder){
  
      byte[] buffer = new byte[1024];
  

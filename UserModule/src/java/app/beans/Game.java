@@ -11,16 +11,8 @@ import org.json.simple.JSONArray;
 public class Game implements Serializable {
     
     private int gameID, newGameStep;
-
-   
     private String title, credits, description;
     private JSONArray filePathJSON;
-
-    
-
-    
-
-    
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
@@ -36,7 +28,6 @@ public class Game implements Serializable {
         this.credits = "";
         this.description = "";
         this.error.clear();
-        
     }
     
     public JSONArray getFilePathJSON() {

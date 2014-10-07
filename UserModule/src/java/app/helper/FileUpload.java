@@ -28,9 +28,9 @@ public class FileUpload {
         this.tempFolder = tempFolder;
     }
  
-    public FileStatus uploadFile(HttpServletRequest req){
+    public File uploadFile(HttpServletRequest req){
         
-        File file ;
+        File file = null;
         DiskFileItemFactory factory = new DiskFileItemFactory();
       
         // maximum size that will be stored in memory
@@ -49,6 +49,7 @@ public class FileUpload {
 
             // Process the uploaded file items
             Iterator i = fileItems.iterator();
+            //System.out.println("fileUPload filepath: " + filePath);
             while ( i.hasNext() ) {
                FileItem fi = (FileItem)i.next();
                if ( !fi.isFormField() ){
@@ -60,22 +61,28 @@ public class FileUpload {
                     boolean isInMemory = fi.isInMemory();
                     long sizeInBytes = fi.getSize();
                     // Write the file
+                    
                     if( fileName.lastIndexOf("\\") >= 0 ){
-                        file = new File( filePath + fileName.substring(fileName.lastIndexOf("\\")));
+                        file = new File( filePath + "/" +  fileName.substring(fileName.lastIndexOf("\\")));
+                        System.out.println("1");
                     }else{
-                        file = new File( filePath + fileName.substring(fileName.lastIndexOf("\\")+1));
+                        file = new File( filePath + "/" + fileName.substring(fileName.lastIndexOf("\\")+1));
+                        System.out.println("2");
                     }
                     fi.write( file );
                }
             }
             
+            
             //wenn erfolgreich hochgeladen
             
-            fileStatus.setFilePath(filePath);  
+            //fileStatus.setFileName(file.getAbsolutePath());
+            //fileStatus.setFilePath(filePath);  
         }catch(Exception ex) {
+            file = null;
             //TODO : LOGGER
             System.out.println(ex);
         }   
-        return fileStatus;
+        return file;
     }
 }
