@@ -18,13 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.imgscalr.Scalr;
 import org.json.simple.JSONArray;
 
-
 public class GameManagerModel {
     SQLHelper sql;
     public GameManagerModel(){
         sql = new SQLHelper();
     }
-    
     
     public void uploadGame(HttpServletRequest req, Game g){
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder

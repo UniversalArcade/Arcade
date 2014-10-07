@@ -91,6 +91,7 @@
                     <tr>
                         <td width="15%"><img src="img/ButtonSelector/ButtonSelector${i}.jpg" /></td>
                       <td width="85%"> 
+                        
                         <select name="button${i}" size="1">                
                             <option value="unused"> Unbenutzt </option>
                             <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
@@ -102,7 +103,8 @@
                                     </c:forEach>
                                 </optgroup>
                             </c:forEach>
-                        </select> 
+                        </select>
+                            
                       </td>
                     </tr>
                  </c:forEach>    
