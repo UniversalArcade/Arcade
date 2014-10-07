@@ -40,7 +40,7 @@
                     
                             <li>
                                 <p>
-                                    <a href="games.jsp">Spiele Verwalten</a>
+                                    <a href="GameListController">Spiele Verwalten</a>
                                 </p>
                             </li>
                             <li>

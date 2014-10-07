@@ -87,87 +87,25 @@
          
         <form method="POST" action="GameManagerController">
             <table width="100%" border="0" cellspacing="1" cellpadding="3">
-
-                <tr>
-                   <td width="15%">Button 1</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="1" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 2</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="2" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 3</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="3" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 4</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="4" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 5</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="5" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 6</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="6" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 7</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="7" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 8</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="8" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 9</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="9" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
-                 <tr>
-                   <td width="15%">Button 10</td>
-                   <td width="85%"> 
-                       <c:set var="buttonID" value="10" />
-                       <%@include file="buttonLayoutSelector.jsp"%>
-                   </td>
-                 </tr>
-                 
+                 <c:forEach begin="1" end="10" var="i"> 
+                    <tr>
+                        <td width="15%"><img src="img/ButtonSelector/ButtonSelector${i}.jpg" /></td>
+                      <td width="85%"> 
+                        <select name="button${i}" size="1">                
+                            <option value="unused"> Unbenutzt </option>
+                            <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
+                                <optgroup label="${device}">
+                                    <c:forEach var="item" items="${buttons.buttons[device]}" varStatus="bb">
+                                        <option value="${item}"> 
+                                            <c:out value="${item}" /> 
+                                        </option>
+                                    </c:forEach>
+                                </optgroup>
+                            </c:forEach>
+                        </select> 
+                      </td>
+                    </tr>
+                 </c:forEach>    
                <tr>
                    <td colspan="2"><input type="submit" name="send" value="weiter" />
                </tr>

@@ -3,10 +3,23 @@
 
 <%@include file="header.jsp"%>
 
+<jsp:useBean id="gamesList" class="app.beans.GamesList" scope="request"/>
 
-<p>
-    TODO : Übersicht Games, wenn User noch kein Game angelegt hat, redirect zu newGame.jsp
-</p>
+    <c:if test="${user.userLvl > 0}">
+       <c:forEach var="item" items="${gamesList.games}">
+
+            <p>
+                <a href="gameDetailController?gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
+            </p>
+        </c:forEach>     
+    </c:if>
+    
+    <c:if test="${user.userLvl == 0}">
+        <jsp:forward page="index.jsp"/>
+    </c:if>       
+            
+
+
 
 <form method="POST" action="newGame.jsp">
     <input type="submit" name="send" value="neues Game anlegen" />

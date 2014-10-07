@@ -6,6 +6,8 @@ public class User implements Serializable{
     
     private int userID,userLvl;
 
+   
+
     public User(){
         this.reset();
     }

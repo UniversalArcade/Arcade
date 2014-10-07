@@ -46,7 +46,9 @@ public class LoginController extends HttpServlet
                         //req.getSession().setAttribute("userLvl", id);
                     }
                     
-                    view = req.getRequestDispatcher("games.jsp");  
+                    view = req.getRequestDispatcher("GameListController");  
+                    res.sendRedirect("/UserModule/GameListController");
+                    
                 }
                 // ansonsten rücksprung zum Formular mit Fehlermeldung
                 else{

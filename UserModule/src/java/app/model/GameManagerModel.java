@@ -30,9 +30,9 @@ public class GameManagerModel {
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         
         
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID(), "C:\\Users\\Public\\Arcade\\Tmp\\" + g.getGameID() + "\\Game");
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\", "C:\\Users\\Public\\Arcade\\Tmp\\");
         FileStatus file = upload.uploadFile(req);
-        System.out.println(file.getFullPath());
+        System.out.println("BLA: " + file.getFullPath());
         UnZip unZip = new UnZip();
         unZip.unZipIt(file.getFullPath(), file.getFilePath());
     }
@@ -42,7 +42,7 @@ public class GameManagerModel {
         int height = 800;
 
         //Bild upload
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\Assets", "C:\\Users\\Public\\Arcade\\Tmp\\" + g.getGameID() + "\\Assets");
+        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:\\Users\\Public\\Arcade\\Games\\", "C:\\Users\\Public\\Arcade\\Tmp");
         FileStatus fileStatus = upload.uploadFile(req);
         
         // Bild umwandeln
