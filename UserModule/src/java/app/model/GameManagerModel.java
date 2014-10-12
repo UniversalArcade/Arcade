@@ -29,7 +29,7 @@ public class GameManagerModel {
         FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file = upload.uploadFile(req);
         UnZip unZip = new UnZip();
-        unZip.unZipIt(file, file.getParent() + "/game/");
+        unZip.unZipIt(file, file.getParent() + "/game");
         file.delete();
     }
     
