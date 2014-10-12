@@ -3,7 +3,6 @@
 
 <%@include file="header.jsp"%>
 
-
 <jsp:useBean id="customer" class="app.beans.Costumer" scope="request" />
 
 <p>
