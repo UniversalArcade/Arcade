@@ -216,3 +216,4 @@ pip-log.txt
 .mr.developer.cfg
 
 \Arcade\UserModule\nbproject\private
+/UserModule/nbproject/private
