@@ -64,7 +64,17 @@ public class GameManagerController extends HttpServlet
                         newGame.setTitle(req.getParameter("title"));
                         newGame.setDescription(req.getParameter("description"));
                         newGame.setCredits(req.getParameter("credits"));
-
+                        
+                        System.out.println("perma: " + req.getParameter("permanentStore"));
+                        String perma = req.getParameter("permanentStore");
+                        
+                        if(perma != null){
+                            if(perma.equals("on")) newGame.setPermanentStore(0);
+                        }
+                        else{
+                            newGame.setPermanentStore(0);
+                        }
+                        
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(newGame.getErrors().isEmpty()){
                             GameManagerModel model = new GameManagerModel();
@@ -88,8 +98,7 @@ public class GameManagerController extends HttpServlet
                                valid = false;
                                break;
                            }
-                           
-                           
+                        
                            buttons += req.getParameter("button" + i);
                            if(i < buttonAmount){
                                buttons += ";"; 
@@ -115,6 +124,7 @@ public class GameManagerController extends HttpServlet
                         
                         if (model.updateExePath(path, newGame) ){
                             newGame.setNewGameStep(6);
+                            model.toggleLive(1, newGame);
                         }
                         
                         

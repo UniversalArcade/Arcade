@@ -9,7 +9,7 @@
        <c:forEach var="item" items="${gamesList.games}">
 
             <p>
-                <a href="gameDetailController?gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
+                <a href="GameDetailController?gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
             </p>
         </c:forEach>     
     </c:if>

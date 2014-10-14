@@ -40,11 +40,14 @@ public class UnZip
      try{
  
     	//create output directory is not exists
-    	File folder = new File(outputFolder);
+    	
+         /*
+         File folder = new File(outputFolder);
     	if(!folder.exists()){
     		folder.mkdir();
     	}
- 
+         */           
+                 
     	//get the zip file content
     	ZipInputStream zis = 
     		new ZipInputStream(new FileInputStream(zipFile));
@@ -56,11 +59,16 @@ public class UnZip
     	   String fileName = ze.getName();
            File newFile = new File(outputFolder + File.separator + fileName);
  
-           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+           //System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+           System.out.println("unzip - filename : " + outputFolder + File.separator + fileName);
+           System.out.println("unzip - separator : " + File.separator);
  
             //create all non exists folders
             //else you will hit FileNotFoundException for compressed folder
             new File(newFile.getParent()).mkdirs();
+            
+            
+            
  
             FileOutputStream fos = new FileOutputStream(newFile);             
  

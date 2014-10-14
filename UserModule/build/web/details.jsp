@@ -1,17 +1,25 @@
-<%-- 
-    Document   : details
-    Created on : 12.10.2014, 14:33:45
-    Author     : KM
---%>
+<!-- GameDetail Seite -->
+<!-- Jede Contentseite bindet header und footer ein -->
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@include file="header.jsp"%>
+
+    <jsp:useBean id="gameDetails" class="app.beans.GamesDetail" scope="request"/>
+    
+    <c:if test="${user.userLvl > 0}">
+        <c:out value="${gameDetails.title }"/>
+    </c:if> 
+
+
+    <c:if test="${user.userLvl == 0}">
+        <jsp:forward page="index.jsp"/>
+    </c:if>       
+            
+
+
+
+<form method="POST" action="GameListController">
+    <input type="submit" name="send" value="zurück zur Übersicht" />
+</form>
+
+
+<%@include file="footer.jsp"%>

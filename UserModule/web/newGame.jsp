@@ -3,9 +3,6 @@
 
 <%@include file="header.jsp"%>
 
-
-
-
 <p>
     Neues Spiel anlegen
 </p>
@@ -67,6 +64,14 @@
                         <textarea name="credits" cols="25" rows="8"><c:out value="${game.credits}"/></textarea>
                         <c:out value="${game.errors['credits']}"/>
                    </td>
+               </tr>
+                <tr>
+                   <td width="15%">PermanentStore</td>
+                   <td width="85%">
+                       <input name="permanentStore" type="checkbox"  ${game.permanentStore == 1 ? "checked" : "" }/>
+                       <c:out value="${game.errors['title']}"/>
+                   </td>
+
                </tr>
                <tr>
                    <td colspan="2"><input type="submit" name="send" value="weiter" />

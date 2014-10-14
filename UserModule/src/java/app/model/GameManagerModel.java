@@ -29,7 +29,11 @@ public class GameManagerModel {
         FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file = upload.uploadFile(req);
         UnZip unZip = new UnZip();
-        unZip.unZipIt(file, file.getParent() + "/game");
+        
+        System.out.println("model - fileName: " + file.getAbsolutePath());
+        System.out.println("model - Parent: " + file.getParent());
+        
+        unZip.unZipIt(file, file.getParent());
         file.delete();
     }
     
@@ -100,7 +104,7 @@ public class GameManagerModel {
     
     public boolean updateDetails(Game g){
         sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"' WHERE ID = "+ g.getGameID());
+          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
         
         return success;
@@ -157,11 +161,14 @@ public class GameManagerModel {
         return files;
     }
     
-    
-    public void updateGame(){
-    
+    public boolean toggleLive(int toggle, Game g){
+        sql.openCon();
+          boolean success = sql.execNonQuery("UPDATE `games` SET live = '"+toggle+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
+        
+        return success;
     }
-    
+   
     public void deleteGame(){
     
     }

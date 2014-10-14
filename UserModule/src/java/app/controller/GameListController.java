@@ -19,15 +19,12 @@ import javax.servlet.RequestDispatcher;
 public class GameListController extends HttpServlet {
 
     
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-            
+    protected void processRequest(HttpServletRequest req, HttpServletResponse res) 
+            throws ServletException, IOException{
+    
         res.setContentType("text/html");
                 RequestDispatcher view;    
-        
-              
-                
+             
         User u = (User)req.getSession().getAttribute("user");
             
             GamesList bgl;
@@ -47,19 +44,22 @@ public class GameListController extends HttpServlet {
                 view = req.getRequestDispatcher("index.jsp");
             }
             
+            view.forward(req, res); 
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
             
-            
-            
-            view.forward(req, res);
-            
-        
+        processRequest(req,res);
     }
 
    
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-       
+            
+        processRequest(req,res);
     }
 
   

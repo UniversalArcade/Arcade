@@ -10,24 +10,35 @@ import org.json.simple.JSONArray;
 
 public class Game implements Serializable {
     
-    private int gameID, newGameStep;
+   
+    private int gameID, newGameStep, permanentStore;
     private String title, credits, description;
     private JSONArray filePathJSON;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
     public Game() {
-        newGameStep = 1;
         error = new HashMap();
+        this.reset();
     }
     
+    //TODO : UGLY!
     public void reset(){
         this.gameID = -1;
         this.newGameStep = 1;
         this.title = "";
         this.credits = "";
         this.description = "";
+        this.permanentStore = 1;
         this.error.clear();
+    }
+    
+    public int getPermanentStore() {
+        return permanentStore;
+    }
+
+    public void setPermanentStore(int permanentStore) {
+        this.permanentStore = permanentStore;
     }
     
     public JSONArray getFilePathJSON() {
@@ -37,6 +48,8 @@ public class Game implements Serializable {
     public void setFilePathJSON(JSONArray filePathJSON) {
         this.filePathJSON = filePathJSON;
     }
+    
+    
     
      public int getGameID() {
         return gameID;

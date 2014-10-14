@@ -1,7 +1,6 @@
 
 package app.controller;
 
-import app.beans.Game;
 import app.beans.GamesDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,25 +28,35 @@ public class GameDetailController extends HttpServlet {
         res.setContentType("text/html");
                 RequestDispatcher view;    
         
-              
                 
-        Game g = (Game)req.getSession().getAttribute("Game");
+                
+        GamesDetail game = new GamesDetail();     
+        game.setGameID( Integer.parseInt( (String)req.getParameter("gameID") ) );
+        System.out.println("nach parse: " + game.getGameID());
+        
             
-            GamesDetail bgdl;
-            if(g.getGameID() > 0){
-                GameDetailModel gdl = new GameDetailModel();
-                bgdl = gdl.listGames(g);
-                if(!bgdl.getDetails().isEmpty()){
-                    view = req.getRequestDispatcher("details.jsp");
-                    req.setAttribute("gamesDetails", bgdl);
+            if(game.getGameID() > 0){
+                GameDetailModel model = new GameDetailModel();
+                game = model.getGameDetails(game);
+                if(game != null){
+                   User u = (User)req.getSession().getAttribute("user");
+                
+                    if(game.getUserID() == u.getUserID()){
+                        view = req.getRequestDispatcher("details.jsp");
+                        req.setAttribute("gameDetails", game);
+                    }
+                    else{
+                        view = req.getRequestDispatcher("index.jsp");
+                    }
+                
                 }
                 else{
-                    view = req.getRequestDispatcher("games.jsp");
-                    
+                    view = req.getRequestDispatcher("index.jsp");
                 }
+                
             }
             else{
-                view = req.getRequestDispatcher("index.jsp");
+                view = req.getRequestDispatcher("games.jsp");
             }
             
             
