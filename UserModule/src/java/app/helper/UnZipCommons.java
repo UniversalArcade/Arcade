@@ -24,17 +24,17 @@ import org.apache.commons.io.IOUtils;
 public class UnZipCommons {
     
     public static void unzip(File file, String outputDir){
-    
-        ZipFile zipFile;
-       
-        try {
-            zipFile = new ZipFile(file);
+ 
+        try (ZipFile zipFile = new ZipFile(file)) {
+            
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
             
             while (entries.hasMoreElements()) {
+                
                 ZipEntry entry = entries.nextElement();
                 File entryDestination = new File(outputDir,  entry.getName());
                 entryDestination.getParentFile().mkdirs();
+                
                 if (entry.isDirectory())
                     entryDestination.mkdirs();
                 else {
@@ -46,11 +46,8 @@ public class UnZipCommons {
                 }
             }
             
-            zipFile.close();
-            
         } catch (IOException ex) {
             Logger.getLogger(UnZipCommons.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 }
