@@ -1,13 +1,16 @@
-<!-- Startseite mit Begrüßungstext -->
-<!-- Jede Contentseite bindet header und footer ein -->
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@include file="header.jsp"%>
-
+<jsp:useBean id="user" class="app.beans.User" scope="session"/>
 <jsp:useBean id="gamesList" class="app.beans.GamesList" scope="request"/>
+
+<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+  <tiles:put name="title" value="Auflistung deiner Spiele"/>
+  <tiles:put name="body">
 
     <c:if test="${user.userLvl > 0}">
        <c:forEach var="item" items="${gamesList.games}">
-
             <p>
                 <a href="GameDetailController?gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
             </p>
@@ -16,7 +19,7 @@
     
     <c:if test="${user.userLvl == 0}">
         <jsp:forward page="index.jsp"/>
-    </c:if>       
+    </c:if>           
             
 
 
@@ -26,4 +29,5 @@
 </form>
 
 
-<%@include file="footer.jsp"%>
+  </tiles:put>
+</tiles:insert>

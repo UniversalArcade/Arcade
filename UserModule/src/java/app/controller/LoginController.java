@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet
                 }
                 // ansonsten rücksprung zum Formular mit Fehlermeldung
                 else{
-                    view = req.getRequestDispatcher("login.jsp");
+                    view = req.getRequestDispatcher("index.jsp");
                     req.setAttribute("customer", cust);
                 }
                 view.forward(req, res);

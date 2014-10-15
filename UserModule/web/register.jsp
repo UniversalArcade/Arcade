@@ -1,15 +1,15 @@
-<!-- Kundendatenformular -->
-
-<%@include file="header.jsp"%>
-
-<!-- Bean mit Kundendaten für die input values sowie Error Hashmap für Fehlerausgabe 
-     als Request-Attribute aus app.controller.Ordercontroller verfügbar -->
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <jsp:useBean id="customer" class="app.beans.Costumer" scope="request"/>
 
+<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+  <tiles:put name="title" value="registrieren"/>
+  <tiles:put name="body">
+
 <c:choose>
     <c:when test="${!customer.registrationComplete}">
-
 
     <p>
         Registrieren (Nur mit HAW Mail)    
@@ -46,8 +46,9 @@
 
     </c:when>
     <c:otherwise>
-        Du hast dich erfolgreich registriert, bitte mail bestätigen 
+        Du hast dich erfolgreich registriert, bitte mail bestÃ¤tigen 
     </c:otherwise>
 </c:choose>
 
-<%@include file="footer.jsp"%>
+  </tiles:put>
+</tiles:insert>
