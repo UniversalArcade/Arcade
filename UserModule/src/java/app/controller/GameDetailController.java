@@ -42,21 +42,21 @@ public class GameDetailController extends HttpServlet {
                    User u = (User)req.getSession().getAttribute("user");
                 
                     if(game.getUserID() == u.getUserID()){
-                        view = req.getRequestDispatcher("details.jsp");
+                        view = req.getRequestDispatcher("/WEB-INF/Pages/details.jsp");
                         req.setAttribute("gameDetails", game);
                     }
                     else{
-                        view = req.getRequestDispatcher("index.jsp");
+                        view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
                     }
                 
                 }
                 else{
-                    view = req.getRequestDispatcher("index.jsp");
+                    view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
                 }
                 
             }
             else{
-                view = req.getRequestDispatcher("games.jsp");
+                view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
             }
             
             

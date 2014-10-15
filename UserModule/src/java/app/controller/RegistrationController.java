@@ -32,16 +32,11 @@ public class RegistrationController extends HttpServlet
                 System.out.println("AHA: " + msg);
                 //System.out.println("JA : " + digest.toString());
                 
-                
-                res.setContentType("text/html");
-                RequestDispatcher view;
-                
                 Costumer cust = new Costumer();
                 cust.setMail(req.getParameter("mail"));
                 cust.setPassword(req.getParameter("password"));
                 cust.setPasswordWDH(req.getParameter("passwordWDH"));
         
-                
                 if( cust.getErrors().isEmpty() ){
                     RegistrationModel register = new RegistrationModel();
                     cust = register.newRegistration(cust) ;
@@ -52,18 +47,17 @@ public class RegistrationController extends HttpServlet
                     
                 }
                 
-                view = req.getRequestDispatcher("register.jsp");
                 req.setAttribute("customer", cust);
-                
-                view.forward(req, res);
-                      
+                req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);         
           }
           catch(Exception e){}  
     }
     
-     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
  
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        
+                req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);
     }
 }

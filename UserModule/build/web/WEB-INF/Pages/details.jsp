@@ -4,7 +4,7 @@
 
 <jsp:useBean id="gameDetails" class="app.beans.GamesDetail" scope="request"/>
 
-<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+<tiles:insert template="Layout/layout.jsp">
   <tiles:put name="title" value="Spiel bearbeiten"/>
   <tiles:put name="body">
 

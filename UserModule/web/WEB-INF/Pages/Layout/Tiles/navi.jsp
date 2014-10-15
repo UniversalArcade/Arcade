@@ -11,12 +11,12 @@
 
                 <li>
                     <p>
-                        <a href="index.jsp">Login</a>
+                        <a href="LoginController">Login</a>
                     </p>
                 </li>
                 <li>
                     <p>
-                        <a href="register.jsp">Registrieren</a>
+                        <a href="RegistrationController">Registrieren</a>
                     </p>
                 </li>
 

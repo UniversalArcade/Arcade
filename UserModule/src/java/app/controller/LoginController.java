@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet
                 }
                 // ansonsten rücksprung zum Formular mit Fehlermeldung
                 else{
-                    view = req.getRequestDispatcher("index.jsp");
+                    view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
                     req.setAttribute("customer", cust);
                 }
                 view.forward(req, res);
@@ -65,14 +65,22 @@ public class LoginController extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
          try{
+                System.out.println("USER BETRITT SEITE");
+             
                 res.setContentType("text/html");
                 RequestDispatcher view;
-             
+                
+                
+                
+                /*
                 User user = (User)req.getSession().getAttribute("user");
                 user.reset();
-                
-                view = req.getRequestDispatcher("index.jsp");  
+                */
+                        
+                        
+                view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");  
                 view.forward(req, res);
+               
                       
           }
           catch(Exception e){}

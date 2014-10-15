@@ -4,7 +4,7 @@
 
 <jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
-<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+<tiles:insert template="Layout/layout.jsp">
   <tiles:put name="title" value="Neues Spiel anlegen"/>
   <tiles:put name="dependence">
         <script src="Scripts/d3.js" charset="utf-8"></script>
