@@ -22,11 +22,9 @@
     </c:if>           
             
 
-
-
-<form method="POST" action="newGame.jsp">
-    <input type="submit" name="send" value="neues Game anlegen" />
-</form>
+    <form method="POST" action="newGame.jsp">
+        <input type="submit" name="send" value="neues Game anlegen" />
+    </form>
 
 
   </tiles:put>

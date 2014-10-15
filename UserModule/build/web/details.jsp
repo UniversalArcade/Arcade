@@ -1,9 +1,14 @@
-<!-- GameDetail Seite -->
-<!-- Jede Contentseite bindet header und footer ein -->
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@include file="header.jsp"%>
+<jsp:useBean id="gameDetails" class="app.beans.GamesDetail" scope="request"/>
 
-    <jsp:useBean id="gameDetails" class="app.beans.GamesDetail" scope="request"/>
+<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+  <tiles:put name="title" value="Spiel bearbeiten"/>
+  <tiles:put name="body">
+
+    
     
     <c:if test="${user.userLvl > 0}">
         <c:out value="${gameDetails.title }"/>
@@ -16,10 +21,11 @@
             
 
 
+    <!-- TODO : klickbarer link anstatt formular -->
+    <form method="POST" action="GameListController">
+        <input type="submit" name="send" value="zurÃ¼ck zur Ãœbersicht" />
+    </form>
 
-<form method="POST" action="GameListController">
-    <input type="submit" name="send" value="zurück zur Übersicht" />
-</form>
 
-
-<%@include file="footer.jsp"%>
+  </tiles:put>
+</tiles:insert>
