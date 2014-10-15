@@ -2,21 +2,18 @@
 package app.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import app.beans.User;
 import app.beans.GamesList;
+import app.helper.Permission;
 import app.model.GameListModel;
 import javax.servlet.RequestDispatcher;
 
-/**
- *
- * @author KM
- */
-public class GameListController extends HttpServlet {
+
+public class GameListController extends HttpServlet{
 
     
     protected void processRequest(HttpServletRequest req, HttpServletResponse res) 
@@ -27,31 +24,27 @@ public class GameListController extends HttpServlet {
              
         User u = (User)req.getSession().getAttribute("user");
             
-            GamesList bgl;
-            if(u.getUserID() > 0){
-                GameListModel gl = new GameListModel();
-                bgl = gl.listGames(u);
-                if(!bgl.getGames().isEmpty()){
-                    view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
-                    req.setAttribute("gamesList", bgl);
-                }
-                else{
-                    view = req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp");
-                    
-                }
-            }
-            else{
-                view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
-            }
-            
-            view.forward(req, res); 
+        GamesList bgl;
+
+        GameListModel gl = new GameListModel();
+        bgl = gl.listGames(u);
+        if(!bgl.getGames().isEmpty()){
+            view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
+            req.setAttribute("gamesList", bgl);
+        }
+        else{
+            view = req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp");
+
+        }
+
+        view.forward(req, res); 
     }
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-            
-        processRequest(req,res);
+        
+        doPost(req,res);   
     }
 
    
@@ -59,9 +52,14 @@ public class GameListController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
             
-        processRequest(req,res);
+        Permission permission = new Permission();
+        
+        if(permission.isValid(req, "user")){
+            this.processRequest(req,res);
+        }
+        else{
+            req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+        }  
     }
 
-  
-    
 }

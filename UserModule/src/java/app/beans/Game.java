@@ -10,7 +10,6 @@ import org.json.simple.JSONArray;
 
 public class Game implements Serializable {
     
-   
     private int gameID, newGameStep, permanentStore;
     private String title, credits, description;
     private JSONArray filePathJSON;
@@ -19,11 +18,11 @@ public class Game implements Serializable {
     
     public Game() {
         error = new HashMap();
-        this.reset();
+        //this.reset();
     }
     
     //TODO : UGLY!
-    public void reset(){
+    /*public void reset(){
         this.gameID = -1;
         this.newGameStep = 1;
         this.title = "";
@@ -31,7 +30,7 @@ public class Game implements Serializable {
         this.description = "";
         this.permanentStore = 1;
         this.error.clear();
-    }
+    }*/
     
     public int getPermanentStore() {
         return permanentStore;

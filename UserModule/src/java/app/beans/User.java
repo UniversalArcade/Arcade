@@ -5,18 +5,7 @@ import java.io.Serializable;
 public class User implements Serializable{
     
     private int userID,userLvl;
-
-   
-
-    public User(){
-        this.reset();
-    }
-    
-    public void reset(){
-        this.setUserID(0);
-        this.setUserLvl(0);
-    }
-    
+ 
     public int getUserID() {
         return userID;
     }

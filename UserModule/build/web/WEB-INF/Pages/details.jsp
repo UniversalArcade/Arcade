@@ -8,19 +8,8 @@
   <tiles:put name="title" value="Spiel bearbeiten"/>
   <tiles:put name="body">
 
+    <c:out value="${gameDetails.title }"/>
     
-    
-    <c:if test="${user.userLvl > 0}">
-        <c:out value="${gameDetails.title }"/>
-    </c:if> 
-
-
-    <c:if test="${user.userLvl == 0}">
-        <jsp:forward page="index.jsp"/>
-    </c:if>       
-            
-
-
     <!-- TODO : klickbarer link anstatt formular -->
     <form method="POST" action="GameListController">
         <input type="submit" name="send" value="zurück zur Übersicht" />

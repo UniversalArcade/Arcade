@@ -71,13 +71,14 @@ public class LoginController extends HttpServlet
                 RequestDispatcher view;
                 
                 
+                String action; 
                 
-                /*
-                User user = (User)req.getSession().getAttribute("user");
-                user.reset();
-                */
-                        
-                        
+                if((action = req.getParameter("action")) != null){
+                    if(action.equals("logout")){
+                        req.getSession().setAttribute("user", null);                        
+                    }
+                }
+                  
                 view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");  
                 view.forward(req, res);
                

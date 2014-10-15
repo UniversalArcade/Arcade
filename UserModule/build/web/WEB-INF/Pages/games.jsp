@@ -2,7 +2,6 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:useBean id="user" class="app.beans.User" scope="session"/>
 <jsp:useBean id="gamesList" class="app.beans.GamesList" scope="request"/>
 
 <tiles:insert template="Layout/layout.jsp">
