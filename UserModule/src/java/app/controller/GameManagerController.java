@@ -5,6 +5,7 @@ package app.controller;
 
 import app.beans.User;
 import app.beans.Game;
+import app.helper.Permission;
 
 import java.io.*;
 import javax.servlet.*;
@@ -13,8 +14,7 @@ import app.model.GameManagerModel;
 
 public class GameManagerController extends HttpServlet
 {
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
+    public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
     	  try{
@@ -125,8 +125,9 @@ public class GameManagerController extends HttpServlet
                             GameManagerModel model = new GameManagerModel();
 
                             if (model.updateExePath(path, newGame) ){
-                                newGame.setNewGameStep(6);
+                                //newGame.setNewGameStep(6);
                                 model.toggleLive(1, newGame);
+                                req.getSession().setAttribute("game", null);
                             }
 
 
@@ -137,9 +138,32 @@ public class GameManagerController extends HttpServlet
                     }
                 }
 
+                //req.setAttribute("game", newGame);
                 view.forward(req, res);
                       
           }
           catch(Exception e){}  
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        
+        doPost(req,res);   
+    }
+
+   
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+            
+        Permission permission = new Permission();
+        
+        if(permission.isValid(req, "user")){
+            this.processRequest(req,res);
+        }
+        else{
+            req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+        }  
     }
 }

@@ -8,6 +8,7 @@ public class Permission {
     
     private HashMap roleMap;
        
+    //TODO : Get Roles from web.xml 
     public Permission(){
         roleMap = new HashMap();
         roleMap.put("user",100);

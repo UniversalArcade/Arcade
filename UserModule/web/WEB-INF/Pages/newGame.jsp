@@ -2,7 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
+<jsp:useBean id="game" class="app.beans.Game" scope="session" />
 
 <tiles:insert template="Layout/layout.jsp">
   <tiles:put name="title" value="Neues Spiel anlegen"/>
@@ -140,9 +140,6 @@
      
      </c:when>
      <c:when test="${game.newGameStep == 6}">
-         
-          ${game.reset()}
-
          Sie haben das Spiel erfolgreich in die Datenbank eingetragen
      </c:when>    
        <c:otherwise>
