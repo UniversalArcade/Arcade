@@ -1,9 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 
-
-<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
-
 <!DOCTYPE html>
 <html>
     <head>

@@ -4,7 +4,7 @@
 
 <jsp:useBean id="customer" class="app.beans.Costumer" scope="request"/>
 
-<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+<tiles:insert template="Layout/layout.jsp">
   <tiles:put name="title" value="registrieren"/>
   <tiles:put name="body">
 

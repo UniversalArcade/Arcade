@@ -1,7 +1,17 @@
-<!-- Startseite mit Begrüßungstext -->
-<!-- Jede Contentseite bindet header und footer ein -->
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@include file="header.jsp"%>
+<jsp:useBean id="game" class="app.beans.Game" scope="session" />
+
+<tiles:insert template="Layout/layout.jsp">
+  <tiles:put name="title" value="Neues Spiel anlegen"/>
+  <tiles:put name="dependence">
+        <script src="Scripts/d3.js" charset="utf-8"></script>
+        <script src="Scripts/exeChooser.js"></script>
+  </tiles:put>
+  <tiles:put name="bodyAttr" value="onload = 'init(${game.filePathJSON})' " />
+  <tiles:put name="body">
 
 <p>
     Neues Spiel anlegen
@@ -120,7 +130,7 @@
         </form>
      </c:when>    
      <c:when test="${game.newGameStep == 5}">
-         <p> Ausführbare Datei auswählen </p>
+         <p> AusfÃ¼hrbare Datei auswÃ¤hlen </p>
          
         <div class="fileChooser"></div>
          <form method="POST" action="GameManagerController">
@@ -130,9 +140,6 @@
      
      </c:when>
      <c:when test="${game.newGameStep == 6}">
-         
-          ${game.reset()}
-
          Sie haben das Spiel erfolgreich in die Datenbank eingetragen
      </c:when>    
        <c:otherwise>
@@ -142,7 +149,5 @@
 
 
 
-
-
-
-<%@include file="footer.jsp"%>
+  </tiles:put>
+</tiles:insert>

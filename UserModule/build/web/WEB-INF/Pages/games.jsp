@@ -2,10 +2,9 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:useBean id="user" class="app.beans.User" scope="session"/>
 <jsp:useBean id="gamesList" class="app.beans.GamesList" scope="request"/>
 
-<tiles:insert template="/WEB-INF/Layout/layout.jsp">
+<tiles:insert template="Layout/layout.jsp">
   <tiles:put name="title" value="Auflistung deiner Spiele"/>
   <tiles:put name="body">
 
@@ -22,11 +21,9 @@
     </c:if>           
             
 
-
-
-<form method="POST" action="newGame.jsp">
-    <input type="submit" name="send" value="neues Game anlegen" />
-</form>
+    <form method="POST" action="GameManagerController">
+        <input type="submit" name="send" value="neues Game anlegen" />
+    </form>
 
 
   </tiles:put>

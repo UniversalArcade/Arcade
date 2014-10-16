@@ -1,17 +1,37 @@
-<!-- Start HTML Dokument und Einbindung der Navigation-->
-
-<%@include file="includes.jsp"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<!-- START alt include -->
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+
+<sql:setDataSource var="SQLCon" driver="com.mysql.jdbc.Driver"
+                   url="${initParam.SQL_URL}"
+                   user="${initParam.SQL_User}"  password="${initParam.SQL_Password}"/>
+
+<jsp:useBean id="user" class="app.beans.User" scope="session"/>
+<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
+
+<!-- ENDE alt Include -->
+
+
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+
+
+
+
+<!-- START alte header -->
+
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="description" content="Mafiatorte" />
-        <title>Arcade</title>
-        <script src="Scripts/d3.js" charset="utf-8"></script>
-        <script src="Scripts/exeChooser.js"></script>
+        <title> <tiles:getAsString name="title" /> </title>
+        <meta name="description" content="Newschool Arcade" />
         <link href="_stylesheet.css" rel="stylesheet" type="text/css" />
+        <tiles:getAsString name="dependence" ignore="true"/>
     </head>
-    <body onload = 'init(${game.filePathJSON})' >
+    <body  <tiles:getAsString name="bodyAttr" ignore="true"/> >
         <div class="holder">
             <div class="top"></div>
             <div class="navi">
@@ -83,3 +103,18 @@
    
             </div>
             <div class="pad">
+
+<!-- ENDE alte Header -->
+
+        <tiles:getAsString name="body"/>
+
+<!-- START alte footer -->
+
+       </div>
+                    <div class="basket">
+                    
+                    </div>
+                <div class="footer"></div>
+            </div> 
+    </body>
+</html>

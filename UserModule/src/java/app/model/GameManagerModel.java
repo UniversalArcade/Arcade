@@ -147,7 +147,7 @@ public class GameManagerModel {
     
     public Game getFileStructureAsJSON(Game g){
         
-        JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID());
+        JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\game");
         g.setFilePathJSON(jsonarr);
         return g;
     }
