@@ -6,8 +6,6 @@ import app.beans.Game;
 import app.helper.FileUpload;
 import app.helper.SQLHelper;
 import app.helper.UnZip;
-import app.helper.UnZip4j;
-import app.helper.UnZipCommons;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,30 +28,15 @@ public class GameManagerModel {
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file = upload.uploadFile(req);
+       
+        UnZip.unzipit(file, file.getParent() + "/game");
         
-        /*UnZip unZip = new UnZip();
-        
-        System.out.println("model - fileName: " + file.getAbsolutePath());
-        System.out.println("model - Parent: " + file.getParent());
-        
-        unZip.unZipIt(file, file.getParent());
-        */
-        
-        // Unzip with Zip4j
-        UnZip4j.unzip(file.getAbsolutePath(), file.getParent() + "/game");
-        
-        // Unzip with commons IO
-        // UnZipCommons.unzip(file, file.getParent() + "/game");
-        
-        
-            if( file.delete() ){
-                System.out.println("gelöscht");
-            }
-            else{
-                System.out.println("NICHT GELÖSCHT");
-            }
-            
-        
+        if( file.delete() ){
+            System.out.println("gelöscht");
+        }
+        else{
+            System.out.println("NICHT GELÖSCHT");
+        }
     }
     
     public void uploadImage(HttpServletRequest req, Game g){
