@@ -149,7 +149,8 @@ public class GameManagerController extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
         
-        doPost(req,res);   
+        doPost(req,res);
+        
     }
 
    
