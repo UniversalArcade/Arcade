@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<tiles:insert template="../Layout/layout.jsp">
+<tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Choose .exe file"/>
   <tiles:put name="dependence">
         <script src="Scripts/d3.js" charset="utf-8"></script>

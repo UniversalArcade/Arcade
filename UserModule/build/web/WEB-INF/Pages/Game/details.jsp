@@ -4,7 +4,7 @@
 
 
 
-<tiles:insert template="../Layout/layout.jsp">
+<tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Spieledetails bearbeiten"/> 
   <tiles:put name="body">
 
