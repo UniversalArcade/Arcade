@@ -11,7 +11,7 @@ import app.helper.SQLHelper;
  *
  * @author Martin
  */
-public class GameDetailModel {
+public class DetailsModel {
     
     public boolean updateDetails(Game g){
         SQLHelper sql = new SQLHelper();

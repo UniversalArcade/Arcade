@@ -4,7 +4,7 @@ package app.controller.game;
 import app.beans.User;
 import app.beans.Game;
 import app.helper.Permission;
-import app.model.game.GameDetailModel;
+import app.model.game.DetailsModel;
 
 import java.io.*;
 import javax.servlet.*;
@@ -60,7 +60,7 @@ public class DetailsController extends HttpServlet
 
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(game.getErrors().isEmpty()){
-                            GameDetailModel model = new GameDetailModel();
+                            DetailsModel model = new DetailsModel();
                             if( model.updateDetails(game) ){
                                 game.setNewGameStep(4);
 

@@ -21,7 +21,7 @@ import org.imgscalr.Scalr;
  *
  * @author Martin
  */
-public class PosterUploadModel {
+public class CoverUploadModel {
     
     public void uploadImage(HttpServletRequest req, Game g){
         int width = 500;

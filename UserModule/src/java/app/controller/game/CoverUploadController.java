@@ -4,7 +4,7 @@ package app.controller.game;
 import app.beans.User;
 import app.beans.Game;
 import app.helper.Permission;
-import app.model.game.PosterUploadModel;
+import app.model.game.CoverUploadModel;
 
 import java.io.*;
 import javax.servlet.*;
@@ -32,7 +32,7 @@ public class CoverUploadController extends HttpServlet
                         
                         String contentType = req.getContentType();
                         if ( (contentType.indexOf("multipart/form-data") >= 0) ) {
-                             PosterUploadModel model = new PosterUploadModel();
+                             CoverUploadModel model = new CoverUploadModel();
                              model.uploadImage(req, game);
                              game.setNewGameStep(3);
                              res.sendRedirect("/UserModule/buttonlayout");
