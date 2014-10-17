@@ -8,12 +8,13 @@
   <tiles:put name="title" value="Buttonlayout bearbeiten"/> 
   <tiles:put name="body">
 
-   <p>
+         <p>
                 Schritt 4 : Buttonlayout erstellen
          </p>
          
          
         <form method="POST" action="GameButtonLayoutController">
+           <input type="hidden" name="action" value="update" />
             <table width="100%" border="0" cellspacing="1" cellpadding="3">
                  <c:forEach begin="1" end="10" var="i"> 
                     <tr>

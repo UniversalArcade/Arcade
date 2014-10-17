@@ -1,15 +1,13 @@
 package app.controller.game;
 
-
-import app.beans.User;
 import app.beans.Game;
+import app.beans.ButtonLayout;
 import app.helper.Permission;
-import app.model.game.PosterUploadModel;
 
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import app.model.GameManagerModel;
+import app.model.game.ButtonLayoutModel;
 
 public class GameButtonLayoutController extends HttpServlet
 {
@@ -18,9 +16,7 @@ public class GameButtonLayoutController extends HttpServlet
        {
     	  try{
                 res.setContentType("text/html");
-              
-                
-                
+
                 String action = req.getParameter("action");
                 System.out.println("action: " + action);
                 
@@ -30,10 +26,45 @@ public class GameButtonLayoutController extends HttpServlet
                     
                     if( action.equals("update") ){
                         
+                            System.out.println("BUTTONLAYOUT : UPDATE");
                         
-                        
+                           int buttonAmount = 10; 
+
+                           String buttons = "";
+                           boolean valid = true;
+
+                           for(int i = 1; i <= buttonAmount; i++){
+                               String button = req.getParameter("button" + i);
+                               if (button == null){
+                                   valid = false;
+                                   break;
+                               }
+
+                               buttons += req.getParameter("button" + i);
+                               if(i < buttonAmount){
+                                   buttons += ";"; 
+                               }
+                           }
+
+                           if(valid){
+                               System.out.println("BUTTONS VALID");
+                                ButtonLayoutModel model = new ButtonLayoutModel();
+
+                                if (model.updateButtonLayout(buttons, game) ){
+                                    game.setNewGameStep(5);
+                                    
+                                    res.sendRedirect("/UserModule/GameUploadController");
+                                    
+                                    /*
+                                    game = model.getFileStructureAsJSON(game);
+                                    System.out.println(game.getFilePathJSON());
+                                    */
+                                }
+                           }
                     }
                 }
+                //work in progress...
+                req.setAttribute("buttons", new ButtonLayout());
                 req.getRequestDispatcher("/WEB-INF/Pages/Game/gameButtonLayout.jsp").forward(req, res);
           }
           catch(Exception e){}  

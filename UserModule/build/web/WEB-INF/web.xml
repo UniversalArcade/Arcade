@@ -52,6 +52,10 @@
         <servlet-name>GameButtonLayoutController</servlet-name>
         <servlet-class>app.controller.game.GameButtonLayoutController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GameUploadController</servlet-name>
+        <servlet-class>app.controller.game.GameUploadController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>GameButtonLayoutController</servlet-name>
         <url-pattern>/GameButtonLayoutController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameUploadController</servlet-name>
+        <url-pattern>/GameUploadController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

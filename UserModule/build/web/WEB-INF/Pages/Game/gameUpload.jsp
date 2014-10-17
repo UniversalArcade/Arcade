@@ -1,17 +1,26 @@
-<%-- 
-    Document   : gameUpload
-    Created on : 17.10.2014, 08:21:21
-    Author     : Martin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
+
+<tiles:insert template="../Layout/layout.jsp">
+  <tiles:put name="title" value="Poster hochladen"/> 
+  <tiles:put name="body">
+
+         <p>
+           Schritt 1 : Spiel hochladen
+         </p>
+         
+         <form action="GameUploadController?action=update" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+                <c:out value="${game.errors['gameID']}"/>    
+                <br />
+            <input type="submit" value="Upload Game" />
+         </form>
+
+  </tiles:put>
+</tiles:insert>
+
+
+
