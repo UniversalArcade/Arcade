@@ -17,7 +17,7 @@ import javax.servlet.RequestDispatcher;
  *
  * @author KM
  */
-public class GameDetailController extends HttpServlet {
+public class GameDetailsController extends HttpServlet {
 
     
     

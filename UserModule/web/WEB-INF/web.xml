@@ -37,8 +37,20 @@
         <servlet-class>app.controller.GameListController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GameDetailsController</servlet-name>
+        <servlet-class>app.controller.GameDetailsController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GameDetailController</servlet-name>
-        <servlet-class>app.controller.GameDetailController</servlet-class>
+        <servlet-class>app.controller.game.GameDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GamePosterController</servlet-name>
+        <servlet-class>app.controller.game.GamePosterController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GameButtonLayoutController</servlet-name>
+        <servlet-class>app.controller.game.GameButtonLayoutController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
@@ -64,9 +76,21 @@
         <servlet-name>GameListController</servlet-name>
         <url-pattern>/GameListController</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameDetailsController</servlet-name>
+        <url-pattern>/GameDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>GameDetailController</servlet-name>
         <url-pattern>/GameDetailController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GamePosterController</servlet-name>
+        <url-pattern>/GamePosterController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameButtonLayoutController</servlet-name>
+        <url-pattern>/GameButtonLayoutController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

@@ -85,22 +85,7 @@ public class GameManagerModel {
         mkDir(baseDir + "/game");
         mkDir(baseDir + "/assets");
         mkDir(baseDir + "/tmp");
-        
-        
-        
-        
-        
-        /*
-        File folder = new File("C:/Users/Public/Arcade/Games/" + gameID);
-    	if(!folder.exists()){
-    		folder.mkdir();
-    	}
-        */
-        
-        
-        //System.out.println("Folder: " + folder.getAbsolutePath());
-        
-        
+         
         return gameID;
     }
     
