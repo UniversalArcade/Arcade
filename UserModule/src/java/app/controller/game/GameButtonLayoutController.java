@@ -25,47 +25,45 @@ public class GameButtonLayoutController extends HttpServlet
                     Game game = (Game) req.getSession().getAttribute("game");
                     
                     if( action.equals("update") ){
-                        
-                            System.out.println("BUTTONLAYOUT : UPDATE");
-                        
-                           int buttonAmount = 10; 
 
-                           String buttons = "";
-                           boolean valid = true;
+                        int buttonAmount = 10; 
 
-                           for(int i = 1; i <= buttonAmount; i++){
-                               String button = req.getParameter("button" + i);
-                               if (button == null){
-                                   valid = false;
-                                   break;
-                               }
+                        String buttons = "";
+                        boolean valid = true;
 
-                               buttons += req.getParameter("button" + i);
-                               if(i < buttonAmount){
-                                   buttons += ";"; 
-                               }
-                           }
+                        for(int i = 1; i <= buttonAmount; i++){
+                            String button = req.getParameter("button" + i);
+                            if (button == null){
+                                valid = false;
+                                break;
+                            }
 
-                           if(valid){
-                               System.out.println("BUTTONS VALID");
-                                ButtonLayoutModel model = new ButtonLayoutModel();
+                            buttons += req.getParameter("button" + i);
+                            if(i < buttonAmount){
+                                buttons += ";"; 
+                            }
+                        }
 
-                                if (model.updateButtonLayout(buttons, game) ){
-                                    game.setNewGameStep(5);
-                                    
-                                    res.sendRedirect("/UserModule/GameUploadController");
-                                    
-                                    /*
-                                    game = model.getFileStructureAsJSON(game);
-                                    System.out.println(game.getFilePathJSON());
-                                    */
-                                }
-                           }
+                        if(valid){
+                            System.out.println("BUTTONS VALID");
+                             ButtonLayoutModel model = new ButtonLayoutModel();
+
+                             if (model.updateButtonLayout(buttons, game) ){
+                                 game.setNewGameStep(5);
+
+                                 res.sendRedirect("/UserModule/GameUploadController");
+
+                                 /*
+                                 game = model.getFileStructureAsJSON(game);
+                                 System.out.println(game.getFilePathJSON());
+                                 */
+                             }
+                        }
                     }
                 }
                 //work in progress...
                 req.setAttribute("buttons", new ButtonLayout());
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/gameButtonLayout.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/Pages/Game/buttonLayout.jsp").forward(req, res);
           }
           catch(Exception e){}  
     }

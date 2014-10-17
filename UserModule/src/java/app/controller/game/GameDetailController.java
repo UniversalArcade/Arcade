@@ -20,14 +20,11 @@ public class GameDetailController extends HttpServlet
                 
                 User user = (User)req.getSession().getAttribute("user");
                 
-              
-                System.out.println("GameDetailController");
-              
+                
                 res.setContentType("text/html");
                 RequestDispatcher view;
                 
                 String action = req.getParameter("action");
-                System.out.println("action: " + action);
                 
                 if(action != null){
                 
@@ -39,7 +36,7 @@ public class GameDetailController extends HttpServlet
                         game.setGameID(gameID);
                         req.getSession().setAttribute("game", game);
 
-                        req.getRequestDispatcher("/WEB-INF/Pages/Game/gameDetails.jsp").forward(req, res);
+                        req.getRequestDispatcher("/WEB-INF/Pages/Game/details.jsp").forward(req, res);
                     }
                     
                     else if( action.equals("update") ){
@@ -72,7 +69,7 @@ public class GameDetailController extends HttpServlet
                         }
                     }
                 }
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/gameDetails.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/Pages/Game/details.jsp").forward(req, res);
           }
           catch(Exception e){}  
     }

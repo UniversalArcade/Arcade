@@ -41,7 +41,7 @@ public class GamePosterController extends HttpServlet
                         } 
                     }
                 }
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/gamePosterUpload.jsp").forward(req, res);
+                req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
           }
           catch(Exception e){}  
     }
