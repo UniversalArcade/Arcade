@@ -2,40 +2,48 @@ package app.controller.game;
 
 import app.beans.Game;
 import app.helper.Permission;
+import app.model.GameManagerModel;
+import app.model.game.ExeChooserModel;
+
 
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import app.model.game.GameUploadModel;
 
-public class GameUploadController extends HttpServlet
+
+public class ExeChooserController extends HttpServlet
 {
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
     	  try{
                 res.setContentType("text/html");
-              
+
                 String action = req.getParameter("action");
                 System.out.println("action: " + action);
                 
+                Game game = (Game) req.getSession().getAttribute("game");
+                
                 if( action != null ){
-                    
-                   Game game = (Game) req.getSession().getAttribute("game");
-                    
-                   if( action.equals("update") ){
-                        String contentType = req.getContentType();
-                        if ((contentType.indexOf("multipart/form-data") >= 0)) {
-                            GameUploadModel model = new GameUploadModel();
-                            model.uploadGame(req, game);
-                            game.setNewGameStep(2);
-                            res.sendRedirect("/UserModule/exechooser");
-                        }else{
-                            // Fehler beim hochladen
-                        }  
-                   } 
+                    if( action.equals("update") ){
+                        String path = req.getParameter("exePath");
+
+                        ExeChooserModel model = new ExeChooserModel();
+
+                        if (model.updateExePath(path, game) ){
+                            //model.toggleLive(1, game);
+                            req.getSession().setAttribute("game", null);
+                        }
+                        
+                    }
                 }
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
+                else{
+                   if(game != null){
+                       GameManagerModel model = new GameManagerModel();
+                       game = model.getFileStructureAsJSON(game);
+                   }     
+                }
+                req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);
           }
           catch(Exception e){}  
     }
