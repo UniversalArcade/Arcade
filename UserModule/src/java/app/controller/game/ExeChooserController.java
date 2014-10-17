@@ -39,7 +39,7 @@ public class ExeChooserController extends HttpServlet
                 }
                 else{
                    if(game != null){
-                       GameManagerModel model = new GameManagerModel();
+                       ExeChooserModel model = new ExeChooserModel();
                        game = model.getFileStructureAsJSON(game);
                    }     
                 }
