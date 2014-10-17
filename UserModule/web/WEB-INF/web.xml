@@ -74,7 +74,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GameManagerController</servlet-name>
-        <url-pattern>/GameManagerController</url-pattern>
+        <url-pattern>/gameManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ExeChooserController</servlet-name>

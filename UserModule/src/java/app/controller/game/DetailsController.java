@@ -9,7 +9,6 @@ import app.model.game.DetailsModel;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import app.model.GameManagerModel;
 
 public class DetailsController extends HttpServlet
 {
@@ -25,21 +24,12 @@ public class DetailsController extends HttpServlet
                 RequestDispatcher view;
                 
                 String action = req.getParameter("action");
+                System.out.println("Details action: " + action );
+                
                 
                 if(action != null){
                 
-                    if( action.equals("new") ){
-                        System.out.println("Neues Game anlegen");
-                        GameManagerModel model = new GameManagerModel();
-                        int gameID = model.insertNewGame(user.getUserID());
-                        Game game = new Game();
-                        game.setGameID(gameID);
-                        req.getSession().setAttribute("game", game);
-
-                        req.getRequestDispatcher("/WEB-INF/Pages/Game/details.jsp").forward(req, res);
-                    }
-                    
-                    else if( action.equals("update") ){
+                    if( action.equals("update") ){
 
                         Game game = (Game)req.getSession().getAttribute("game");
                         game.deleteErrors();
@@ -62,9 +52,13 @@ public class DetailsController extends HttpServlet
                         if(game.getErrors().isEmpty()){
                             DetailsModel model = new DetailsModel();
                             if( model.updateDetails(game) ){
+                                
+                                System.out.println("details: redirect to gammanager");
+                                
                                 game.setNewGameStep(4);
 
-                                res.sendRedirect("/UserModule/coverupload");
+                                //res.sendRedirect("/UserModule/coverupload");
+                                res.sendRedirect("/UserModule/gameManager?component=details");
                             }
                         }
                     }

@@ -20,8 +20,7 @@ public class GameManagerModel {
     		folder.mkdir();
     	}
         
-        return path;
-        
+        return path; 
     }
     
     public int insertNewGame(int userID){

@@ -8,21 +8,13 @@
   <tiles:put name="title" value="Auflistung deiner Spiele"/>
   <tiles:put name="body">
 
-    <c:if test="${user.userLvl > 0}">
-       <c:forEach var="item" items="${gamesList.games}">
-            <p>
-                <a href="GameDetailController?gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
-            </p>
-        </c:forEach>     
-    </c:if>
+    <c:forEach var="item" items="${gamesList.games}">
+         <p>
+             <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
+         </p>
+    </c:forEach>     
     
-    <c:if test="${user.userLvl == 0}">
-        <jsp:forward page="index.jsp"/>
-    </c:if>           
-            
-
-    <form method="POST" action="details">
-        <input type="hidden" name="action" value="new" />
+    <form method="POST" action="gameManager?action=new">
         <input type="submit" name="send" value="neues Game anlegen" />
     </form>
 

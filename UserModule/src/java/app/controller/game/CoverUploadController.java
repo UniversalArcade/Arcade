@@ -35,7 +35,7 @@ public class CoverUploadController extends HttpServlet
                              CoverUploadModel model = new CoverUploadModel();
                              model.uploadImage(req, game);
                              game.setNewGameStep(3);
-                             res.sendRedirect("/UserModule/buttonlayout");
+                             res.sendRedirect("/UserModule/gameManager?component=coverupload");
                         }else{
                             // Fehler beim hochladen
                         } 

@@ -31,8 +31,9 @@ public class ExeChooserController extends HttpServlet
                         ExeChooserModel model = new ExeChooserModel();
 
                         if (model.updateExePath(path, game) ){
-                            //model.toggleLive(1, game);
-                            req.getSession().setAttribute("game", null);
+                            
+                            res.sendRedirect("/UserModule/gameManager?component=exechooser");
+                            
                         }
                         
                     }

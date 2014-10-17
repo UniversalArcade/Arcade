@@ -51,7 +51,7 @@ public class ButtonLayoutController extends HttpServlet
                              if (model.updateButtonLayout(buttons, game) ){
                                  game.setNewGameStep(5);
 
-                                 res.sendRedirect("/UserModule/gameupload");
+                                 res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
 
                                  /*
                                  game = model.getFileStructureAsJSON(game);

@@ -29,7 +29,7 @@ public class GameUploadController extends HttpServlet
                             GameUploadModel model = new GameUploadModel();
                             model.uploadGame(req, game);
                             game.setNewGameStep(2);
-                            res.sendRedirect("/UserModule/exechooser");
+                            res.sendRedirect("/UserModule/gameManager?component=gameupload");
                         }else{
                             // Fehler beim hochladen
                         }  
