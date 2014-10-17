@@ -12,7 +12,7 @@
            Schritt 1 : Spiel hochladen
          </p>
          
-         <form action="GameUploadController?action=update" method="post" enctype="multipart/form-data">
+         <form action="gameupload?action=update" method="post" enctype="multipart/form-data">
             <input type="file" name="file" />
                 <c:out value="${game.errors['gameID']}"/>    
                 <br />

@@ -9,7 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.game.ButtonLayoutModel;
 
-public class GameButtonLayoutController extends HttpServlet
+public class ButtonLayoutController extends HttpServlet
 {
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
@@ -51,7 +51,7 @@ public class GameButtonLayoutController extends HttpServlet
                              if (model.updateButtonLayout(buttons, game) ){
                                  game.setNewGameStep(5);
 
-                                 res.sendRedirect("/UserModule/GameUploadController");
+                                 res.sendRedirect("/UserModule/gameupload");
 
                                  /*
                                  game = model.getFileStructureAsJSON(game);

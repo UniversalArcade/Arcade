@@ -41,16 +41,16 @@
         <servlet-class>app.controller.GameDetailsController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GameDetailController</servlet-name>
-        <servlet-class>app.controller.game.GameDetailController</servlet-class>
+        <servlet-name>DetailsController</servlet-name>
+        <servlet-class>app.controller.game.DetailsController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GamePosterController</servlet-name>
-        <servlet-class>app.controller.game.GamePosterController</servlet-class>
+        <servlet-name>CoverUploadController</servlet-name>
+        <servlet-class>app.controller.game.CoverUploadController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GameButtonLayoutController</servlet-name>
-        <servlet-class>app.controller.game.GameButtonLayoutController</servlet-class>
+        <servlet-name>ButtonLayoutController</servlet-name>
+        <servlet-class>app.controller.game.ButtonLayoutController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GameUploadController</servlet-name>
@@ -85,20 +85,20 @@
         <url-pattern>/GameDetailsController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GameDetailController</servlet-name>
-        <url-pattern>/GameDetailController</url-pattern>
+        <servlet-name>DetailsController</servlet-name>
+        <url-pattern>/details</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GamePosterController</servlet-name>
-        <url-pattern>/GamePosterController</url-pattern>
+        <servlet-name>CoverUploadController</servlet-name>
+        <url-pattern>/coverupload</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GameButtonLayoutController</servlet-name>
-        <url-pattern>/GameButtonLayoutController</url-pattern>
+        <servlet-name>ButtonLayoutController</servlet-name>
+        <url-pattern>/buttonlayout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GameUploadController</servlet-name>
-        <url-pattern>/GameUploadController</url-pattern>
+        <url-pattern>/gameupload</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

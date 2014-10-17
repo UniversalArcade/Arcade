@@ -21,7 +21,7 @@
     </c:if>           
             
 
-    <form method="POST" action="GameDetailController">
+    <form method="POST" action="details">
         <input type="hidden" name="action" value="new" />
         <input type="submit" name="send" value="neues Game anlegen" />
     </form>

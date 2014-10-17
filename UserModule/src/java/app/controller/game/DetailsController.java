@@ -11,7 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
 
-public class GameDetailController extends HttpServlet
+public class DetailsController extends HttpServlet
 {
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
@@ -64,7 +64,7 @@ public class GameDetailController extends HttpServlet
                             if( model.updateDetails(game) ){
                                 game.setNewGameStep(4);
 
-                                res.sendRedirect("/UserModule/GamePosterController");
+                                res.sendRedirect("/UserModule/coverupload");
                             }
                         }
                     }

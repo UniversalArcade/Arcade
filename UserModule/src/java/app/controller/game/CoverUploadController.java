@@ -11,7 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
 
-public class GamePosterController extends HttpServlet
+public class CoverUploadController extends HttpServlet
 {
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
@@ -35,7 +35,7 @@ public class GamePosterController extends HttpServlet
                              PosterUploadModel model = new PosterUploadModel();
                              model.uploadImage(req, game);
                              game.setNewGameStep(3);
-                             res.sendRedirect("/UserModule/GameButtonLayoutController");
+                             res.sendRedirect("/UserModule/buttonlayout");
                         }else{
                             // Fehler beim hochladen
                         } 

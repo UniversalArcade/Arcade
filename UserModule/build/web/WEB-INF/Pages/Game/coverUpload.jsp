@@ -12,7 +12,7 @@
       Schritt 2 : Poster hochladen
     </p>
 
-    <form action="GamePosterController?action=update" method="post" enctype="multipart/form-data">
+    <form action="coverupload?action=update" method="post" enctype="multipart/form-data">
            
         <input type="file" name="file" />
                 <br />
