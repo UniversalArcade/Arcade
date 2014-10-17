@@ -20,10 +20,10 @@ public class ExeChooserController extends HttpServlet
                 res.setContentType("text/html");
 
                 String action = req.getParameter("action");
-                System.out.println("action: " + action);
-                
+              
                 Game game = (Game) req.getSession().getAttribute("game");
-                
+               
+
                 if( action != null ){
                     if( action.equals("update") ){
                         String path = req.getParameter("exePath");
@@ -39,9 +39,12 @@ public class ExeChooserController extends HttpServlet
                     }
                 }
                 else{
+                   
                    if(game != null){
+
                        ExeChooserModel model = new ExeChooserModel();
                        game = model.getFileStructureAsJSON(game);
+
                    }     
                 }
                 req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);

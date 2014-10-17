@@ -60,6 +60,10 @@
         <servlet-name>ExeChooser</servlet-name>
         <servlet-class>app.controller.game.ExeChooserController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StatisticsController</servlet-name>
+        <servlet-class>app.controller.game.StatisticsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
@@ -107,6 +111,10 @@
     <servlet-mapping>
         <servlet-name>ExeChooser</servlet-name>
         <url-pattern>/exechooser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatisticsController</servlet-name>
+        <url-pattern>/statistics</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

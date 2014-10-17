@@ -19,6 +19,8 @@ public class DetailsController extends HttpServlet
                 
                 User user = (User)req.getSession().getAttribute("user");
                 
+                Game blubb = (Game)req.getSession().getAttribute("game");
+                System.out.println("details id: " + blubb.getGameID());
                 
                 res.setContentType("text/html");
                 RequestDispatcher view;
@@ -54,10 +56,6 @@ public class DetailsController extends HttpServlet
                             if( model.updateDetails(game) ){
                                 
                                 System.out.println("details: redirect to gammanager");
-                                
-                                game.setNewGameStep(4);
-
-                                //res.sendRedirect("/UserModule/coverupload");
                                 res.sendRedirect("/UserModule/gameManager?component=details");
                             }
                         }

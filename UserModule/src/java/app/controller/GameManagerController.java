@@ -32,8 +32,10 @@ public class GameManagerController extends HttpServlet
                 
                 
                 if(action != null){
+                    
+                    User user = (User)req.getSession().getAttribute("user");
                     if(action.equals("new")){
-                        User user = (User)req.getSession().getAttribute("user");
+                        
                         
                         GameManagerModel model = new GameManagerModel();
                         int gameID = model.insertNewGame(user.getUserID());
@@ -43,7 +45,21 @@ public class GameManagerController extends HttpServlet
                         
                         res.sendRedirect("/UserModule/" + components.get(0));
                     }
+                    
+                    else if(action.equals("edit")){
+                       int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
+                       GameManagerModel model = new GameManagerModel();
+                       Game game = model.getGameByID(gameID, user.getUserID());
+                       if(game != null){
+                           game.setInEditMode(true);
+                           req.getSession().setAttribute("game", game);
+                           res.sendRedirect("/UserModule/statistics");  
+                       }
+                    }
+                    
                 }
+                
+                
                 
                 
                 System.out.println("component: " + caller);
@@ -61,7 +77,8 @@ public class GameManagerController extends HttpServlet
                             model.toggleLive(1, game);
                             
                             req.getSession().setAttribute("game", null);
-                            req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);
+                            //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);
+                            res.sendRedirect("/UserModule/GameListController");
                         }
                     }
                 }

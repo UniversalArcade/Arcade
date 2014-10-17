@@ -29,15 +29,18 @@ public class GameListController extends HttpServlet{
         GameListModel gl = new GameListModel();
         bgl = gl.listGames(u);
         if(!bgl.getGames().isEmpty()){
-            view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
+            //view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
+            
             req.setAttribute("gamesList", bgl);
+            req.getRequestDispatcher("/WEB-INF/Pages/games.jsp").forward(req, res);
         }
         else{
-            view = req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp");
-
+            //view = req.getRequestDispatcher("/WEB-INF/Pages/games.jsp");
+            res.sendRedirect("/UserModule/gameManager?action=new");
+            
         }
 
-        view.forward(req, res); 
+        //view.forward(req, res); 
     }
     
     @Override

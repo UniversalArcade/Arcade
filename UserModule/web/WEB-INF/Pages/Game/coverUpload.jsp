@@ -9,7 +9,7 @@
   <tiles:put name="body">
 
     <p>
-      Schritt 2 : Poster hochladen
+      Schritt 2 : Cover hochladen
     </p>
 
     <form action="coverupload?action=update" method="post" enctype="multipart/form-data">

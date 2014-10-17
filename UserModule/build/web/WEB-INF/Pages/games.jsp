@@ -10,7 +10,7 @@
 
     <c:forEach var="item" items="${gamesList.games}">
          <p>
-             <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a>
+             <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a> LIVE
          </p>
     </c:forEach>     
     

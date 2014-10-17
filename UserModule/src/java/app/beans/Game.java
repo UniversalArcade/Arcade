@@ -10,16 +10,53 @@ import org.json.simple.JSONArray;
 
 public class Game implements Serializable {
     
-    private int gameID, newGameStep, permanentStore;
-    private String title, credits, description;
+    private boolean inEditMode;
+
+    
+    private int gameID, permanentStore, gameDuration, gameStarts;
+    private String title, credits, description, buttonConfig;
     private JSONArray filePathJSON;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
+    
+    public boolean isInEditMode() {
+        return inEditMode;
+    }
+
+    public void setInEditMode(boolean inEditMode) {
+        this.inEditMode = inEditMode;
+    }
+    
+    public String getButtonConfig() {
+        return buttonConfig;
+    }
+
+    public void setButtonConfig(String buttonConfig) {
+        this.buttonConfig = buttonConfig;
+    }
+    
+    public int getGameDuration() {
+        return gameDuration;
+    }
+
+    public void setGameDuration(int gameDuration) {
+        this.gameDuration = gameDuration;
+    }
+
+    public int getGameStarts() {
+        return gameStarts;
+    }
+
+    public void setGameStarts(int gameStarts) {
+        this.gameStarts = gameStarts;
+    }
+    
+    
     public Game() {
         error = new HashMap();
-        this.setNewGameStep(1);
         this.setPermanentStore(1);
+        this.setInEditMode(false);
     }
     
 
@@ -54,14 +91,7 @@ public class Game implements Serializable {
         }
     }
     
-    public int getNewGameStep() {
-        return newGameStep;
-    }
-
-    public void setNewGameStep(int newGameStep) {
-        this.newGameStep = newGameStep;
-    }
-    
+   
     public String getTitle() {
         return title;
     }

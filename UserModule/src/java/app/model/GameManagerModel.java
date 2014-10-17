@@ -3,8 +3,14 @@ package app.model;
 
 
 import app.beans.Game;
+import app.beans.GamesDetail;
+import app.beans.User;
 import app.helper.SQLHelper;
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class GameManagerModel {
@@ -51,6 +57,37 @@ public class GameManagerModel {
    
     public void deleteGame(){
     
+    }
+    
+    public Game getGameByID(int gameID, int userID) {
+        Game g = new Game();
+        SQLHelper sql = new SQLHelper();
+        
+        sql.openCon();
+            
+            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
+            try {
+                if(rs.next()){
+                    g.setGameID(gameID);
+                    g.setTitle(rs.getString("title"));
+                    g.setDescription(rs.getString("description"));
+                    g.setButtonConfig(rs.getString("buttonConfig"));
+                    g.setCredits(rs.getString("credits"));
+                    g.setGameDuration(rs.getInt("gameDuration"));
+                    g.setGameStarts(rs.getInt("gameStarts"));
+                    g.setPermanentStore(rs.getInt("permanentStore")); 
+                }
+                else{
+                    g = null;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GameDetailModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+        sql.closeCon();
+        
+        return g;
+        
     }
     
 }

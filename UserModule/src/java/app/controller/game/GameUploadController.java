@@ -28,7 +28,6 @@ public class GameUploadController extends HttpServlet
                         if ((contentType.indexOf("multipart/form-data") >= 0)) {
                             GameUploadModel model = new GameUploadModel();
                             model.uploadGame(req, game);
-                            game.setNewGameStep(2);
                             res.sendRedirect("/UserModule/gameManager?component=gameupload");
                         }else{
                             // Fehler beim hochladen
