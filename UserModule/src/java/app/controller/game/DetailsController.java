@@ -3,6 +3,7 @@ package app.controller.game;
 
 import app.beans.User;
 import app.beans.Game;
+import app.beans.Message;
 import app.helper.Permission;
 import app.model.game.DetailsModel;
 
@@ -55,7 +56,8 @@ public class DetailsController extends HttpServlet
                             DetailsModel model = new DetailsModel();
                             if( model.updateDetails(game) ){
                                 
-                                System.out.println("details: redirect to gammanager");
+                                req.getSession().setAttribute("message", new Message("Details erfolgreich bearbeitet"));
+                                
                                 res.sendRedirect("/UserModule/gameManager?component=details");
                             }
                         }

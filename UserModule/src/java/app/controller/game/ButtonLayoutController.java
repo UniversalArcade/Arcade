@@ -2,6 +2,7 @@ package app.controller.game;
 
 import app.beans.Game;
 import app.beans.ButtonLayout;
+import app.beans.Message;
 import app.helper.Permission;
 
 import java.io.*;
@@ -49,6 +50,7 @@ public class ButtonLayoutController extends HttpServlet
                              ButtonLayoutModel model = new ButtonLayoutModel();
 
                              if (model.updateButtonLayout(buttons, game) ){
+                                 req.getSession().setAttribute("message", new Message("Button Layout erfolgreich bearbeitet"));
                                  res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
                              }
                         }

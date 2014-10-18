@@ -17,7 +17,7 @@
         <div class="fileChooser"></div>
          <form method="POST" action="exechooser?action=update">
             <input type="hidden" name="exePath" class="exePath" value=""> 
-            <input type="submit" value="Fertig" class="exePathSubmit" disabled="" />
+            <input type="submit" value="${game.inEditMode ? "bearbeiten" : "fertig"}" class="exePathSubmit" disabled="" />
         </form>
 
   </tiles:put>

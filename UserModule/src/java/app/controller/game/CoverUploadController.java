@@ -3,6 +3,7 @@ package app.controller.game;
 
 import app.beans.User;
 import app.beans.Game;
+import app.beans.Message;
 import app.helper.Permission;
 import app.model.game.CoverUploadModel;
 
@@ -34,6 +35,7 @@ public class CoverUploadController extends HttpServlet
                         if ( (contentType.indexOf("multipart/form-data") >= 0) ) {
                              CoverUploadModel model = new CoverUploadModel();
                              model.uploadImage(req, game);
+                             req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
                              res.sendRedirect("/UserModule/gameManager?component=coverupload");
                         }else{
                             // Fehler beim hochladen

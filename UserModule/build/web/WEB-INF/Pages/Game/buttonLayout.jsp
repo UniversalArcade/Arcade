@@ -38,7 +38,7 @@
                     </tr>
                  </c:forEach>    
                <tr>
-                   <td colspan="2"><input type="submit" name="send" value="weiter" />
+                   <td colspan="2"><input type="submit" name="send" value="${game.inEditMode ? "bearbeiten" : "weiter"}" />
                </tr>
             </table>
         </form>

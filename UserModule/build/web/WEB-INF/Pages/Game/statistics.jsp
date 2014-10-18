@@ -7,6 +7,10 @@
 <tiles:insert template="../Layout/gameLayout.jsp">
     <tiles:put name="title" value="Statistiken zu ${game.title}"/> 
   <tiles:put name="body">
+      <p>
+          TODO: dein spiel ist live / nicht live (ändern)
+          
+      </p> 
 
     <p>
         anzahl aufrufe: <c:out value="${game.gameStarts}" />

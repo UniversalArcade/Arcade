@@ -1,6 +1,7 @@
 package app.controller.game;
 
 import app.beans.Game;
+import app.beans.Message;
 import app.helper.Permission;
 import app.model.GameManagerModel;
 import app.model.game.ExeChooserModel;
@@ -31,11 +32,9 @@ public class ExeChooserController extends HttpServlet
                         ExeChooserModel model = new ExeChooserModel();
 
                         if (model.updateExePath(path, game) ){
-                            
+                            req.getSession().setAttribute("message", new Message("Exe erfolgreich ausgewählt"));
                             res.sendRedirect("/UserModule/gameManager?component=exechooser");
-                            
                         }
-                        
                     }
                 }
                 else{

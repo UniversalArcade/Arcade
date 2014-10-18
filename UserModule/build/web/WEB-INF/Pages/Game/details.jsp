@@ -2,7 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
+<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Spieledetails bearbeiten"/> 
@@ -45,7 +45,7 @@
 
           </tr>
           <tr>
-              <td colspan="2"><input type="submit" name="send" value="weiter" />
+              <td colspan="2"><input type="submit" name="send" value="${game.inEditMode ? "bearbeiten" : "weiter"}" />
           </tr>
        </table>
    </form>

@@ -65,13 +65,25 @@ public class GameManagerController extends HttpServlet
                 System.out.println("component: " + caller);
                 if(components != null){
                     if(components.contains( caller )){
-                        int index = components.indexOf( caller ) + 1;
+                        
+                        Game game = (Game) req.getSession().getAttribute("game");
+                        
+                        int index;
+                        if(game.isInEditMode()){
+                            index = components.indexOf( caller );
+                        }
+                        else{
+                            index = components.indexOf( caller ) + 1;
+                        }
+                        
+                        
+                        
                         if(index < components.size()){
                             String next = components.get( index );
                             res.sendRedirect("/UserModule/" + next);
                         }
                         else{
-                            Game game = (Game)req.getSession().getAttribute("game");
+                            //Game game = (Game)req.getSession().getAttribute("game");
                             
                             GameManagerModel model = new GameManagerModel();
                             model.toggleLive(1, game);

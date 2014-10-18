@@ -18,6 +18,9 @@
             <div class="navi">
                 <jsp:include page="Tiles/editGameNav.jsp" />    
             </div>
+            <div id="message">
+                <jsp:include page="Tiles/message.jsp" />  
+            </div>
             <div class="pad">
                 <tiles:getAsString name="body"/>
             </div>

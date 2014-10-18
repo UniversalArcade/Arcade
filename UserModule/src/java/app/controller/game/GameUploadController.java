@@ -1,6 +1,7 @@
 package app.controller.game;
 
 import app.beans.Game;
+import app.beans.Message;
 import app.helper.Permission;
 
 import java.io.*;
@@ -28,6 +29,7 @@ public class GameUploadController extends HttpServlet
                         if ((contentType.indexOf("multipart/form-data") >= 0)) {
                             GameUploadModel model = new GameUploadModel();
                             model.uploadGame(req, game);
+                            req.getSession().setAttribute("message", new Message("Spiel erfolgreich hochgeladen"));
                             res.sendRedirect("/UserModule/gameManager?component=gameupload");
                         }else{
                             // Fehler beim hochladen
