@@ -4,6 +4,7 @@ package app.controller;
 
 import app.model.LoginModel;
 import app.beans.Costumer;
+import app.beans.Message;
 import app.beans.User;
 
 import java.io.*;
@@ -40,10 +41,10 @@ public class LoginController extends HttpServlet
                     
                     if(user.getUserID() > 0){
                         System.out.println("ID > 0");
-                        //Basket b = (Basket)req.getSession().getAttribute("basket");
+
                         req.getSession().setAttribute("user", user);
-                        //req.getSession().setAttribute("userLvl", id);
-                        //req.getSession().setAttribute("userLvl", id);
+                        req.getSession().setAttribute("message", new Message(user.getUserID() +  " erfolgreich eingeloggt."));
+
                     }
                     
                     view = req.getRequestDispatcher("GameListController");  
