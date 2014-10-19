@@ -1,0 +1,31 @@
+
+
+#InfoBox {
+visibility:hidden;
+position:absolute;
+top:10px;
+left:10px;
+z-index:1;
+
+/* diese Angaben können Sie anpassen */
+width:300px;
+background-color:#FDFEFF;
+border:4px solid #0090E0;
+}
+
+
+/* weitere Box in der Info-Box für padding */
+#BoxInnen {
+padding:15px;
+}
+
+
+/* Formatierung Texte in der Info-Box */
+
+#BoxInhalte {
+font-family:Verdana,Arial,Helvetica,sans-serif;
+font-size:11px;
+color:#5F5F5F;
+line-height:130%;
+}
+
