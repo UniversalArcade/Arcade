@@ -2,12 +2,25 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<link rel="stylesheet" type="text/css" href="tooltip.css">
+<script src="tooltip.js"></script>
+<div id="InfoBox" style="z-index:1; visibility:hidden;">
+<div id="BoxInnen"><span id="BoxInhalte">&nbsp;</span></div>
+</div>
+
+
+<br><br>
+
+
+
+<br><br>
+
 <jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Spieledetails bearbeiten"/> 
   <tiles:put name="body">
-
+  
     <p>
       Schritt 1 : Details bearbeiten
     </p>
@@ -27,6 +40,7 @@
               <td width="85%">
                    <textarea name="description" cols="25" rows="8"><c:out value="${game.description}"/></textarea> 
                    <c:out value="${game.errors['description']}"/>
+                   
               </td>
           </tr>
           <tr>
@@ -41,6 +55,8 @@
               <td width="85%">
                   <input name="permanentStore" type="checkbox"  ${game.permanentStore == 1 ? "checked" : "" }/>
                   <c:out value="${game.errors['title']}"/>
+                  <a onmouseover="InfoBoxAnzeigen(event,'Durch diese<br>Funktion wird ihr <br>Spiel blablabla',20,-30);"
+                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
               </td>
 
           </tr>
