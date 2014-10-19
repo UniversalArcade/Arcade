@@ -37,10 +37,6 @@
         <servlet-class>app.controller.GameListController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GameDetailsController</servlet-name>
-        <servlet-class>app.controller.GameDetailsController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>DetailsController</servlet-name>
         <servlet-class>app.controller.game.DetailsController</servlet-class>
     </servlet>
@@ -87,10 +83,6 @@
     <servlet-mapping>
         <servlet-name>GameListController</servlet-name>
         <url-pattern>/GameListController</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GameDetailsController</servlet-name>
-        <url-pattern>/GameDetailsController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DetailsController</servlet-name>

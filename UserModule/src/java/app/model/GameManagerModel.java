@@ -3,7 +3,6 @@ package app.model;
 
 
 import app.beans.Game;
-import app.beans.GamesDetail;
 import app.beans.User;
 import app.helper.SQLHelper;
 import java.io.File;
@@ -81,7 +80,7 @@ public class GameManagerModel {
                     g = null;
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(GameDetailModel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GameManagerModel.class.getName()).log(Level.SEVERE, null, ex);
             }
            
         sql.closeCon();
