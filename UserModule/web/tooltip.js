@@ -1,6 +1,6 @@
 
-var offsetx=20
-var offsety=0
+var offsetx=20;
+var offsety=0;
 
 function InfoBoxAusblenden() {
       document.getElementById('InfoBox').style.visibility = "hidden";
