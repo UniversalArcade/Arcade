@@ -24,6 +24,8 @@
                     <td width="15%">Mail</td>
                     <td width="85%"><input type="text" name="mail" value="${customer.mail}" size="30"/>
                         <c:out value="${customer.errors['mail']}"/>
+                         <a onmouseover="InfoBoxAnzeigen(event,'Geben Sie hier Ihre Email ein <br>Bsp.: Max.Mustermann@haw-hamburg.de',20,-30);"
+                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                     </td>
 
                 </tr>

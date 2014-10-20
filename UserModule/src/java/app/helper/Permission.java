@@ -36,4 +36,9 @@ public class Permission {
         }
         return false;
     }
+    
+    //TODO : prüft ob angeforderter Userlvl exakt dem eigenen entspricht ( == )
+    public boolean isExactly(){
+     return true;
+    }
 }

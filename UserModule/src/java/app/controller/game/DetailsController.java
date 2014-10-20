@@ -54,8 +54,7 @@ public class DetailsController extends HttpServlet
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(game.getErrors().isEmpty()){
                             DetailsModel model = new DetailsModel();
-                            if( model.updateDetails(game) ){
-                                
+                            if( model.updateDetails(game) ){                                
                                 req.getSession().setAttribute("message", new Message("Details erfolgreich bearbeitet"));
                                 
                                 res.sendRedirect("/UserModule/gameManager?component=details");

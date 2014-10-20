@@ -7,6 +7,8 @@
         <title> <tiles:getAsString name="title" /> </title>
         <meta name="description" content="Newschool Arcade" />
         <link href="_stylesheet.css" rel="stylesheet" type="text/css" />
+        <script src="Scripts/tooltip.js"></script>
+        
         <tiles:getAsString name="dependence" ignore="true"/>
     </head>
     <body  <tiles:getAsString name="bodyAttr" ignore="true"/> >
@@ -19,6 +21,11 @@
                 <jsp:include page="Tiles/message.jsp" />  
             </div>
             <div class="pad">
+                
+                <div id="InfoBox" style="z-index:1; visibility:hidden;">
+                    <div id="BoxInnen"><span id="BoxInhalte">&nbsp;</span></div>
+                </div>
+                
                 <tiles:getAsString name="body"/>
             </div>
             <div class="basket"></div>

@@ -12,7 +12,11 @@
   <tiles:put name="bodyAttr" value="onload = 'init(${game.filePathJSON})' " />
   <tiles:put name="body">
 
-        <p> Ausführbare Datei auswählen </p>
+        <p> Ausführbare Datei auswählen 
+         <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie hier die Startdatei Ihres Spiels aus. (.exe ,.bat o.ä.)',20,-30);"
+        accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
+        </p>
+       
          
         <div class="fileChooser"></div>
          <form method="POST" action="exechooser?action=update">

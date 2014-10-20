@@ -12,7 +12,7 @@
     <c:when test="${!customer.registrationComplete}">
 
     <p>
-        Registrieren (Nur mit HAW Mail)    
+        Registrieren
     </p>
 
     <form method="POST" action="RegistrationController">
@@ -21,6 +21,8 @@
                 <td width="15%">Mail</td>
                 <td width="85%"><input type="text" name="mail" value="${customer.mail}" size="30"/>
                     <c:out value="${customer.errors['mail']}"/>
+                    <a onmouseover="InfoBoxAnzeigen(event,'Geben Sie hier Ihre Email ein. Es funktioniert hier nur Ihre @haw-hamburg.de Adresse. <br>Bsp.: Max.Mustermann@haw-hamburg.de',20,-30);"
+                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                 </td>
 
             </tr>
@@ -29,6 +31,8 @@
                 <td width="85%">
                     <input type="password" name="password" value="${customer.password}" size="30"/>
                     <c:out value="${customer.errors['password']}"/>
+                     <a onmouseover="InfoBoxAnzeigen(event,'Das Passwort muss zwischen <br>6-30 Zeichen lang sein und mindestens ein Sonderzeichen und eine Zahl enthalten.',20,-30);"
+                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                 </td>
             </tr>
              <tr>

@@ -26,6 +26,11 @@ public class Costumer implements Serializable {
     }
 
     public void setMail(String mail) {
+        //TODO regex auf @haw-hamburg.de
+        //ein@ im gesamten string
+        //keine sonderzeichen außer . -_
+        //haw mail sowieso nur vorname.nachname@haw-hambur.de
+        //außer bei doppelten Namen...konvention???
         if(!mail.equals("")){
             this.mail = mail;
         }
@@ -39,6 +44,12 @@ public class Costumer implements Serializable {
     }
 
     public void setPassword(String password) {
+        // code strippen (html tags...)
+        // anzahl zeichen 6 - 30
+        // mindestens ein sonderzeichen
+        // mindestens eine zahl
+        // passwortcheck als JS im Frontend (trivial)
+        
         if(!password.equals("")){
             this.password = password;
             if(password.length() < 3){
