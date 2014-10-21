@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import app.beans.User;
 import app.beans.GamesList;
+import app.beans.Message;
 import app.helper.Permission;
 import app.model.GameListModel;
 import javax.servlet.RequestDispatcher;
@@ -57,11 +58,12 @@ public class GameListController extends HttpServlet{
             
         Permission permission = new Permission();
         
-        if(permission.isValid(req, "user")){
+        if(permission.isValid(req, "user") >= 0){
             this.processRequest(req,res);
         }
         else{
-            req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+            req.getSession().setAttribute("message", new Message("error","Kein Zugriff"));
+            req.getRequestDispatcher("/login").forward(req, res);
         }  
     }
 

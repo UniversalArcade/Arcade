@@ -55,11 +55,12 @@ public class GameUploadController extends HttpServlet
             
         Permission permission = new Permission();
         
-        if(permission.isValid(req, "user")){
+        if(permission.isValid(req, "user") >= 0){
             this.processRequest(req,res);
         }
         else{
-            req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+            req.getSession().setAttribute("message", new Message("error","Kein Zugriff"));
+            req.getRequestDispatcher("/login").forward(req, res);
         }  
     }
 }
