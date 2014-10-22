@@ -51,8 +51,8 @@ function evaluation(){
 function init(){    
     evaluation();
     
-    imageIDs.forEach(function(d,i){ positions.push( sizes.imgWidth * (i-1) + sizes.imgThresh * (i-1) ) });
-    //(i-1) damit das erste Bild links außerhalb der svg ebene ist
+    imageIDs.forEach(function(d,i){ positions.push( sizes.imgWidth * (i) + sizes.imgThresh * (i) ) });
+    //Erstes Bild ist nun am linken Rand der svg ebene.
     
     
     container = d3.select("body")
