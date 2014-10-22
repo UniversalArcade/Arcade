@@ -11,7 +11,7 @@
 
                 <li>
                     <p>
-                        <a href="LoginController">Login</a>
+                        <a href="login">Login</a>
                     </p>
                 </li>
                 <li>
@@ -48,7 +48,7 @@
 
                  <li>
                     <p>
-                        <a href="LoginController?action=logout">Logout</a>
+                        <a href="login?action=logout">Logout</a>
                     </p>
                 </li>
 

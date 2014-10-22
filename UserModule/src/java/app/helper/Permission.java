@@ -23,22 +23,27 @@ public class Permission {
         return -1;
     }
     
-    public boolean isValid(HttpServletRequest req, String role){
+    
+    // return
+    // -1 : role < userLvl :: input userLvl is less then required
+    // 0 : role == userLvl :: input userLvl is exactly as requiered
+    // 1: role > userLvl :: input userLvl is more then required
+    public int isValid(HttpServletRequest req, String role){
 
         User user = (User)req.getSession().getAttribute("user");
         if(user != null){
             if(user.getUserID() > 0 && user.getUserLvl() > 0){
                 int userLvl = this.getUserLvlFromRole(role);
-                if(userLvl > -1 && user.getUserLvl() >= userLvl){
-                    return true;
+                if(userLvl > -1 ){
+                    if(user.getUserLvl() > userLvl){
+                        return 1 ;
+                    }
+                    else if(user.getUserLvl() == userLvl){
+                        return 0;
+                    }                    
                 }
             }
         }
-        return false;
-    }
-    
-    //TODO : prüft ob angeforderter Userlvl exakt dem eigenen entspricht ( == )
-    public boolean isExactly(){
-     return true;
+        return -1;
     }
 }
