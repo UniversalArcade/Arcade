@@ -69,8 +69,8 @@ public class ExeChooserController extends HttpServlet
             this.processRequest(req,res);
         }
         else{
-           req.getSession().setAttribute("message", new Message("error","Kein Zugriff"));
-            req.getRequestDispatcher("/login").forward(req, res);
+           req.getSession().setAttribute("message", new Message(Message.Type.ERROR,"Kein Zugriff"));
+           req.getRequestDispatcher("/login").forward(req, res);
         }  
     }
 }

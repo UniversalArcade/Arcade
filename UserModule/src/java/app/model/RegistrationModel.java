@@ -27,7 +27,7 @@ public class RegistrationModel {
             ResultSet rs = sql.execQuery("SELECT id FROM user WHERE mail='"+c.getMail()+"'");
             if( !rs.next() ){
                sql.execNonQuery("INSERT INTO `user` (mail,password,salt) VALUES ('"+c.getMail()+"', '"+c.getPassword()+"', '1234')");
-              
+               MailHelper.MailHelper("hh-amburg1985@web.de", "message jo", "betreff jo");
             }
             else{
                 c.addError("mail", "E-mail-Adresse existiert bereits");

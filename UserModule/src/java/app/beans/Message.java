@@ -13,6 +13,10 @@ public class Message implements Serializable{
     // Klasse hat String type und String Msg
     // Type ist success oder warning oder error
     
+    public enum Type{
+        SUCCESS, ERROR
+    }
+    
     private ArrayList<MessageElement> message;
     
     public Message(){
@@ -21,13 +25,15 @@ public class Message implements Serializable{
     
     public Message(String message){
         this();
-        this.addMessage("success", message);
+        this.addMessage(Type.SUCCESS.name(), message);
     }
     
-    public Message(String type, String message){
+    public Message(Type type, String message){
         this();
-        this.addMessage(type, message);
+        this.addMessage(type.name(), message);
     }
+    
+    
     
     public void addMessage(String type, String message){
        this.message.add( new MessageElement(type, message) );

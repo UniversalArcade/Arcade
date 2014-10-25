@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.simple.JSONArray;
+import org.json.*;
 
 /**
  *
@@ -20,6 +21,7 @@ import org.json.simple.JSONArray;
 public class ExeChooserModel {
     
     public boolean updateExePath(String path, Game g){
+        
         SQLHelper sql = new SQLHelper();
         
         sql.openCon();

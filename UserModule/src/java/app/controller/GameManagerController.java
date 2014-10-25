@@ -121,7 +121,7 @@ public class GameManagerController extends HttpServlet
             this.processRequest(req,res);
         }
         else{
-            req.getSession().setAttribute("message", new Message("error","Kein Zugriff"));
+            req.getSession().setAttribute("message", new Message(Message.Type.ERROR,"Kein Zugriff"));
             req.getRequestDispatcher("/login").forward(req, res);
         }  
     }
