@@ -103,26 +103,37 @@ function init(){
 }
 
 function selectGame(){
-    /*
-    d3.select("g")
+    
+    
+     d3.select("g")
             .transition()
             .duration(1000)
-            .attr("opacity","0");
-    */
+            .attr("opacity","0"); 
+
    
    var startGame = imageIDs[ positions.indexOf(420) ];
     //alert("Ausgewähltes Spiel - ID:" + imageIDs[ positions.indexOf(420) ] );
-               
-    $.get('GameController',{action:"getGameInfo",gameID:startGame},function(responseText) { 
-                            //$('#response').text(responseText);
-                            //alert(responseText);
+    
+    //Beispiel Array-Objekt
+    var details = {"ID":1,"Spielename":3,"Spielestarts": 13,"Spieledauer":25,"Spieleinfo":"bla bla blub","Buttonbelegung":["A = Start", "B = Jump"]};
+    console.log(details);
+    document.getElementById('details').innerHTML = details;}
+
+    
+    
+    /*$.get('GameController',{action:"getGameInfo",gameID:startGame},function(responseText) { 
+                            $('#response').text(responseText);
+                            alert(responseText);
                             details = JSON.parse(responseText);
-                            
-    });
     
+        
+        
+    }); */
+
     
                
-}
+
+
 
 function updatePosition(direction){
     done = false;
