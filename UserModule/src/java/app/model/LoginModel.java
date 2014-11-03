@@ -21,11 +21,13 @@ public class LoginModel {
         
         sql.openCon();
             
-            ResultSet rs = sql.execQuery("SELECT id, userlvl FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
+            ResultSet rs = sql.execQuery("SELECT id, userlvl,isregistred FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
         
             if(rs.next()){
                 user.setUserID( rs.getInt("id") );
                 user.setUserLvl( rs.getInt("userlvl") );
+                user.setRegistred(rs.getInt("isregistred"));
+                 System.out.println("Registred Status:" + user.getRegistred());
             }
            
         sql.closeCon();

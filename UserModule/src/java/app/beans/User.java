@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class User implements Serializable{
     
-    private int userID,userLvl;
+    private int userID,userLvl,isregistred;
  
     public int getUserID() {
         return userID;
@@ -20,5 +20,13 @@ public class User implements Serializable{
 
     public void setUserLvl(int userLvl) {
         this.userLvl = userLvl;
+    }
+    
+    public int getRegistred(){
+        return isregistred;
+    }
+    
+    public void setRegistred(int isregistred){
+        this.isregistred= isregistred;
     }
 }

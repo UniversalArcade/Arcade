@@ -34,12 +34,17 @@ public class RegistrationModel {
                  
                          
                sql.execNonQuery("INSERT INTO `user` (mail,password,salt,randomValue) VALUES ('"+c.getMail()+"', '"+c.getPassword()+"', '1234','"+random+"')");
-               String recipent = c.getMail();
+              
                String uniqueURL = "http://localhost:8080/UserModule/RegistrationController?unique="+random;
-               String message = "Vielen Dank für Ihre Registrierung bei der HAW ArcadeStation. Zum freischalten Ihres Accounts klicken Sie bitte auf folgenden Link ....";
-               message += "<a href="+uniqueURL+">Hier klicken</a>";
+               String message = "Vielen Dank für Ihre Registrierung bei der HAW ArcadeStation." ;
+                    message += "<br/>*************************************** <br/>";
+                    message += "<br/>Folgenden Daten sind von Ihnen hinterlegt : " ;
+                    message += "<br/>Email ="+ c.getMail()+"";
+                    message += "<br/>Zum freischalten Ihres Accounts klicken Sie bitte auf folgenden Link ";
+                    message += "<br/><a href="+uniqueURL+">Account aktivieren </a><br/>";
+                    message += "<br/>*************************************** ";
                 
-               MailHelper.sendMail("Ihre Registrierung bei HAWArcadeStation", recipent, message );                   
+               MailHelper.sendMail("Ihre Registrierung bei HAWArcadeStation", c.getMail(), message );                   
             }       
             else{
                 c.addError("mail", "E-mail-Adresse existiert bereits");
@@ -57,12 +62,12 @@ public class RegistrationModel {
     public void activateUser(String URLString)throws Exception{
        sql.openCon(); 
         ResultSet rs = sql.execQuery("SELECT id FROM user WHERE randomValue='"+URLString+"'");
-        System.out.println("randomValue: "+URLString);
+        //System.out.println("randomValue: "+URLString);
             if( !rs.next() ){                    
                 System.out.println("RandomValue not found");
             } 
             else {
-                sql.execNonQuery("UPDATE user SET istregistriert ='1' WHERE randomValue='"+URLString+"' ");      
+                sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE randomValue='"+URLString+"' ");      
         }      
        sql.closeCon();
     }
