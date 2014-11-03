@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package app.helper;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +10,20 @@ import java.util.logging.Logger;
  * @author Martin
  */
 public class SecurityHelper {
+    int random;
+    
+    /**
+     *
+     * @return
+     */
+    public Integer createRandom(){
+        Random ran = new Random();
+        random = 100000 + ran.nextInt(900000);  
+        String randomValue = Integer.toString(random);
+        System.out.println("RandomValue "+randomValue);  
+        return random;
+    }
+    
     
     public SecurityHelper(){}
     

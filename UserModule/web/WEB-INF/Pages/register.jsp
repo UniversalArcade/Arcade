@@ -2,6 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <jsp:useBean id="customer" class="app.beans.Costumer" scope="request"/>
 
 <tiles:insert template="Layout/layout.jsp">
@@ -28,15 +29,15 @@
             </tr>
             <tr>
                 <td width="15%">Passwort</td>
-                <td width="85%">
-                    <input type="password" name="password" value="${customer.password}" size="30"/>
+                
+             <td width="85%"><input type="password" name="password" value="${customer.password}" size="30"/>
                     <c:out value="${customer.errors['password']}"/>
                      <a onmouseover="InfoBoxAnzeigen(event,'Das Passwort muss zwischen <br>6-30 Zeichen lang sein und mindestens ein Sonderzeichen und eine Zahl enthalten.',20,-30);"
                    accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
-                </td>
+               </td>      
             </tr>
              <tr>
-                <td width="15%">Passwort widerholen</td>
+                <td width="15%">Passwort wiederholen</td>
                 <td width="85%">
                     <input type="password" name="passwordWDH" value="${customer.passwordWDH}" size="30"/>
                     <c:out value="${customer.errors['passwordWDH']}"/>
@@ -50,7 +51,7 @@
 
     </c:when>
     <c:otherwise>
-        Du hast dich erfolgreich registriert, bitte mail bestätigen 
+        Du hast dich erfolgreich registriert, bitte Mail bestätigen. 
     </c:otherwise>
 </c:choose>
 

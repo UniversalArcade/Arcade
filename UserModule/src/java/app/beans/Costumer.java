@@ -24,7 +24,7 @@ public class Costumer implements Serializable {
     public String getMail() {
         return mail;
     }
-
+    
     public void setMail(String mail) {
         //TODO regex auf @haw-hamburg.de
         //ein@ im gesamten string
@@ -96,6 +96,5 @@ public class Costumer implements Serializable {
     public HashMap getErrors(){
         return error;
     }
-    
     
 }
