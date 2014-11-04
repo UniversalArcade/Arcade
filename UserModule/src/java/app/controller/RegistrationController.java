@@ -20,12 +20,14 @@ public class RegistrationController extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  try{
+    	  
               
                 //SecurityHelper sec = new SecurityHelper();
                 //System.out.println(sec.getSHAHash("abc"));
-                boolean error = false;
-              
+                
+               
+                // SHA Experiment
+                /*
                 MessageDigest md = MessageDigest.getInstance( "SHA" );
                 byte[] digest = md.digest( "ABCDEFGHIJKLMNO".getBytes() );
                 String msg = "";
@@ -35,6 +37,8 @@ public class RegistrationController extends HttpServlet
                 System.out.println("AHA: " + msg);
                 //System.out.println("JA : " + digest.toString());
                 
+                */        
+                        
                 Costumer cust = new Costumer();
                 cust.setMail(req.getParameter("mail"));
                 cust.setPassword(req.getParameter("password"));
@@ -49,8 +53,7 @@ public class RegistrationController extends HttpServlet
                 }               
                 req.setAttribute("customer", cust);
                 req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);         
-          }
-          catch(Exception e){}  
+         
     }
     
  
