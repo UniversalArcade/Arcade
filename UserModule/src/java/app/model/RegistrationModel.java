@@ -30,23 +30,25 @@ public class RegistrationModel {
             ResultSet rs = sql.execQuery("SELECT id FROM user WHERE mail='"+c.getMail()+"'");
             try {
                 if( !rs.next() ){
+                    
+                    Random r = new Random();
+                    long random = 100000000000000L+((long)(r.nextDouble()*(100000000000000L-999999999999999L)));
+                    
+                    
+                    
 
-                    //SecurityHelper.createRandom();
-
-                    Random ran = new Random();
-                    int random = 100000 + ran.nextInt(900000);
-
-
-                    sql.execNonQuery("INSERT INTO `user` (mail,password,salt,randomValue) VALUES ('"+c.getMail()+"', '"+c.getPassword()+"', '1234','"+random+"')");
+                    sql.execNonQuery("INSERT INTO `user` (mail,password,salt,registerActivationString) VALUES ('"+c.getMail()+"', '"+c.getPassword()+"', '1234','"+random+"')");
 
                     String uniqueURL = "http://localhost:8080/UserModule/RegistrationController?unique="+random;
-                    String message = "Vielen Dank für Ihre Registrierung bei der HAW ArcadeStation." ;
+                    String message = "<html><body>Vielen Dank für Ihre Registrierung bei der HAW ArcadeStation." ;
                     message += "<br/>*************************************** <br/>";
-                    message += "<br/>Folgenden Daten sind von Ihnen hinterlegt : " ;
-                    message += "<br/>Email ="+ c.getMail()+"";
+                    message += "<br/>";
+                    message += "<br/>";
                     message += "<br/>Zum freischalten Ihres Accounts klicken Sie bitte auf folgenden Link ";
                     message += "<br/><a href="+uniqueURL+">Account aktivieren </a><br/>";
-                    message += "<br/>*************************************** ";
+                    message += "<br/>";
+                    message += "<br/>";
+                    message += "<br/>***************************************</body></html> ";
 
                     MailHelper.sendMail("Ihre Registrierung bei HAWArcadeStation", c.getMail(), message );
                 }
@@ -64,18 +66,18 @@ public class RegistrationModel {
     /**
      *
      * @param URLString
-     * @throws Exception
      */
     public void activateUser(String URLString){
        sql.openCon(); 
-        ResultSet rs = sql.execQuery("SELECT id FROM user WHERE randomValue='"+URLString+"'");
+        ResultSet rs = sql.execQuery("SELECT id FROM user WHERE registerActivationString='"+URLString+"'");
         try {
-            //System.out.println("randomValue: "+URLString);
+            //System.out.println("registerActivationString: "+URLString);
             if( !rs.next() ){
-                System.out.println("RandomValue not found");
+                System.out.println("registerActivationString not found");
+                return;
             } 
             else {
-                sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE randomValue='"+URLString+"' ");
+                sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE registerActivationString='"+URLString+"' ");
             }      
         } catch (SQLException ex) {
             Logger.getLogger(RegistrationModel.class.getName()).log(Level.SEVERE, null, ex);

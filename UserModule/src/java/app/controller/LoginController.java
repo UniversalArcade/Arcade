@@ -26,19 +26,21 @@ public class LoginController extends HttpServlet
                     System.out.println("EMPTY");                   
                     LoginModel login = new LoginModel();
                     User user = login.login(cust);
-                    System.out.println("USERID: " + user.getUserID());                 
-                    if(user.getUserID() > 0 && user.getRegistred()>0){
-                        req.getSession().setAttribute("user", user);
-                        req.getSession().setAttribute("message", new Message(user.getUserID() +  " erfolgreich eingeloggt."));                        
-                        System.out.println(user.getUserID());
-                        res.sendRedirect("/UserModule/GameListController");                       
-                    }
-                    else if(user.getUserID() > 0 && user.getRegistred()==0){
-                        req.getSession().setAttribute("user", user);
-                        req.getSession().setAttribute("message", new Message("Ihr Account wurde noch nicht bestätigt"));                                             
-                        req.setAttribute("customer", cust);
-                        view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
-                    }
+                    System.out.println("USERID: " + user.getUserID()); 
+                    if(user.getUserID() > 0 ){
+                            if( user.getRegistred()>0){
+                                req.getSession().setAttribute("user", user);
+                                req.getSession().setAttribute("message", new Message(user.getUserID() +  " erfolgreich eingeloggt."));                        
+                                System.out.println(user.getUserID());
+                                res.sendRedirect("/UserModule/GameListController");                       
+                            }
+                            else if( user.getRegistred()==0){
+                                //req.getSession().setAttribute("user", user);
+                                req.getSession().setAttribute("message", new Message("Ihr Account wurde noch nicht bestätigt"));                                             
+                                req.setAttribute("customer", cust);
+                                view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
+                            }
+                    }       
                     else{                  
                         req.getSession().setAttribute("message", new Message("User existiert nicht"));     
                         view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
