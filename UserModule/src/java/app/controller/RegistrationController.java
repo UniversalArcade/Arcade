@@ -69,6 +69,7 @@ public class RegistrationController extends HttpServlet
                     RegistrationModel registerChange = new RegistrationModel();
                     try {
                         registerChange.activateUser(url);
+                        
                         req.getSession().setAttribute("message", new Message("Ihre Email-Adresse wurde bestätigt. Sie können sich nun einloggen!"));
                         req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
                         

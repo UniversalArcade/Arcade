@@ -73,11 +73,10 @@ public class RegistrationModel {
         try {
             //System.out.println("registerActivationString: "+URLString);
             if( !rs.next() ){
-                System.out.println("registerActivationString not found");
-                return;
+                System.out.println("registerActivationString not found");                            
             } 
             else {
-                sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE registerActivationString='"+URLString+"' ");
+                sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE registerActivationString='"+URLString+"' ");         
             }      
         } catch (SQLException ex) {
             Logger.getLogger(RegistrationModel.class.getName()).log(Level.SEVERE, null, ex);
