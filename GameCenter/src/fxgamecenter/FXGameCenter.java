@@ -53,7 +53,7 @@ public class FXGameCenter extends Application {
         primaryStage.setFullScreen(true);
 
         imagesVisible = 5;
-        moveAniDuration = 200;
+        moveAniDuration = 500;
         enterPressed = false; 
         direction = 0;
         imgThresh = 20;
