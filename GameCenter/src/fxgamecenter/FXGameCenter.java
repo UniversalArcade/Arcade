@@ -109,7 +109,6 @@ public class FXGameCenter extends Application {
                         updateTransition( direction );
                         moveImagesTransition.play();
                     }
-                    
                     else if(key.getCode() == KeyCode.ENTER){
                         if(!enterPressed){
                             System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));

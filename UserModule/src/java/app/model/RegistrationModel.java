@@ -7,6 +7,7 @@ import app.beans.Costumer;
 import app.helper.SQLHelper;
 import app.helper.MailHelper;
 import app.helper.SecurityHelper;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
@@ -31,9 +32,13 @@ public class RegistrationModel {
             try {
                 if( !rs.next() ){
                     
+                    /*
                     Random r = new Random();
                     long random = 100000000000000L+((long)(r.nextDouble()*(100000000000000L-999999999999999L)));
+                    */
                     
+                    // https://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html#BigInteger%28int,%20int,%20java.util.Random%29
+                    BigInteger random = new BigInteger( 49, 0, new Random() );
                     
                     
 
