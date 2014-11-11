@@ -358,14 +358,11 @@ public class FXGameCenter extends Application {
                 moveImagesTransition.getChildren().add(translateTransition);
             }
             
-            
             DropShadow nextBlurEffect = (DropShadow)nextCenter.getEffect();
             DropShadow nowBlurEffect = (DropShadow)nowCenter.getEffect();
-            
-            
+
             moveImagesTimeline.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, // set start position at 0
-                    //new KeyValue(outerglow.heightProperty(), 0)
                     new KeyValue(nextBlurEffect.heightProperty(), 0),
                     new KeyValue(nextBlurEffect.widthProperty(), 0),
                     new KeyValue(nowBlurEffect.heightProperty(), 20),
@@ -375,8 +372,15 @@ public class FXGameCenter extends Application {
                     new KeyValue(nextBlurEffect.heightProperty(), 20),
                     new KeyValue(nextBlurEffect.widthProperty(), 20),
                     new KeyValue(nowBlurEffect.heightProperty(), 0),
-                    new KeyValue(nowBlurEffect.widthProperty(), 0)        
-                )
+                    new KeyValue(nowBlurEffect.widthProperty(), 0)
+                ),
+                new KeyFrame(new Duration(moveAniDuration + 1),
+                    new EventHandler<ActionEvent>() {
+                        @Override    
+                        public void handle(ActionEvent event) {
+                            nowCenter.setEffect(null);
+                        }
+                    })
             );
             
             moveImagesTransition.getChildren().add(moveImagesTimeline);
@@ -399,7 +403,6 @@ public class FXGameCenter extends Application {
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getFirst().getX() - newImage.getFitWidth() - imgThresh);
             newImage.setOpacity(0);
-            //newImage.setEffect(outerglow);
             images.addFirst(newImage);
             root.getChildren().add(newImage);
         }
@@ -412,7 +415,6 @@ public class FXGameCenter extends Application {
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getLast().getX() + newImage.getFitWidth() + imgThresh);
             newImage.setOpacity(0);
-            //newImage.setEffect(outerglow);
             images.addLast(newImage);   
             root.getChildren().add(newImage);
         }
