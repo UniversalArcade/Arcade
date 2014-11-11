@@ -10,20 +10,26 @@ import java.util.LinkedList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -38,14 +44,19 @@ public class FXGameCenter extends Application {
     private int imgThresh, imagesVisible, direction, moveAniDuration;
     private ParallelTransition moveImagesTransition;
     private Pane root;
+    private Timeline moveImagesTimeline;
+    
     
     private Scene scene;
     
     @Override
     public void start(Stage primaryStage) {
         
+        
+        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
-  
+        
+        moveImagesTimeline = new Timeline();
         root = new Pane();
         scene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         root.setStyle("-fx-background-color: #000000;");
@@ -129,7 +140,25 @@ public class FXGameCenter extends Application {
                 } 
              }
         });
-
+        
+        /*
+        Rectangle rect =new Rectangle(images.getFirst().getFitWidth() + 20,images.getFirst().getFitHeight() + 20);        
+        rect.relocate(50, 50);
+        rect.setFill(Color.web("f2f2f2"));
+        */
+        
+        //Outer Glow Effect
+        
+        
+        
+        //outerglow.setWidth(images.getFirst().getFitWidth() + 20);
+        //outerglow.setHeight(images.getFirst().getFitHeight() + 20);
+        
+        
+        
+        //rect.setEffect(outerglow);
+        //root.getChildren().add(rect);
+        //images.getFirst().setEffect(outerglow);
         
         primaryStage.show();
     }
@@ -137,6 +166,7 @@ public class FXGameCenter extends Application {
     
     
     public void prepareStartUpImages(){
+        
         
         int toAdd = imagesVisible + 2 - ids.size();
         
@@ -169,8 +199,10 @@ public class FXGameCenter extends Application {
             //if current image is the first one in array 
             if(c == 0){
                 imageView.toFront();
-                imageView.setScaleX(1.5);
-                imageView.setScaleY(1.5);
+                imageView.setScaleX(1.2);
+                imageView.setScaleY(1.2);
+                //ImageOuterGlowEffect effect = new ImageOuterGlowEffect();
+                imageView.setEffect( (new ImageOuterGlowEffect()).getEffect() );
                 imageView.setX(scene.getWidth()/2 - imageView.getFitWidth()/2);
                 images.add(imageView);
             }
@@ -186,6 +218,7 @@ public class FXGameCenter extends Application {
                 }
                 imageView.toBack();
             }
+            //imageView.setEffect(outerglow);
             
         }
         ids = tmp;
@@ -201,7 +234,7 @@ public class FXGameCenter extends Application {
        
        return imageView;
     }
-    
+    /*
     public void updateTransition(int direction){
             moveImagesTransition.getChildren().clear();
             //transitions = new ArrayList();
@@ -259,6 +292,96 @@ public class FXGameCenter extends Application {
 
             //parallelTransition.getChildren().addAll(transitions);
     }
+    */
+    
+    public void updateTransition(int direction){
+            moveImagesTransition.getChildren().clear();
+            
+            moveImagesTimeline.getKeyFrames().clear();
+            
+            
+            
+            //transitions = new ArrayList();
+            
+            double setToX;
+            ScaleTransition st;
+            ImageView nextCenter;
+           
+            if(direction > 0){
+                setToX = imgSizeX + imgThresh;
+                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.getFirst());
+                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.get(images.size()-2));
+                ftLeft.setFromValue(0.0f);
+                ftLeft.setToValue(1.0f);
+                ftRight.setFromValue(1.0f);
+                ftRight.setToValue(0.0f);
+                moveImagesTransition.getChildren().add(ftLeft);
+                moveImagesTransition.getChildren().add(ftRight);
+                
+                nextCenter = images.get( (int)(images.size() / 2) -1);
+            }
+            else{
+                setToX = imgSizeX * -1 + imgThresh * -1;
+                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.get(1));
+                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.getLast());
+                ftLeft.setFromValue(1.0f);
+                ftLeft.setToValue(0.0f);
+                ftRight.setFromValue(0.0f);
+                ftRight.setToValue(1.0f);
+                moveImagesTransition.getChildren().add(ftLeft);
+                moveImagesTransition.getChildren().add(ftRight);
+                
+                nextCenter = images.get( (int)(images.size() / 2) +1);
+            }
+            
+            nextCenter.toFront();
+            nextCenter.setEffect( (new ImageOuterGlowEffect()).getEffect() );
+            
+            st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
+            st.setToX(1.2f);
+            st.setToY(1.2f);
+            moveImagesTransition.getChildren().add(st);
+            
+            ImageView nowCenter = images.get( (int)(images.size() / 2));
+            //nowCenter.setEffect(null);
+            ScaleTransition stNow = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nowCenter);
+            stNow.setToX(1.0f);
+            stNow.setToY(1.0f);
+            moveImagesTransition.getChildren().add(stNow);
+
+            
+            for(ImageView imageView : images){
+                TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageView);
+                translateTransition.setFromX(0);
+                translateTransition.setToX(setToX);
+                translateTransition.setInterpolator(Interpolator.EASE_BOTH);
+                moveImagesTransition.getChildren().add(translateTransition);
+            }
+            
+            
+            DropShadow nextBlurEffect = (DropShadow)nextCenter.getEffect();
+            DropShadow nowBlurEffect = (DropShadow)nowCenter.getEffect();
+            
+            
+            moveImagesTimeline.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, // set start position at 0
+                    //new KeyValue(outerglow.heightProperty(), 0)
+                    new KeyValue(nextBlurEffect.heightProperty(), 0),
+                    new KeyValue(nextBlurEffect.widthProperty(), 0),
+                    new KeyValue(nowBlurEffect.heightProperty(), 20),
+                    new KeyValue(nowBlurEffect.widthProperty(), 20)        
+                ),
+                new KeyFrame(new Duration(moveAniDuration), // set end position at 40s
+                    new KeyValue(nextBlurEffect.heightProperty(), 20),
+                    new KeyValue(nextBlurEffect.widthProperty(), 20),
+                    new KeyValue(nowBlurEffect.heightProperty(), 0),
+                    new KeyValue(nowBlurEffect.widthProperty(), 0)        
+                )
+            );
+            
+            moveImagesTransition.getChildren().add(moveImagesTimeline);
+           
+    }
     
     public void updateElements(int direction){
 
@@ -276,6 +399,7 @@ public class FXGameCenter extends Application {
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getFirst().getX() - newImage.getFitWidth() - imgThresh);
             newImage.setOpacity(0);
+            //newImage.setEffect(outerglow);
             images.addFirst(newImage);
             root.getChildren().add(newImage);
         }
@@ -288,6 +412,7 @@ public class FXGameCenter extends Application {
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getLast().getX() + newImage.getFitWidth() + imgThresh);
             newImage.setOpacity(0);
+            //newImage.setEffect(outerglow);
             images.addLast(newImage);   
             root.getChildren().add(newImage);
         }
