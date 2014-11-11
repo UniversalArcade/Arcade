@@ -11,6 +11,7 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -161,12 +162,15 @@ public class FXGameCenter extends Application {
         for(int i=0; i < (imagesVisible + 2); i++){
             
             ImageView imageView = loadImageFromID(ids.get(i));
-            
+            root.getChildren().add(imageView);
             int c = images.size();
             System.out.println(c);
             
             //if current image is the first one in array 
             if(c == 0){
+                imageView.toFront();
+                imageView.setScaleX(1.5);
+                imageView.setScaleY(1.5);
                 imageView.setX(scene.getWidth()/2 - imageView.getFitWidth()/2);
                 images.add(imageView);
             }
@@ -180,8 +184,9 @@ public class FXGameCenter extends Application {
                     imageView.setX(images.getFirst().getX() - imageView.getFitWidth() - imgThresh);
                     images.addFirst(imageView);
                 }
+                imageView.toBack();
             }
-            root.getChildren().add(imageView);
+            
         }
         ids = tmp;
         tmp = null;
@@ -202,6 +207,8 @@ public class FXGameCenter extends Application {
             //transitions = new ArrayList();
             
             double setToX;
+            ScaleTransition st;
+            ImageView nextCenter;
            
             if(direction > 0){
                 setToX = imgSizeX + imgThresh;
@@ -213,6 +220,8 @@ public class FXGameCenter extends Application {
                 ftRight.setToValue(0.0f);
                 moveImagesTransition.getChildren().add(ftLeft);
                 moveImagesTransition.getChildren().add(ftRight);
+                
+                nextCenter = images.get( (int)(images.size() / 2) -1);
             }
             else{
                 setToX = imgSizeX * -1 + imgThresh * -1;
@@ -224,7 +233,21 @@ public class FXGameCenter extends Application {
                 ftRight.setToValue(1.0f);
                 moveImagesTransition.getChildren().add(ftLeft);
                 moveImagesTransition.getChildren().add(ftRight);
+                
+                nextCenter = images.get( (int)(images.size() / 2) +1);
             }
+            
+            nextCenter.toFront();
+            st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
+            st.setToX(1.2f);
+            st.setToY(1.2f);
+            moveImagesTransition.getChildren().add(st);
+            
+            ImageView nowCenter = images.get( (int)(images.size() / 2));
+            ScaleTransition stNow = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nowCenter);
+            stNow.setToX(1.0f);
+            stNow.setToY(1.0f);
+            moveImagesTransition.getChildren().add(stNow);
 
             for(ImageView imageView : images){
                 TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageView);
