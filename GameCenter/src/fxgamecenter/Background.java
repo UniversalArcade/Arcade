@@ -5,10 +5,15 @@
  */
 package fxgamecenter;
 
+import java.util.LinkedList;
 import java.util.Random;
 import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -17,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -25,28 +31,42 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-
-/**
- *
- * @author Martin
- */
 public class Background {
     
     private int radius, aniCounter;
+    private double backgroundXTranslation;
     private Random rand;
+    private Timeline moveBackgroundTimeline;
+    private Group circles;
+    private Group group;
+    private Scene scene;
+    private LinkedList<Circle> circlesList;
     
-    public void init(Scene scene, Group group){
-
+    public Background(Scene scene, Group group){
         radius = 30;
         rand = new Random();
+        backgroundXTranslation = 0;
+        moveBackgroundTimeline = new Timeline();
+        circles = new Group();
+        this.group = group;
+        this.scene = scene;
+        circlesList = new LinkedList();
+    }
+    
+    
+    
+    public void init(){
         
-        Group circles = new Group();
+        
+        
+        //Group circles = new Group();
         for (int i = 0; i < 300; i++) {
             Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
             //Circle circle = new Circle(radius * 2, Color.web("white", 0.05));
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStroke(Color.web("white", 0.16));
             circle.setStrokeWidth(4);
+            circlesList.add(circle);
             circles.getChildren().add(circle);
             circle.relocate(rand.nextDouble() * scene.getWidth(), rand.nextDouble() * (scene.getHeight() + radius * 2));
         }
@@ -68,11 +88,12 @@ public class Background {
         colors.setBlendMode(BlendMode.OVERLAY);
         group.getChildren().add(blendModeGroup);      
         circles.setEffect(new BoxBlur(10, 10, 3));
+        
        
         
         
-        Timeline t1 = new Timeline();
-        t1.setCycleCount(Animation.INDEFINITE);
+        Timeline bubbleTimeline = new Timeline();
+        bubbleTimeline.setCycleCount(Animation.INDEFINITE);
         
         aniCounter = 0;
         for (Node circle : circles.getChildren()) {
@@ -83,9 +104,6 @@ public class Background {
                     int counter = aniCounter;
                     
                     public void handle(ActionEvent event) {
-                       
-                        
-                        
                         Bounds pos = circle.localToScene(circle.getBoundsInLocal());
                         //System.out.println(pos);
                         double xMin = pos.getMinX();
@@ -93,31 +111,113 @@ public class Background {
                         double xMax = pos.getMaxX();
                         double yMax = pos.getMaxY();
                         
-                        double dx = 0.5;
-                        //double dy = 0.4 * ( (radius*2 + 10) / (xMax - xMin) );
+                        //double dx = 0.5;
                         double dy = 0.4 * ( (xMax - xMin) / (radius*2 + 10)  ) + counter/400;
-                        //double dy = 0.4;
                         
-                        if(xMin > scene.getWidth()){
-                            circle.setTranslateX(0);
-                            circle.relocate(radius * -2 -5, rand.nextDouble() * scene.getHeight());
+                        /*
+                        if(xMin >= scene.getWidth()){
+                            //circle.setTranslateX(0);
+                            Bounds newPos = circle.localToScene(circle.getBoundsInLocal());
+                            //circle.setTranslateX(newPos.getMinX() - scene.getWidth() - 100);
+                            //circle.setTranslateX(-400);
+                            circle.setTranslateX(circle.getTranslateX() + -1920);
+                            //circle.setTranslateX(xMin - scene.getWidth());
+                            //circle.relocate(100,  rand.nextDouble() * scene.getHeight());
                         }
+                        */
                         if(yMax < 0){
                             circle.setTranslateY(0);
                             circle.relocate(rand.nextDouble() * scene.getWidth(),scene.getHeight() + (xMax - xMin));
                         }
                         
                         //circle.setTranslateX(circle.getTranslateX() + dx);
-                        circle.setTranslateY(circle.getTranslateY() - dy);
-                        
+                        circle.setTranslateY(circle.getTranslateY() - dy);   
                     }
-                    
                 });
-
-                t1.getKeyFrames().add(moveBall);
-            
+                bubbleTimeline.getKeyFrames().add(moveBall);
         }
         
-        t1.play();
+        bubbleTimeline.play();
+        
     }
+    
+    public void setBackgroundXTranslation(double trans){
+        this.backgroundXTranslation = trans;
+    }
+    
+    public Timeline getBackgroundMoveAnimation(){
+        moveBackgroundTimeline.getKeyFrames().clear();
+        
+        /*
+        for (Node circle : circles.getChildren()) {
+            moveBackgroundTimeline.getKeyFrames().addAll(
+                    new KeyFrame(Duration.ZERO, // set start position at 0
+                    new KeyValue(circle.translateXProperty(), circle.getTranslateX())),                    
+                    new KeyFrame(new Duration(20500), // set end position at 40s
+                    new KeyValue(circle.translateXProperty(), circle.getTranslateX() + scene.getWidth())));
+        }
+                */
+        /*
+        for (Node circle : circles.getChildren()) {
+            moveBackgroundTimeline.getKeyFrames().addAll(
+                    new KeyFrame(Duration.ZERO, // set start position at 0
+                    new KeyValue(circle.translateXProperty(), circle.getTranslateX())),                    
+                    new KeyFrame(new Duration(1000), // set end position at 40s
+                    new KeyValue(circle.translateXProperty(), circle.getTranslateX() + scene.getWidth())));
+        }
+        */
+        
+        
+        //moveBackgroundTimeline.setCycleCount(Animation.INDEFINITE);
+        moveBackgroundTimeline.setCycleCount(500);
+        
+        //aniCounter = 0;
+        for (Node circle : circles.getChildren()) {
+            //aniCounter++;
+            KeyFrame moveBall = new KeyFrame(Duration.seconds(.0010), // .0300
+                new EventHandler<ActionEvent>() {
+                    
+                    //int counter = aniCounter;
+                    
+                    public void handle(ActionEvent event) {
+                        Bounds pos = circle.localToScene(circle.getBoundsInLocal());
+                        //System.out.println(pos);
+                        double xMin = pos.getMinX();
+                        double xMax = pos.getMaxX();
+                        
+                        
+                        double dx = 1;
+                        //double dy = 0.4 * ( (xMax - xMin) / (radius*2 + 10)  ) + counter/400;
+                        
+                        
+                        if(xMin >= scene.getWidth()){
+                            //circle.setTranslateX(0);
+                            //Bounds newPos = circle.localToScene(circle.getBoundsInLocal());
+                            //circle.setTranslateX(newPos.getMinX() - scene.getWidth() - 100);
+                            //circle.setTranslateX(-400);
+                            circle.setTranslateX(circle.getTranslateX() + scene.getWidth() * -1 - (xMax - xMin));
+                            //circle.setTranslateX(xMin - scene.getWidth());
+                            //circle.relocate(100,  rand.nextDouble() * scene.getHeight());
+                        }
+                       
+                        
+                        circle.setTranslateX(circle.getTranslateX() + dx);
+                        //circle.setTranslateY(circle.getTranslateY() - dy);   
+                    }
+                });
+                moveBackgroundTimeline.getKeyFrames().add(moveBall);
+        }
+        
+        
+              
+        
+        
+        
+        
+        return moveBackgroundTimeline;
+        //return moveImagesTransition;
+    }
+    
+    
+    
 }

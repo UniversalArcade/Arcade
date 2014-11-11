@@ -71,8 +71,8 @@ public class FXGameCenter extends Application {
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
 
-        bg = new Background();
-        bg.init(scene, bgEffectsGroup);
+        bg = new Background(scene, bgEffectsGroup);
+        bg.init();
         
         imagesVisible = 5;
         moveAniDuration = 500;
@@ -319,6 +319,8 @@ public class FXGameCenter extends Application {
             );
             
             moveImagesTransition.getChildren().add(moveImagesTimeline);
+            moveImagesTransition.getChildren().add(bg.getBackgroundMoveAnimation());
+            
            
     }
     
