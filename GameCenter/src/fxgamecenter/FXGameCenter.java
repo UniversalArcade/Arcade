@@ -21,6 +21,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -28,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -43,33 +45,41 @@ public class FXGameCenter extends Application {
     private double imgSizeX;
     private int imgThresh, imagesVisible, direction, moveAniDuration;
     private ParallelTransition moveImagesTransition;
-    private Pane root;
+    private Pane imagePane;
     private Timeline moveImagesTimeline;
-    
+    private Group imageGroup, bgEffectsGroup;
     
     private Scene scene;
+    private Background bg;
     
     @Override
     public void start(Stage primaryStage) {
-        
-        
-        
+
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         
         moveImagesTimeline = new Timeline();
-        root = new Pane();
-        scene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
-        root.setStyle("-fx-background-color: #000000;");
+        imageGroup = new Group();
+        imagePane = new Pane();
+        
+        bgEffectsGroup = new Group();
+        imagePane.getChildren().add(bgEffectsGroup);
+        imagePane.getChildren().add(imageGroup);
+        
+        scene = new Scene(imagePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+        imagePane.setStyle("-fx-background-color: #000000;");
         primaryStage.setTitle("Newschool Arcade");
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
 
+        bg = new Background();
+        bg.init(scene, bgEffectsGroup);
+        
         imagesVisible = 5;
         moveAniDuration = 500;
         enterPressed = false; 
         direction = 0;
         imgThresh = 20;
-        imgSizeX = (root.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
+        imgSizeX = (imagePane.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         images = new LinkedList();
         ids = new LinkedList();
         /*
@@ -141,24 +151,7 @@ public class FXGameCenter extends Application {
              }
         });
         
-        /*
-        Rectangle rect =new Rectangle(images.getFirst().getFitWidth() + 20,images.getFirst().getFitHeight() + 20);        
-        rect.relocate(50, 50);
-        rect.setFill(Color.web("f2f2f2"));
-        */
         
-        //Outer Glow Effect
-        
-        
-        
-        //outerglow.setWidth(images.getFirst().getFitWidth() + 20);
-        //outerglow.setHeight(images.getFirst().getFitHeight() + 20);
-        
-        
-        
-        //rect.setEffect(outerglow);
-        //root.getChildren().add(rect);
-        //images.getFirst().setEffect(outerglow);
         
         primaryStage.show();
     }
@@ -192,7 +185,7 @@ public class FXGameCenter extends Application {
         for(int i=0; i < (imagesVisible + 2); i++){
             
             ImageView imageView = loadImageFromID(ids.get(i));
-            root.getChildren().add(imageView);
+            imageGroup.getChildren().add(imageView);
             int c = images.size();
             System.out.println(c);
             
@@ -230,69 +223,11 @@ public class FXGameCenter extends Application {
        ImageView imageView = new ImageView( new Image("file:pics/" + id + ".jpg"));
        imageView.setFitHeight(300);
        imageView.setFitWidth(imgSizeX);
-       imageView.setY(100);
+       imageView.setY(scene.getHeight() / 2 - imageView.getFitHeight() / 2);
        
        return imageView;
     }
-    /*
-    public void updateTransition(int direction){
-            moveImagesTransition.getChildren().clear();
-            //transitions = new ArrayList();
-            
-            double setToX;
-            ScaleTransition st;
-            ImageView nextCenter;
-           
-            if(direction > 0){
-                setToX = imgSizeX + imgThresh;
-                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.getFirst());
-                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.get(images.size()-2));
-                ftLeft.setFromValue(0.0f);
-                ftLeft.setToValue(1.0f);
-                ftRight.setFromValue(1.0f);
-                ftRight.setToValue(0.0f);
-                moveImagesTransition.getChildren().add(ftLeft);
-                moveImagesTransition.getChildren().add(ftRight);
-                
-                nextCenter = images.get( (int)(images.size() / 2) -1);
-            }
-            else{
-                setToX = imgSizeX * -1 + imgThresh * -1;
-                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.get(1));
-                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.getLast());
-                ftLeft.setFromValue(1.0f);
-                ftLeft.setToValue(0.0f);
-                ftRight.setFromValue(0.0f);
-                ftRight.setToValue(1.0f);
-                moveImagesTransition.getChildren().add(ftLeft);
-                moveImagesTransition.getChildren().add(ftRight);
-                
-                nextCenter = images.get( (int)(images.size() / 2) +1);
-            }
-            
-            nextCenter.toFront();
-            st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
-            st.setToX(1.2f);
-            st.setToY(1.2f);
-            moveImagesTransition.getChildren().add(st);
-            
-            ImageView nowCenter = images.get( (int)(images.size() / 2));
-            ScaleTransition stNow = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nowCenter);
-            stNow.setToX(1.0f);
-            stNow.setToY(1.0f);
-            moveImagesTransition.getChildren().add(stNow);
-
-            for(ImageView imageView : images){
-                TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageView);
-                translateTransition.setFromX(0);
-                translateTransition.setToX(setToX);
-                translateTransition.setInterpolator(Interpolator.EASE_BOTH);
-                moveImagesTransition.getChildren().add(translateTransition);
-            }
-
-            //parallelTransition.getChildren().addAll(transitions);
-    }
-    */
+    
     
     public void updateTransition(int direction){
             moveImagesTransition.getChildren().clear();
@@ -404,7 +339,7 @@ public class FXGameCenter extends Application {
             newImage.setX(images.getFirst().getX() - newImage.getFitWidth() - imgThresh);
             newImage.setOpacity(0);
             images.addFirst(newImage);
-            root.getChildren().add(newImage);
+            imageGroup.getChildren().add(newImage);
         }
         else{
             ids.add(ids.pollFirst());
@@ -416,7 +351,7 @@ public class FXGameCenter extends Application {
             newImage.setX(images.getLast().getX() + newImage.getFitWidth() + imgThresh);
             newImage.setOpacity(0);
             images.addLast(newImage);   
-            root.getChildren().add(newImage);
+            imageGroup.getChildren().add(newImage);
         }
     }
 
