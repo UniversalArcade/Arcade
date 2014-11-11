@@ -243,6 +243,8 @@ public class FXGameCenter extends Application {
             ImageView nextCenter;
            
             if(direction > 0){
+                
+                
                 setToX = imgSizeX + imgThresh;
                 FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.getFirst());
                 FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.get(images.size()-2));
@@ -319,7 +321,7 @@ public class FXGameCenter extends Application {
             );
             
             moveImagesTransition.getChildren().add(moveImagesTimeline);
-            moveImagesTransition.getChildren().add(bg.getBackgroundMoveAnimation());
+            moveImagesTransition.getChildren().add(bg.getBackgroundMoveAnimation(moveAniDuration,direction));
             
            
     }
