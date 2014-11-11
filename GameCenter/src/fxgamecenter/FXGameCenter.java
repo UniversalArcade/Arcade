@@ -252,6 +252,7 @@ public class FXGameCenter extends Application {
 
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getFirst().getX() - newImage.getFitWidth() - imgThresh);
+            newImage.setOpacity(0);
             images.addFirst(newImage);
             root.getChildren().add(newImage);
         }
@@ -263,6 +264,7 @@ public class FXGameCenter extends Application {
                 
             ImageView newImage = loadImageFromID(ids.get( index ));
             newImage.setX(images.getLast().getX() + newImage.getFitWidth() + imgThresh);
+            newImage.setOpacity(0);
             images.addLast(newImage);   
             root.getChildren().add(newImage);
         }
