@@ -17,7 +17,7 @@ public class ImageOuterGlowEffect {
         outerglow.setWidth(20);
         outerglow.setHeight(20);
         outerglow.setSpread(0.5);
-        outerglow.setColor(Color.RED);
+        outerglow.setColor(Color.WHITE);
         return outerglow;
     }
 }

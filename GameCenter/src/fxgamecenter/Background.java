@@ -32,7 +32,7 @@ import javafx.util.Duration;
  */
 public class Background {
     
-    private int radius;
+    private int radius, aniCounter;
     private Random rand;
     
     public void init(Scene scene, Group group){
@@ -42,12 +42,13 @@ public class Background {
         
         Group circles = new Group();
         for (int i = 0; i < 300; i++) {
-            Circle circle = new Circle(radius, Color.web("white", 0.05));
+            Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
+            //Circle circle = new Circle(radius * 2, Color.web("white", 0.05));
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStroke(Color.web("white", 0.16));
             circle.setStrokeWidth(4);
             circles.getChildren().add(circle);
-            circle.relocate(rand.nextDouble() * scene.getWidth(), rand.nextDouble() * scene.getHeight());
+            circle.relocate(rand.nextDouble() * scene.getWidth(), rand.nextDouble() * (scene.getHeight() + radius * 2));
         }
         Rectangle colors = new Rectangle(scene.getWidth(), scene.getHeight(),
                 new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE, new Stop[]{
@@ -72,14 +73,18 @@ public class Background {
         
         Timeline t1 = new Timeline();
         t1.setCycleCount(Animation.INDEFINITE);
+        
+        aniCounter = 0;
         for (Node circle : circles.getChildren()) {
-            KeyFrame moveBall = new KeyFrame(Duration.seconds(.0300),
+            aniCounter++;
+            KeyFrame moveBall = new KeyFrame(Duration.seconds(.0300), // .0300
                 new EventHandler<ActionEvent>() {
-
+                    
+                    int counter = aniCounter;
+                    
                     public void handle(ActionEvent event) {
+                       
                         
-                        double dx = 0.5;
-                        double dy = 0.4;
                         
                         Bounds pos = circle.localToScene(circle.getBoundsInLocal());
                         //System.out.println(pos);
@@ -88,23 +93,31 @@ public class Background {
                         double xMax = pos.getMaxX();
                         double yMax = pos.getMaxY();
                         
+                        double dx = 0.5;
+                        //double dy = 0.4 * ( (radius*2 + 10) / (xMax - xMin) );
+                        double dy = 0.4 * ( (xMax - xMin) / (radius*2 + 10)  ) + counter/400;
+                        //double dy = 0.4;
+                        
                         if(xMin > scene.getWidth()){
                             circle.setTranslateX(0);
                             circle.relocate(radius * -2 -5, rand.nextDouble() * scene.getHeight());
                         }
                         if(yMax < 0){
                             circle.setTranslateY(0);
-                            circle.relocate(rand.nextDouble() * scene.getWidth(),scene.getHeight() + radius * 2);
+                            circle.relocate(rand.nextDouble() * scene.getWidth(),scene.getHeight() + (xMax - xMin));
                         }
                         
                         //circle.setTranslateX(circle.getTranslateX() + dx);
                         circle.setTranslateY(circle.getTranslateY() - dy);
-
+                        
                     }
+                    
                 });
 
                 t1.getKeyFrames().add(moveBall);
+            
         }
+        
         t1.play();
     }
 }
