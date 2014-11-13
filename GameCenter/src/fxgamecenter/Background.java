@@ -5,6 +5,7 @@
  */
 package fxgamecenter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import javafx.animation.Animation;
@@ -38,10 +39,12 @@ public class Background extends Thread{
     private double backgroundXTranslation;
     private Random rand;
     private Timeline moveBackgroundTimeline;
+    private TranslateTransition MoveBGHorizontaly;
     private Group circles;
     private Group group;
     private Scene scene;
     private LinkedList<Circle> circlesList;
+    ArrayList<Group> circleGroups;
     
     public Background(Scene scene, Group group){
         radius = 30;
@@ -52,6 +55,7 @@ public class Background extends Thread{
         this.group = group;
         this.scene = scene;
         circlesList = new LinkedList();
+        circleGroups = new ArrayList();
         setDaemon(true);
     }
     
@@ -63,7 +67,12 @@ public class Background extends Thread{
     
     
     public void init(){
-
+        
+        circleGroups.add(new Group());
+        circleGroups.add(new Group());
+        circleGroups.add(new Group());
+        circles.getChildren().addAll(circleGroups);
+        
         //Group circles = new Group();
         for (int i = 0; i < 300; i++) {
             Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
@@ -76,7 +85,10 @@ public class Background extends Thread{
             circle.setCacheHint(CacheHint.SPEED);
             
             circlesList.add(circle);
-            circles.getChildren().add(circle);
+            circleGroups.get( rand.nextInt( circleGroups.size() -1 ) ).getChildren().add(circle);
+            
+            //circles.getChildren().add(circle);
+            
             circle.relocate(rand.nextDouble() * scene.getWidth(), rand.nextDouble() * (scene.getHeight() + radius * 2));
         }
         Rectangle colors = new Rectangle(scene.getWidth(), scene.getHeight(),
@@ -99,14 +111,14 @@ public class Background extends Thread{
         //colors.setCache(true);
         //colors.setCacheHint(CacheHint.SPEED);
         
-        group.getChildren().add(blendModeGroup);      
+       group.getChildren().add(blendModeGroup);      
         circles.setEffect(new BoxBlur(10, 10, 3));
 
         Timeline bubbleTimeline = new Timeline();
         bubbleTimeline.setCycleCount(Animation.INDEFINITE);
         
         aniCounter = 0;
-        for (Node circle : circles.getChildren()) {
+        for (Node circle : circleGroups.get(0).getChildren()) { 
             aniCounter++;
             KeyFrame moveBall = new KeyFrame(Duration.seconds(.0300), // .0300
                 new EventHandler<ActionEvent>() {
@@ -132,13 +144,30 @@ public class Background extends Thread{
                 bubbleTimeline.getKeyFrames().add(moveBall);
         }
         bubbleTimeline.play();
+        
+        
+        MoveBGHorizontaly = new TranslateTransition(Duration.millis(500), circles);
+        MoveBGHorizontaly.setFromX(0);   
+        MoveBGHorizontaly.setInterpolator(Interpolator.EASE_BOTH);
+        
+    }
+    
+    public void triggerBackgroundMoveAnimation(int duration, int direction){
+        
+        //MoveBGHorizontaly.setToX(direction * 200);
+        MoveBGHorizontaly.setToX(direction * 200);
+        
+        MoveBGHorizontaly.play();
+        
+        //return moveBackgroundTimeline;
     }
     
     
+    /*
     public void triggerBackgroundMoveAnimation(int duration, int direction){
         moveBackgroundTimeline.getKeyFrames().clear();
         
-        moveBackgroundTimeline.setCycleCount(500);
+        moveBackgroundTimeline.setCycleCount(duration);
         for (Node circle : circles.getChildren()) {
             
             KeyFrame moveBall = new KeyFrame(Duration.seconds(.0010), // .0300
@@ -165,37 +194,6 @@ public class Background extends Thread{
         }
         moveBackgroundTimeline.play();
         //return moveBackgroundTimeline;
-    }    
-    
-    
-    public Timeline getBackgroundMoveAnimation(int duration, int direction){
-        moveBackgroundTimeline.getKeyFrames().clear();
-        
-        moveBackgroundTimeline.setCycleCount(500);
-        for (Node circle : circles.getChildren()) {
-            
-            KeyFrame moveBall = new KeyFrame(Duration.seconds(.0010), // .0300
-                new EventHandler<ActionEvent>() {
-                    
-                    public void handle(ActionEvent event) {
-                        Bounds pos = circle.localToScene(circle.getBoundsInLocal());
-                        double xMin = pos.getMinX();
-                        double xMax = pos.getMaxX();
-                        
-                        double dx = direction * -0.2 ;
-                        
-                        if(xMin >= scene.getWidth()){
-                            circle.setTranslateX(circle.getTranslateX() + scene.getWidth() * -1 - (xMax - xMin));
-                        }
-                        if(xMax <= 0){
-                            circle.setTranslateX(circle.getTranslateX() + scene.getWidth() + (xMax - xMin));
-                        }
-                       
-                        circle.setTranslateX(circle.getTranslateX() + dx);
-                    }
-                });
-                moveBackgroundTimeline.getKeyFrames().add(moveBall);
-        }
-        return moveBackgroundTimeline;
-    }   
+    }*/    
+
 }
