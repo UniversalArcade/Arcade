@@ -69,7 +69,8 @@ public class FXGameCenter extends Application {
         primaryStage.setFullScreen(true);
 
         bg = new Background(scene, bgEffectsGroup);
-        bg.init();
+        //bg.init();
+        bg.start();
         
         imagesVisible = 5;
         moveAniDuration = 500;

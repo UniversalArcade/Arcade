@@ -32,7 +32,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-public class Background {
+public class Background extends Thread{
     
     private int radius, aniCounter;
     private double backgroundXTranslation;
@@ -52,6 +52,12 @@ public class Background {
         this.group = group;
         this.scene = scene;
         circlesList = new LinkedList();
+        setDaemon(true);
+    }
+    
+    @Override 
+    public void run(){
+        init();
     }
     
     
