@@ -22,7 +22,8 @@ import javafx.stage.Stage;
 
 public class FXGameCenter extends Application {
     
-
+    
+    
     private boolean enterPressed;
     //private int imgThresh, imagesVisible, direction, moveAniDuration;
     private Pane imagePane;
@@ -52,7 +53,7 @@ public class FXGameCenter extends Application {
         primaryStage.setFullScreen(true);
         
         bg = new Background(scene, bgEffectsGroup);
-        bg.start();
+        //bg.start();
         
         imageSlider = new ImageSlider(scene, imageGroup);
         imageSlider.start();

@@ -217,7 +217,6 @@ public class ImageSlider extends Thread{
             }
             
             nextCenter.toFront();
-            //nextCenter.setEffect( (new ImageOuterGlowEffect()).getEffect() );
             
             st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
             st.setToX(1.2f);
@@ -232,6 +231,7 @@ public class ImageSlider extends Thread{
             moveImagesTransition.getChildren().add(stNow);
 
             
+            /*
             for(ImageView imageView : images){
                 TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageView);
                 translateTransition.setFromX(0);
@@ -239,14 +239,22 @@ public class ImageSlider extends Thread{
                 translateTransition.setInterpolator(Interpolator.EASE_BOTH);
                 moveImagesTransition.getChildren().add(translateTransition);
             }
+            */
+            
+            TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
+            translateTransition.setFromX(0);
+            translateTransition.setToX(setToX);
+            translateTransition.setInterpolator(Interpolator.EASE_BOTH);
+            moveImagesTransition.getChildren().add(translateTransition);
             
             DropShadow nextBlurEffect = (DropShadow)nextCenter.getEffect();
             DropShadow nowBlurEffect = (DropShadow)nowCenter.getEffect();
 
+            
             moveImagesTimeline.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, // set start position at 0
-                    new KeyValue(nextBlurEffect.heightProperty(), 0),
-                    new KeyValue(nextBlurEffect.widthProperty(), 0),
+                    new KeyValue(nextBlurEffect.heightProperty(), 0, Interpolator.EASE_BOTH),
+                    new KeyValue(nextBlurEffect.widthProperty(), 0, Interpolator.EASE_BOTH),
                     new KeyValue(nowBlurEffect.heightProperty(), 20),
                     new KeyValue(nowBlurEffect.widthProperty(), 20)        
                 ),
@@ -277,11 +285,24 @@ public class ImageSlider extends Thread{
     }
     
     public void updateElements(int direction){
-
+        
+        //imageGroup.setTranslateX(0);
         for(ImageView imageView : images){
+            imageView.setTranslateX(imageGroup.getTranslateX());
+            
+            
+            System.out.println("transX: " + imageView.getTranslateX() + " X: " + imageView.getX());
             imageView.setX(imageView.getX() + imageView.getTranslateX());
             imageView.setTranslateX(0);
         }
+        imageGroup.setTranslateX(0);
+        
+       
+        
+        System.out.println("GroupTrans: " + imageGroup.getTranslateX());
+        
+        //imageGroup.setX(imageGroup.getX() + imageGroup.getTranslateX());
+        
         
         if(direction > 0){
             ids.addFirst( ids.pollLast() );
@@ -303,6 +324,7 @@ public class ImageSlider extends Thread{
             newImage.setX( images.get( images.size() -2 ).getX() + newImage.getFitWidth() + imgThresh );
             newImage.setOpacity(0);
         }
+        //imageGroup.setTranslateX(0);
     }
     
     
