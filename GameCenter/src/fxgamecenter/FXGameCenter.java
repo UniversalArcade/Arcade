@@ -53,7 +53,7 @@ public class FXGameCenter extends Application {
         primaryStage.setFullScreen(true);
         
         bg = new Background(scene, bgEffectsGroup);
-        //bg.start();
+        bg.start();
         
         imageSlider = new ImageSlider(scene, imageGroup);
         imageSlider.start();

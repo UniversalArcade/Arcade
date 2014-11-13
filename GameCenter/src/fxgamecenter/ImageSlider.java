@@ -88,19 +88,19 @@ public class ImageSlider extends Thread{
         this.prepareStartUpImages();
         
         moveImagesTransition = new ParallelTransition();
-        /*
+        
          
         moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
 
             @Override
             public void handle(ActionEvent event) {
 
-                updateElements( direction );
+                updateElements();
                 
                
             }
         });
-        */
+        
         
         
     }
@@ -171,18 +171,18 @@ public class ImageSlider extends Thread{
        return new Image("file:pics/" + id + ".jpg", true);
     }
     
+    public void initTransition(){
+        
+    }
     
     public void updateTransition(int direction, Timeline bgmove){
-            this.direction = direction;
+            
         
-            //moveImagesTransition.getChildren().clear();
-            moveImagesTransition = new ParallelTransition();
-            moveImagesTimeline = new Timeline();
-            //moveImagesTimeline.getKeyFrames().clear();
+            moveImagesTransition.getChildren().clear();
+            //moveImagesTransition = new ParallelTransition();
+            //moveImagesTimeline = new Timeline();
+            moveImagesTimeline.getKeyFrames().clear();
             
-            
-            
-            //transitions = new ArrayList();
             
             double setToX;
             ScaleTransition st;
@@ -223,29 +223,23 @@ public class ImageSlider extends Thread{
             st.setToY(1.2f);
             moveImagesTransition.getChildren().add(st);
             
+            
             ImageView nowCenter = images.get( (int)(images.size() / 2));
-            //nowCenter.setEffect(null);
             ScaleTransition stNow = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nowCenter);
             stNow.setToX(1.0f);
             stNow.setToY(1.0f);
             moveImagesTransition.getChildren().add(stNow);
 
             
-            /*
-            for(ImageView imageView : images){
-                TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageView);
-                translateTransition.setFromX(0);
-                translateTransition.setToX(setToX);
-                translateTransition.setInterpolator(Interpolator.EASE_BOTH);
-                moveImagesTransition.getChildren().add(translateTransition);
-            }
-            */
             
             TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
             translateTransition.setFromX(0);
             translateTransition.setToX(setToX);
             translateTransition.setInterpolator(Interpolator.EASE_BOTH);
             moveImagesTransition.getChildren().add(translateTransition);
+            
+            
+            
             
             DropShadow nextBlurEffect = (DropShadow)nextCenter.getEffect();
             DropShadow nowBlurEffect = (DropShadow)nowCenter.getEffect();
@@ -269,7 +263,7 @@ public class ImageSlider extends Thread{
                         @Override    
                         public void handle(ActionEvent event) {
                             //nowCenter.setEffect(null);
-                            updateElements( direction );
+                            //updateElements( direction );
                         }
                     })
             );
@@ -284,14 +278,13 @@ public class ImageSlider extends Thread{
         return moveImagesTransition.getStatus();
     }
     
-    public void updateElements(int direction){
+    public void updateElements(){
         
         for(ImageView imageView : images){
             imageView.setX(imageView.getX() + imageGroup.getTranslateX());
         }
-        imageGroup.setTranslateX(0);
-        
-        if(direction > 0){
+
+        if(imageGroup.getTranslateX() > 0){
             ids.addFirst( ids.pollLast() );
             int index = (int)(ids.size()/2) - ((int)(imagesVisible/2 ) +1) ;
             
@@ -311,6 +304,7 @@ public class ImageSlider extends Thread{
             newImage.setX( images.get( images.size() -2 ).getX() + newImage.getFitWidth() + imgThresh );
             newImage.setOpacity(0);
         }
+        imageGroup.setTranslateX(0);
     }
     
     
