@@ -40,6 +40,7 @@ public class Background extends Thread{
     private Random rand;
     private Timeline moveBackgroundTimeline;
     private TranslateTransition MoveBGHorizontaly;
+    private ParallelTransition MoveBGVertically;
     private Group circles;
     private Group group;
     private Scene scene;
@@ -51,6 +52,7 @@ public class Background extends Thread{
         rand = new Random();
         backgroundXTranslation = 0;
         moveBackgroundTimeline = new Timeline();
+        MoveBGVertically = new ParallelTransition();
         circles = new Group();
         this.group = group;
         this.scene = scene;
@@ -74,7 +76,7 @@ public class Background extends Thread{
         circles.getChildren().addAll(circleGroups);
         
         //Group circles = new Group();
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 150; i++) {
             Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
             //Circle circle = new Circle(radius * 2, Color.web("white", 0.05));
             circle.setStrokeType(StrokeType.OUTSIDE);
@@ -113,7 +115,7 @@ public class Background extends Thread{
         
        group.getChildren().add(blendModeGroup);      
         circles.setEffect(new BoxBlur(10, 10, 3));
-
+        /*
         Timeline bubbleTimeline = new Timeline();
         bubbleTimeline.setCycleCount(Animation.INDEFINITE);
         
@@ -144,6 +146,31 @@ public class Background extends Thread{
                 bubbleTimeline.getKeyFrames().add(moveBall);
         }
         bubbleTimeline.play();
+        */
+        
+        
+        int i = 0;
+        for(Group g : circleGroups){
+            i++;
+            
+            TranslateTransition trans = new TranslateTransition(Duration.seconds( (i+5) * 7), g);
+            trans.setCycleCount(Animation.INDEFINITE);
+            trans.setFromY( (i-1) * scene.getHeight());
+            trans.setToY(scene.getHeight() * -1 - radius*2 );
+            trans.setOnFinished(new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+
+                }
+            });
+            
+            MoveBGVertically.getChildren().add(trans);
+        }
+        MoveBGVertically.play();
+        
+        
+        
+        
         
         
         MoveBGHorizontaly = new TranslateTransition(Duration.millis(500), circles);
