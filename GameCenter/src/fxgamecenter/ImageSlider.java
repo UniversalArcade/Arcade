@@ -34,8 +34,9 @@ public class ImageSlider extends Thread{
     private boolean enterPressed;
     private double imgSizeX;
     private int imgThresh, imagesVisible, moveAniDuration;
-    public int direction;
-    public ParallelTransition moveImagesTransition;
+    private int direction;
+    private ParallelTransition moveImagesTransition;
+    private FadeTransition fadeIncoming, fadeOutgoing;
     
     private Timeline moveImagesTimeline;
     private Group imageGroup;
@@ -86,6 +87,7 @@ public class ImageSlider extends Thread{
         
         //make shure there are enough images to display, if not: fill array with already existing ids
         this.prepareStartUpImages();
+        this.prepareTransition();
         
         moveImagesTransition = new ParallelTransition();
         
@@ -171,8 +173,15 @@ public class ImageSlider extends Thread{
        return new Image("file:pics/" + id + ".jpg", true);
     }
     
-    public void initTransition(){
-        
+    public void prepareTransition(){
+         fadeIncoming = new FadeTransition(Duration.millis(moveAniDuration));
+         fadeIncoming.setFromValue(0.0f);
+         fadeIncoming.setToValue(1.0f);
+         
+         fadeOutgoing = new FadeTransition(Duration.millis(moveAniDuration));
+         fadeOutgoing.setFromValue(1.0f);
+         fadeOutgoing.setToValue(0.0f);
+         
     }
     
     public void updateTransition(int direction, Timeline bgmove){
@@ -190,28 +199,24 @@ public class ImageSlider extends Thread{
            
             if(direction > 0){
                 setToX = imgSizeX + imgThresh;
-                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.getFirst());
-                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.get(images.size()-2));
-                ftLeft.setFromValue(0.0f);
-                ftLeft.setToValue(1.0f);
-                ftRight.setFromValue(1.0f);
-                ftRight.setToValue(0.0f);
-                moveImagesTransition.getChildren().add(ftLeft);
-                moveImagesTransition.getChildren().add(ftRight);
                 
-                nextCenter = images.get( (int)(images.size() / 2) -1);
+                fadeIncoming.setNode(images.getFirst());
+                fadeOutgoing.setNode(images.get(images.size()-2));
+                
+                
+                moveImagesTransition.getChildren().add(fadeIncoming);
+                moveImagesTransition.getChildren().add(fadeOutgoing);
+                
+                nextCenter = images.get( (int)(images.size() / 2) -1 );
             }
             else{
                 setToX = imgSizeX * -1 + imgThresh * -1;
-                FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.get(1));
-                FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.getLast());
-                //ftLeft.setNode();
-                ftLeft.setFromValue(1.0f);
-                ftLeft.setToValue(0.0f);
-                ftRight.setFromValue(0.0f);
-                ftRight.setToValue(1.0f);
-                moveImagesTransition.getChildren().add(ftLeft);
-                moveImagesTransition.getChildren().add(ftRight);
+                
+                fadeIncoming.setNode(images.getLast());
+                fadeOutgoing.setNode(images.get(1));
+                
+                moveImagesTransition.getChildren().add(fadeIncoming);
+                moveImagesTransition.getChildren().add(fadeOutgoing);
                 
                 nextCenter = images.get( (int)(images.size() / 2) +1);
             }
@@ -257,15 +262,7 @@ public class ImageSlider extends Thread{
                     new KeyValue(nextBlurEffect.widthProperty(), 20),
                     new KeyValue(nowBlurEffect.heightProperty(), 0),
                     new KeyValue(nowBlurEffect.widthProperty(), 0)
-                ),
-                new KeyFrame(new Duration(moveAniDuration + 1),
-                    new EventHandler<ActionEvent>() {
-                        @Override    
-                        public void handle(ActionEvent event) {
-                            //nowCenter.setEffect(null);
-                            //updateElements( direction );
-                        }
-                    })
+                )
             );
             
             moveImagesTransition.getChildren().add(moveImagesTimeline);
