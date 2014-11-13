@@ -181,7 +181,12 @@ public class FXGameCenter extends Application {
         
         for(int i=0; i < (imagesVisible + 2); i++){
             
-            ImageView imageView = loadImageFromID(ids.get(i));
+            ImageView imageView = new ImageView( loadImageFromID(ids.get(i) ) );
+            imageView.setFitHeight(300);
+            imageView.setFitWidth(imgSizeX);
+            imageView.setY(scene.getHeight() / 2 - imageView.getFitHeight() / 2);
+            
+            //ImageView imageView = loadImageFromID(ids.get(i));
             imageGroup.getChildren().add(imageView);
             int c = images.size();
             //System.out.println(c);
@@ -215,16 +220,9 @@ public class FXGameCenter extends Application {
         tmp = null;
     }
     
-    public ImageView loadImageFromID(int id){
+    public Image loadImageFromID(int id){
        // image, backgroundloading
-       ImageView imageView = new ImageView( new Image("file:pics/" + id + ".jpg", true));
-       imageView.setFitHeight(300);
-       imageView.setFitWidth(imgSizeX);
-       imageView.setY(scene.getHeight() / 2 - imageView.getFitHeight() / 2);
-       
-       
-       
-       return imageView;
+       return new Image("file:pics/" + id + ".jpg", true);
     }
     
     
@@ -333,28 +331,24 @@ public class FXGameCenter extends Application {
         }
         
         if(direction > 0){
-            ids.addFirst(ids.pollLast());
-            images.pollLast();
-
+            ids.addFirst( ids.pollLast() );
             int index = (int)(ids.size()/2) - ((int)(imagesVisible/2 ) +1) ;
-
-            ImageView newImage = loadImageFromID(ids.get( index ));
-            newImage.setX(images.getFirst().getX() - newImage.getFitWidth() - imgThresh);
+            
+            images.addFirst( images.pollLast() );
+            ImageView newImage = images.getFirst();
+            newImage.setImage( loadImageFromID( ids.get( index ) ) );
+            newImage.setX( images.get(1).getX() - newImage.getFitWidth() - imgThresh );
             newImage.setOpacity(0);
-            images.addFirst(newImage);
-            imageGroup.getChildren().add(newImage);
         }
         else{
-            ids.add(ids.pollFirst());
-            images.pollFirst();
-                
+            ids.add( ids.pollFirst() );
             int index = (int)(ids.size()/2) + ((int)(imagesVisible/2 ) +1) ;
-                
-            ImageView newImage = loadImageFromID(ids.get( index ));
-            newImage.setX(images.getLast().getX() + newImage.getFitWidth() + imgThresh);
+            
+            images.add( images.pollFirst() );
+            ImageView newImage = images.getLast();
+            newImage.setImage( loadImageFromID(ids.get( index ) ) );
+            newImage.setX( images.get( images.size() -2 ).getX() + newImage.getFitWidth() + imgThresh );
             newImage.setOpacity(0);
-            images.addLast(newImage);   
-            imageGroup.getChildren().add(newImage);
         }
     }
 
