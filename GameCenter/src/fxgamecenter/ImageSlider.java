@@ -11,21 +11,14 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+
 import javafx.util.Duration;
 
 public class ImageSlider extends Thread{
@@ -34,11 +27,12 @@ public class ImageSlider extends Thread{
     private boolean enterPressed;
     private double imgSizeX;
     private int imgThresh, imagesVisible, moveAniDuration;
-    private int direction;
     private ParallelTransition moveImagesTransition;
     private FadeTransition fadeIncoming, fadeOutgoing;
+    private TranslateTransition translateTransition;
+    private ScaleTransition scaleBigTransition, scaleNormalTransition;
     
-    private Timeline moveImagesTimeline;
+    private Timeline outerGlowAnimation;
     private Group imageGroup;
     
     private Scene scene;
@@ -60,13 +54,9 @@ public class ImageSlider extends Thread{
     
     public void init(){
         
-        
-        
-        moveImagesTimeline = new Timeline();
         imagesVisible = 5;
         moveAniDuration = 500;
         enterPressed = false; 
-        direction = 0;
         imgThresh = 20;
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         images = new LinkedList();
@@ -84,27 +74,20 @@ public class ImageSlider extends Thread{
         ids.add(2);
         ids.add(1);
         
-        
+        moveImagesTransition = new ParallelTransition();
         //make shure there are enough images to display, if not: fill array with already existing ids
         this.prepareStartUpImages();
         this.prepareTransition();
         
-        moveImagesTransition = new ParallelTransition();
+        
         
          
         moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
-
             @Override
             public void handle(ActionEvent event) {
-
                 updateElements();
-                
-               
             }
-        });
-        
-        
-        
+        }); 
     }
     
     public void prepareStartUpImages(){
@@ -174,86 +157,75 @@ public class ImageSlider extends Thread{
     }
     
     public void prepareTransition(){
-         fadeIncoming = new FadeTransition(Duration.millis(moveAniDuration));
-         fadeIncoming.setFromValue(0.0f);
-         fadeIncoming.setToValue(1.0f);
+        outerGlowAnimation = new Timeline();
+        
+        translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
+        translateTransition.setFromX(0);   
+        translateTransition.setInterpolator(Interpolator.EASE_BOTH);
+
+        fadeIncoming = new FadeTransition(Duration.millis(moveAniDuration));
+        fadeIncoming.setFromValue(0.0f);
+        fadeIncoming.setToValue(1.0f);
+
+        fadeOutgoing = new FadeTransition(Duration.millis(moveAniDuration));
+        fadeOutgoing.setFromValue(1.0f);
+        fadeOutgoing.setToValue(0.0f);
+
+        scaleBigTransition = new ScaleTransition(Duration.millis(moveAniDuration / 1.5));
+        scaleBigTransition.setToX(1.2f);
+        scaleBigTransition.setToY(1.2f);
+
+        scaleNormalTransition = new ScaleTransition(Duration.millis(moveAniDuration / 1.5));
+        scaleNormalTransition.setToX(1.0f);
+        scaleNormalTransition.setToY(1.0f);
          
-         fadeOutgoing = new FadeTransition(Duration.millis(moveAniDuration));
-         fadeOutgoing.setFromValue(1.0f);
-         fadeOutgoing.setToValue(0.0f);
-         
+        moveImagesTransition.getChildren().addAll(
+                translateTransition, 
+                fadeIncoming, 
+                fadeOutgoing, 
+                scaleBigTransition, 
+                scaleNormalTransition, 
+                outerGlowAnimation
+        );
     }
     
-    public void updateTransition(int direction, Timeline bgmove){
-            
-        
-            moveImagesTransition.getChildren().clear();
-            //moveImagesTransition = new ParallelTransition();
-            //moveImagesTimeline = new Timeline();
-            moveImagesTimeline.getKeyFrames().clear();
-            
-            
-            double setToX;
-            ScaleTransition st;
+    public void updateTransition(int direction){
+
             ImageView nextCenter;
            
             if(direction > 0){
-                setToX = imgSizeX + imgThresh;
+                translateTransition.setToX( imgSizeX + imgThresh );
                 
                 fadeIncoming.setNode(images.getFirst());
                 fadeOutgoing.setNode(images.get(images.size()-2));
                 
-                
-                moveImagesTransition.getChildren().add(fadeIncoming);
-                moveImagesTransition.getChildren().add(fadeOutgoing);
-                
                 nextCenter = images.get( (int)(images.size() / 2) -1 );
             }
             else{
-                setToX = imgSizeX * -1 + imgThresh * -1;
+                translateTransition.setToX( imgSizeX * -1 + imgThresh * -1 );
                 
                 fadeIncoming.setNode(images.getLast());
                 fadeOutgoing.setNode(images.get(1));
                 
-                moveImagesTransition.getChildren().add(fadeIncoming);
-                moveImagesTransition.getChildren().add(fadeOutgoing);
-                
                 nextCenter = images.get( (int)(images.size() / 2) +1);
             }
-            
+
             nextCenter.toFront();
             
-            st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
-            st.setToX(1.2f);
-            st.setToY(1.2f);
-            moveImagesTransition.getChildren().add(st);
-            
+            scaleBigTransition.setNode(nextCenter);
             
             ImageView nowCenter = images.get( (int)(images.size() / 2));
-            ScaleTransition stNow = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nowCenter);
-            stNow.setToX(1.0f);
-            stNow.setToY(1.0f);
-            moveImagesTransition.getChildren().add(stNow);
-
-            
-            
-            TranslateTransition translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
-            translateTransition.setFromX(0);
-            translateTransition.setToX(setToX);
-            translateTransition.setInterpolator(Interpolator.EASE_BOTH);
-            moveImagesTransition.getChildren().add(translateTransition);
-            
-            
+            scaleNormalTransition.setNode(nowCenter);
             
             
             DropShadow nextBlurEffect = (DropShadow)nextCenter.getEffect();
             DropShadow nowBlurEffect = (DropShadow)nowCenter.getEffect();
 
-            
-            moveImagesTimeline.getKeyFrames().addAll(
+            outerGlowAnimation.getKeyFrames().clear();
+            outerGlowAnimation.getKeyFrames().addAll(
                 new KeyFrame(Duration.ZERO, // set start position at 0
-                    new KeyValue(nextBlurEffect.heightProperty(), 0, Interpolator.EASE_BOTH),
-                    new KeyValue(nextBlurEffect.widthProperty(), 0, Interpolator.EASE_BOTH),
+                    new KeyValue(nextBlurEffect.heightProperty(), 0),
+                    new KeyValue(nextBlurEffect.widthProperty(), 0),
                     new KeyValue(nowBlurEffect.heightProperty(), 20),
                     new KeyValue(nowBlurEffect.widthProperty(), 20)        
                 ),
@@ -264,10 +236,6 @@ public class ImageSlider extends Thread{
                     new KeyValue(nowBlurEffect.widthProperty(), 0)
                 )
             );
-            
-            moveImagesTransition.getChildren().add(moveImagesTimeline);
-            moveImagesTransition.getChildren().add(bgmove);
-            
             moveImagesTransition.play();           
     }
     

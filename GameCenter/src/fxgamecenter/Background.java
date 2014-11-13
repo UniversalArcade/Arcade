@@ -134,7 +134,7 @@ public class Background extends Thread{
         bubbleTimeline.play();
     }
     
-    /*
+    
     public void triggerBackgroundMoveAnimation(int duration, int direction){
         moveBackgroundTimeline.getKeyFrames().clear();
         
@@ -166,7 +166,7 @@ public class Background extends Thread{
         moveBackgroundTimeline.play();
         //return moveBackgroundTimeline;
     }    
-    */
+    
     
     public Timeline getBackgroundMoveAnimation(int duration, int direction){
         moveBackgroundTimeline.getKeyFrames().clear();

@@ -65,10 +65,15 @@ public class FXGameCenter extends Application {
                 
                 if(imageSlider.getMoveAnimationStatus() == Animation.Status.STOPPED){
                     if(key.getCode() == KeyCode.D){
-                        imageSlider.updateTransition( -1 , bg.getBackgroundMoveAnimation(500, -1));
+                        //imageSlider.updateTransition( -1 , bg.getBackgroundMoveAnimation(500, -1));
+                        imageSlider.updateTransition( -1 );
+                        bg.triggerBackgroundMoveAnimation(500, -1);
+                        
                     }
                     else if(key.getCode() == KeyCode.A){
-                        imageSlider.updateTransition( 1 , bg.getBackgroundMoveAnimation(500, 1) );
+                        //imageSlider.updateTransition( 1 , bg.getBackgroundMoveAnimation(500, 1) );
+                        imageSlider.updateTransition( 1 );
+                        bg.triggerBackgroundMoveAnimation(500, 1);
                     }
                     
                     else if(key.getCode() == KeyCode.ENTER){
