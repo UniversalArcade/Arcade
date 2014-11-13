@@ -286,23 +286,10 @@ public class ImageSlider extends Thread{
     
     public void updateElements(int direction){
         
-        //imageGroup.setTranslateX(0);
         for(ImageView imageView : images){
-            imageView.setTranslateX(imageGroup.getTranslateX());
-            
-            
-            System.out.println("transX: " + imageView.getTranslateX() + " X: " + imageView.getX());
-            imageView.setX(imageView.getX() + imageView.getTranslateX());
-            imageView.setTranslateX(0);
+            imageView.setX(imageView.getX() + imageGroup.getTranslateX());
         }
         imageGroup.setTranslateX(0);
-        
-       
-        
-        System.out.println("GroupTrans: " + imageGroup.getTranslateX());
-        
-        //imageGroup.setX(imageGroup.getX() + imageGroup.getTranslateX());
-        
         
         if(direction > 0){
             ids.addFirst( ids.pollLast() );
@@ -324,7 +311,6 @@ public class ImageSlider extends Thread{
             newImage.setX( images.get( images.size() -2 ).getX() + newImage.getFitWidth() + imgThresh );
             newImage.setOpacity(0);
         }
-        //imageGroup.setTranslateX(0);
     }
     
     
