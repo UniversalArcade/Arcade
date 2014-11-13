@@ -17,6 +17,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -64,6 +65,10 @@ public class Background {
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStroke(Color.web("white", 0.16));
             circle.setStrokeWidth(4);
+            
+            //circle.setCache(true);
+            //circle.setCacheHint(CacheHint.SPEED);
+            
             circlesList.add(circle);
             circles.getChildren().add(circle);
             circle.relocate(rand.nextDouble() * scene.getWidth(), rand.nextDouble() * (scene.getHeight() + radius * 2));
@@ -84,6 +89,10 @@ public class Background {
                 new Group(new Group(new Rectangle(scene.getWidth(), scene.getHeight(),
                      Color.BLACK), circles), colors);
         colors.setBlendMode(BlendMode.OVERLAY);
+        
+        //colors.setCache(true);
+        //colors.setCacheHint(CacheHint.SPEED);
+        
         group.getChildren().add(blendModeGroup);      
         circles.setEffect(new BoxBlur(10, 10, 3));
 

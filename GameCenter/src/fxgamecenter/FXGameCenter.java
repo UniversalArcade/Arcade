@@ -5,7 +5,6 @@
  */
 package fxgamecenter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -14,13 +13,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -29,9 +28,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -54,7 +50,8 @@ public class FXGameCenter extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-
+        
+        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         
         moveImagesTimeline = new Timeline();
@@ -187,7 +184,7 @@ public class FXGameCenter extends Application {
             ImageView imageView = loadImageFromID(ids.get(i));
             imageGroup.getChildren().add(imageView);
             int c = images.size();
-            System.out.println(c);
+            //System.out.println(c);
             
             //if current image is the first one in array 
             if(c == 0){
@@ -219,11 +216,13 @@ public class FXGameCenter extends Application {
     }
     
     public ImageView loadImageFromID(int id){
-       //ImageView imageView = new ImageView( new Image("file:C:\\Users\\Public\\Arcade\\testpics\\" + id + ".jpg"));
-       ImageView imageView = new ImageView( new Image("file:pics/" + id + ".jpg"));
+       // image, backgroundloading
+       ImageView imageView = new ImageView( new Image("file:pics/" + id + ".jpg", true));
        imageView.setFitHeight(300);
        imageView.setFitWidth(imgSizeX);
        imageView.setY(scene.getHeight() / 2 - imageView.getFitHeight() / 2);
+       
+       
        
        return imageView;
     }
