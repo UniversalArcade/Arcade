@@ -72,8 +72,8 @@ public class Background extends Thread{
             circle.setStroke(Color.web("white", 0.16));
             circle.setStrokeWidth(4);
             
-            //circle.setCache(true);
-            //circle.setCacheHint(CacheHint.SPEED);
+            circle.setCache(true);
+            circle.setCacheHint(CacheHint.SPEED);
             
             circlesList.add(circle);
             circles.getChildren().add(circle);
@@ -134,6 +134,40 @@ public class Background extends Thread{
         bubbleTimeline.play();
     }
     
+    /*
+    public void triggerBackgroundMoveAnimation(int duration, int direction){
+        moveBackgroundTimeline.getKeyFrames().clear();
+        
+        moveBackgroundTimeline.setCycleCount(500);
+        for (Node circle : circles.getChildren()) {
+            
+            KeyFrame moveBall = new KeyFrame(Duration.seconds(.0010), // .0300
+                new EventHandler<ActionEvent>() {
+                    
+                    public void handle(ActionEvent event) {
+                        Bounds pos = circle.localToScene(circle.getBoundsInLocal());
+                        double xMin = pos.getMinX();
+                        double xMax = pos.getMaxX();
+                        
+                        double dx = direction * -0.2 ;
+                        
+                        if(xMin >= scene.getWidth()){
+                            circle.setTranslateX(circle.getTranslateX() + scene.getWidth() * -1 - (xMax - xMin));
+                        }
+                        if(xMax <= 0){
+                            circle.setTranslateX(circle.getTranslateX() + scene.getWidth() + (xMax - xMin));
+                        }
+                       
+                        circle.setTranslateX(circle.getTranslateX() + dx);
+                    }
+                });
+                moveBackgroundTimeline.getKeyFrames().add(moveBall);
+        }
+        moveBackgroundTimeline.play();
+        //return moveBackgroundTimeline;
+    }    
+    */
+    
     public Timeline getBackgroundMoveAnimation(int duration, int direction){
         moveBackgroundTimeline.getKeyFrames().clear();
         
@@ -163,5 +197,5 @@ public class Background extends Thread{
                 moveBackgroundTimeline.getKeyFrames().add(moveBall);
         }
         return moveBackgroundTimeline;
-    }    
+    }   
 }
