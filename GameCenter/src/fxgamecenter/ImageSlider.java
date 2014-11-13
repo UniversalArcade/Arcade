@@ -87,7 +87,9 @@ public class ImageSlider extends Thread{
         //make shure there are enough images to display, if not: fill array with already existing ids
         this.prepareStartUpImages();
         
-         moveImagesTransition = new ParallelTransition();
+        moveImagesTransition = new ParallelTransition();
+        /*
+         
         moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
 
             @Override
@@ -95,20 +97,13 @@ public class ImageSlider extends Thread{
 
                 updateElements( direction );
                 
-                /*
-                Bounds pos = images.get(images.size() -1).localToScene(images.get(images.size() -1).getBoundsInLocal());
-                System.out.println(pos);
-                System.out.println(images.get(images.size() -1).getTranslateX()); 
-                */
+               
             }
         });
+        */
         
         
     }
-    
-    
-    
-    
     
     public void prepareStartUpImages(){
         
@@ -139,21 +134,18 @@ public class ImageSlider extends Thread{
             ImageView imageView = new ImageView( loadImageFromID(ids.get(i) ) );
             imageView.setFitHeight(300);
             imageView.setFitWidth(imgSizeX);
-            imageView.setY(scene.getHeight() / 2 - imageView.getFitHeight() / 2);
+            imageView.setY( scene.getHeight() / 2 - imageView.getFitHeight() / 2 );
             
-            //ImageView imageView = loadImageFromID(ids.get(i));
             imageGroup.getChildren().add(imageView);
             int c = images.size();
-            //System.out.println(c);
             
             //if current image is the first one in array 
             if(c == 0){
                 imageView.toFront();
                 imageView.setScaleX(1.2);
                 imageView.setScaleY(1.2);
-                //ImageOuterGlowEffect effect = new ImageOuterGlowEffect();
-                imageView.setEffect( (new ImageOuterGlowEffect()).getEffect() );
-                imageView.setX(scene.getWidth()/2 - imageView.getFitWidth()/2);
+                imageView.setEffect( (new ImageOuterGlowEffect(20,20)).getEffect() );
+                imageView.setX( scene.getWidth() / 2 - imageView.getFitWidth() / 2 );
                 images.add(imageView);
             }
             //if there are more then one image in the array
@@ -166,10 +158,9 @@ public class ImageSlider extends Thread{
                     imageView.setX(images.getFirst().getX() - imageView.getFitWidth() - imgThresh);
                     images.addFirst(imageView);
                 }
+                imageView.setEffect( (new ImageOuterGlowEffect()).getEffect() );
                 imageView.toBack();
-            }
-            //imageView.setEffect(outerglow);
-            
+            }            
         }
         ids = tmp;
         tmp = null;
@@ -184,9 +175,10 @@ public class ImageSlider extends Thread{
     public void updateTransition(int direction, Timeline bgmove){
             this.direction = direction;
         
-            moveImagesTransition.getChildren().clear();
-            
-            moveImagesTimeline.getKeyFrames().clear();
+            //moveImagesTransition.getChildren().clear();
+            moveImagesTransition = new ParallelTransition();
+            moveImagesTimeline = new Timeline();
+            //moveImagesTimeline.getKeyFrames().clear();
             
             
             
@@ -197,8 +189,6 @@ public class ImageSlider extends Thread{
             ImageView nextCenter;
            
             if(direction > 0){
-                
-                
                 setToX = imgSizeX + imgThresh;
                 FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.getFirst());
                 FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.get(images.size()-2));
@@ -215,6 +205,7 @@ public class ImageSlider extends Thread{
                 setToX = imgSizeX * -1 + imgThresh * -1;
                 FadeTransition ftLeft = new FadeTransition(Duration.millis(moveAniDuration), images.get(1));
                 FadeTransition ftRight = new FadeTransition(Duration.millis(moveAniDuration), images.getLast());
+                //ftLeft.setNode();
                 ftLeft.setFromValue(1.0f);
                 ftLeft.setToValue(0.0f);
                 ftRight.setFromValue(0.0f);
@@ -226,7 +217,7 @@ public class ImageSlider extends Thread{
             }
             
             nextCenter.toFront();
-            nextCenter.setEffect( (new ImageOuterGlowEffect()).getEffect() );
+            //nextCenter.setEffect( (new ImageOuterGlowEffect()).getEffect() );
             
             st = new ScaleTransition(Duration.millis(moveAniDuration / 1.5), nextCenter);
             st.setToX(1.2f);
@@ -269,7 +260,8 @@ public class ImageSlider extends Thread{
                     new EventHandler<ActionEvent>() {
                         @Override    
                         public void handle(ActionEvent event) {
-                            nowCenter.setEffect(null);
+                            //nowCenter.setEffect(null);
+                            updateElements( direction );
                         }
                     })
             );

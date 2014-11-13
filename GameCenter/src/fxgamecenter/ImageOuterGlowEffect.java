@@ -10,12 +10,24 @@ import javafx.scene.paint.Color;
 
 public class ImageOuterGlowEffect {
     
+    private int width, height;
+
+    public ImageOuterGlowEffect(){
+        this.width = 0;
+        this.height = 0;
+    }
+    
+    public ImageOuterGlowEffect(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
+
     public DropShadow getEffect(){
         DropShadow outerglow = new DropShadow();
         outerglow.setOffsetX(0);
         outerglow.setOffsetY(0);
-        outerglow.setWidth(20);
-        outerglow.setHeight(20);
+        outerglow.setWidth(width); // 20
+        outerglow.setHeight(height); // 20
         outerglow.setSpread(0.5);
         outerglow.setColor(Color.WHITE);
         return outerglow;
