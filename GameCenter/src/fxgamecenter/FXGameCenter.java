@@ -6,6 +6,7 @@
 package fxgamecenter;
 
 
+import com.sun.javafx.scene.traversal.Direction;
 import javafx.animation.Animation;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -36,6 +37,7 @@ public class FXGameCenter extends Application {
     @Override
     public void start(Stage primaryStage) {
         
+        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
         
@@ -51,12 +53,18 @@ public class FXGameCenter extends Application {
         primaryStage.setTitle("Newschool Arcade");
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
-        
+
         bg = new Background(scene, bgEffectsGroup, aniDuration);
-        bg.start();
+        
+        Thread backgroundThread = new Thread( bg );
+        backgroundThread.setDaemon(true);
+        backgroundThread.start();
         
         imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
-        imageSlider.start();
+        
+        Thread imageSliderThread = new Thread (imageSlider);
+        imageSliderThread.setDaemon(true);
+        imageSliderThread.start();
         
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -65,21 +73,21 @@ public class FXGameCenter extends Application {
                 
                 if(imageSlider.getMoveAnimationStatus() == Animation.Status.STOPPED){
                     if(key.getCode() == KeyCode.D){
-                        //imageSlider.updateTransition( -1 , bg.getBackgroundMoveAnimation(500, -1));
                         imageSlider.updateTransition( -1 );
-                        bg.triggerBackgroundMoveAnimation(-1);
+                        bg.triggerBackgroundMoveAnimation( -1 );
                         
                     }
                     else if(key.getCode() == KeyCode.A){
-                        //imageSlider.updateTransition( 1 , bg.getBackgroundMoveAnimation(500, 1) );
                         imageSlider.updateTransition( 1 );
-                        bg.triggerBackgroundMoveAnimation(1);
+                        bg.triggerBackgroundMoveAnimation( 1 );
                     }
                     
                     else if(key.getCode() == KeyCode.ENTER){
                         if(!enterPressed){
                             //System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
+                            //imageSlider.onKeyEnter();
                             enterPressed = true;
+                            
                         }
                     }
                 }

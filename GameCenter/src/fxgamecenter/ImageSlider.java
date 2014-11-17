@@ -22,7 +22,7 @@ import javafx.scene.image.ImageView;
 
 import javafx.util.Duration;
 
-public class ImageSlider extends Thread{
+public class ImageSlider implements Runnable{
     private LinkedList<ImageView> images;
     private LinkedList<Integer> ids;
     private boolean enterPressed;
@@ -41,7 +41,6 @@ public class ImageSlider extends Thread{
     
     
     public ImageSlider(Scene scene, Group group, int moveAniDuration){
-        setDaemon(true);
         this.scene = scene;
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
