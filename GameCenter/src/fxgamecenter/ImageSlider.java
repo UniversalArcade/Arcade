@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -22,7 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class ImageSlider extends Thread{
-     private LinkedList<ImageView> images;
+    private LinkedList<ImageView> images;
     private LinkedList<Integer> ids;
     private boolean enterPressed;
     private double imgSizeX;
@@ -39,12 +40,11 @@ public class ImageSlider extends Thread{
     //private Background bg;
     
     
-    public ImageSlider(Scene scene, Group group){
+    public ImageSlider(Scene scene, Group group, int moveAniDuration){
         setDaemon(true);
         this.scene = scene;
         this.imageGroup = group;
-        //this.bg = bg;
-        
+        this.moveAniDuration = moveAniDuration;
     }
     
     @Override
@@ -55,7 +55,7 @@ public class ImageSlider extends Thread{
     public void init(){
         
         imagesVisible = 5;
-        moveAniDuration = 500;
+        //moveAniDuration = 500;
         enterPressed = false; 
         imgThresh = 20;
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
@@ -66,7 +66,7 @@ public class ImageSlider extends Thread{
             ids.add(i);
         }
         */
-        ids.add(7);
+        //ids.add(7);
         ids.add(6);
         ids.add(5);
         ids.add(4);
@@ -117,9 +117,10 @@ public class ImageSlider extends Thread{
         for(int i=0; i < (imagesVisible + 2); i++){
             
             ImageView imageView = new ImageView( loadImageFromID(ids.get(i) ) );
-            imageView.setFitHeight(300);
+            imageView.setFitHeight(500);
             imageView.setFitWidth(imgSizeX);
-            imageView.setY( scene.getHeight() / 2 - imageView.getFitHeight() / 2 );
+            imageView.setCache(true);
+            imageView.setCacheHint(CacheHint.SPEED);
             
             imageGroup.getChildren().add(imageView);
             int c = images.size();
@@ -147,13 +148,16 @@ public class ImageSlider extends Thread{
                 imageView.toBack();
             }            
         }
+        imageGroup.setTranslateY(scene.getHeight() / 2 - images.getFirst().getFitHeight() / 2);
+        
         ids = tmp;
         tmp = null;
     }
     
     public Image loadImageFromID(int id){
        // image, backgroundloading
-       return new Image("file:pics/" + id + ".jpg", true);
+       //return new Image("file:pics/G" + id + ".jpg", true);
+        return new Image("file:pics/G" + id + ".jpg",true);
     }
     
     public void prepareTransition(){
@@ -249,26 +253,30 @@ public class ImageSlider extends Thread{
             imageView.setX(imageView.getX() + imageGroup.getTranslateX());
         }
 
+        ImageView newImage;
+        
         if(imageGroup.getTranslateX() > 0){
             ids.addFirst( ids.pollLast() );
             int index = (int)(ids.size()/2) - ((int)(imagesVisible/2 ) +1) ;
             
             images.addFirst( images.pollLast() );
-            ImageView newImage = images.getFirst();
+            newImage = images.getFirst();
             newImage.setImage( loadImageFromID( ids.get( index ) ) );
             newImage.setX( images.get(1).getX() - newImage.getFitWidth() - imgThresh );
-            newImage.setOpacity(0);
         }
         else{
             ids.add( ids.pollFirst() );
             int index = (int)(ids.size()/2) + ((int)(imagesVisible/2 ) +1) ;
             
             images.add( images.pollFirst() );
-            ImageView newImage = images.getLast();
+            newImage = images.getLast();
             newImage.setImage( loadImageFromID(ids.get( index ) ) );
             newImage.setX( images.get( images.size() -2 ).getX() + newImage.getFitWidth() + imgThresh );
-            newImage.setOpacity(0);
         }
+        
+        newImage.setOpacity(0);
+        newImage.setCache(true);
+        newImage.setCacheHint(CacheHint.SPEED);
         imageGroup.setTranslateX(0);
     }
     

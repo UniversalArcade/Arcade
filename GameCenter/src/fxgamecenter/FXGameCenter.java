@@ -25,7 +25,7 @@ public class FXGameCenter extends Application {
     
     
     private boolean enterPressed;
-    //private int imgThresh, imagesVisible, direction, moveAniDuration;
+    private int aniDuration;
     private Pane imagePane;
     private Group imageGroup, bgEffectsGroup;
     
@@ -36,8 +36,8 @@ public class FXGameCenter extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
+        aniDuration = 500;
         
         imageGroup = new Group();
         imagePane = new Pane();
@@ -52,10 +52,10 @@ public class FXGameCenter extends Application {
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         
-        bg = new Background(scene, bgEffectsGroup);
+        bg = new Background(scene, bgEffectsGroup, aniDuration);
         bg.start();
         
-        imageSlider = new ImageSlider(scene, imageGroup);
+        imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
         imageSlider.start();
         
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -67,13 +67,13 @@ public class FXGameCenter extends Application {
                     if(key.getCode() == KeyCode.D){
                         //imageSlider.updateTransition( -1 , bg.getBackgroundMoveAnimation(500, -1));
                         imageSlider.updateTransition( -1 );
-                        //bg.triggerBackgroundMoveAnimation(500, -1);
+                        bg.triggerBackgroundMoveAnimation(-1);
                         
                     }
                     else if(key.getCode() == KeyCode.A){
                         //imageSlider.updateTransition( 1 , bg.getBackgroundMoveAnimation(500, 1) );
                         imageSlider.updateTransition( 1 );
-                        //bg.triggerBackgroundMoveAnimation(500, 1);
+                        bg.triggerBackgroundMoveAnimation(1);
                     }
                     
                     else if(key.getCode() == KeyCode.ENTER){

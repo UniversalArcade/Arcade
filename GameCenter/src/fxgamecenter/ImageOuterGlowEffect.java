@@ -29,7 +29,7 @@ public class ImageOuterGlowEffect {
         outerglow.setWidth(width); // 20
         outerglow.setHeight(height); // 20
         outerglow.setSpread(0.5);
-        outerglow.setColor(Color.WHITE);
+        outerglow.setColor(Color.BLUE);
         return outerglow;
     }
 }
