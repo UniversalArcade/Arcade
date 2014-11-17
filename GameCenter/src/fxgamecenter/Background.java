@@ -7,6 +7,8 @@ package fxgamecenter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
@@ -33,7 +35,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-public class Background implements Runnable{
+public class Background implements Observer, Runnable{
     
     private int radius, lastHorizontalDirection, parentAniduration;
     private double backgroundXTranslation;
@@ -183,4 +185,12 @@ public class Background implements Runnable{
             moveBackgroundTimeline[0].play();
         }
     }    
+
+    @Override
+    public void update(Observable o, Object arg) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //System.out.println("HIT ME: " + (int)arg );
+        
+        triggerBackgroundMoveAnimation( (int)arg );
+    }
 }

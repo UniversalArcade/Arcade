@@ -2,6 +2,7 @@
 package fxgamecenter;
 
 import java.util.LinkedList;
+import java.util.Observable;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -22,7 +23,7 @@ import javafx.scene.image.ImageView;
 
 import javafx.util.Duration;
 
-public class ImageSlider implements Runnable{
+public class ImageSlider extends Observable implements Runnable{
     private LinkedList<ImageView> images;
     private LinkedList<Integer> ids;
     private boolean enterPressed;
@@ -193,7 +194,10 @@ public class ImageSlider implements Runnable{
     }
     
     public void updateTransition(int direction){
-
+            
+            setChanged(); //Observerable
+            notifyObservers( direction );
+            
             ImageView nextCenter;
            
             if(direction > 0){
