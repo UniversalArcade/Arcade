@@ -17,6 +17,10 @@
         <servlet-class>app.controller.GameController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ProfilController</servlet-name>
+        <servlet-class>app.controller.ProfilController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>RegistrationController</servlet-name>
         <servlet-class>app.controller.RegistrationController</servlet-class>
     </servlet>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>RegistrationController</servlet-name>
         <url-pattern>/RegistrationController</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>ProfilController</servlet-name>
+        <url-pattern>/ProfilController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>

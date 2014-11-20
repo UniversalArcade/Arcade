@@ -32,7 +32,7 @@
                 </li>
                 <li>
                     <p>
-                        <a href="profil.jsp">Profil</a>
+                        <a href="ProfilController">Profil</a>
                     </p>
                 </li>
 

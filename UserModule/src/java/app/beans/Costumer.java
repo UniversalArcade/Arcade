@@ -96,5 +96,5 @@ public class Costumer implements Serializable {
     public HashMap getErrors(){
         return error;
     }
-    
+ 
 }
