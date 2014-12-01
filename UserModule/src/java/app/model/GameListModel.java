@@ -39,4 +39,8 @@ public class GameListModel {
         return gl;
         
     }
+    
+    public void deleteGame(){
+        
+    }
 }

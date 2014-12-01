@@ -15,14 +15,21 @@
        
 
         <p>
-            Profil
+            <span style="font-weight:bold; font-size:100%">Profil</span> 
         </p>
 
         <form method="POST" action="ProfilController">
             <table width="100%" border="0" cellspacing="1" cellpadding="3">
                 <tr>
-                    <td width="15%">Mail</td>
-                    <td width="85%"><input type="text" name="mail" value="${customer.mail}" size="30"/>
+                    <td width="35%">Aktuelle Email Adresse</td>
+                    <td width="65%">   <c:out value="${customer.getMail()}"/>             </td>
+          
+                </tr>
+                
+                <tr>
+                    
+                    <td width="35%">Mail ändern</td>
+                    <td width="65%"><input type="text" name="mail" value="${customer.mail}" size="30"/>
                         
                         <c:out value="${customer.errors['mail']}"/>
                          
@@ -32,8 +39,11 @@
 
                 </tr> 
                 <tr>
-                    <td width="15%">Passwort</td>
-                    <td width="85%">
+                 
+                </tr>  
+                <tr>
+                       <td width="35%">Passwort zur Bestätigung</td>
+                    <td width="65%">
                         <input type="password" name="password" value="${customer.password}" size="30"/>
                         
                         <c:out value="${customer.errors['password']}"/>
@@ -41,10 +51,8 @@
                         <a onmouseover="InfoBoxAnzeigen(event,'Geben Sie hier bitte Ihre aktuelles Passwort zur validierung ein.',20,-30);"
                    accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                     </td>
-                </tr>  
-                <tr>
-                    <td colspan="2"><input type="submit" name="send" value="Ändern" />
-                   
+                    
+                    <td colspan="2"><input type="submit" name="send" value="Ändern" />               
                     </td>
                 </tr>
              </table>

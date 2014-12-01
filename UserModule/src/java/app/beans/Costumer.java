@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Costumer implements Serializable {
     
     private String mail, password, passwordWDH;
-    private HashMap error;
+    private HashMap error,message;
     private final String _EMPTY = "Bitte Ausfüllen!";
     private boolean registrationComplete;
 
@@ -96,5 +96,10 @@ public class Costumer implements Serializable {
     public HashMap getErrors(){
         return error;
     }
- 
+     public void addMessage(String key, String value){
+        message.put(key,value);
+    }
+     public HashMap getMessage(){
+        return message;
+    }
 }

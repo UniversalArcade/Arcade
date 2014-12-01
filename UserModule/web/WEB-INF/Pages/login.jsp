@@ -15,7 +15,7 @@
        
 
         <p>
-            Login
+            <span style="font-weight:bold; font-size:100%">Login</span> 
         </p>
 
         <form method="POST" action="login">

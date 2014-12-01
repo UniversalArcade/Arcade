@@ -11,6 +11,9 @@ import app.beans.User;
 import app.model.LoginModel;
 import app.model.ProfilModel;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -40,11 +43,13 @@ public class ProfilController extends HttpServlet {
         try{
                User u = (User)req.getSession().getAttribute("user");
                ProfilModel updateProfil = new ProfilModel();
-               Costumer cust = new Costumer();
+               Costumer cust = new Costumer();            
                cust.setMail(req.getParameter("mail"));
                cust.setPassword(req.getParameter("password"));
+               //req.getSession().setAttribute("message", new Message(""+cust.getErrors()));
+               req.getSession().setAttribute("message", new Message( ""+cust.getErrors().get("password") ));
                updateProfil.updateUser(u,cust);
-             
+               
         }
         catch(Exception e){                     
           }
@@ -55,8 +60,7 @@ public class ProfilController extends HttpServlet {
      //Wenn  auf "Profil" in der Navleiste geklickt wird
      protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-       req.getRequestDispatcher("/WEB-INF/Pages/profil.jsp").forward(req, res);
-         
+       req.getRequestDispatcher("/WEB-INF/Pages/profil.jsp").forward(req, res);          
      }
 } 
 

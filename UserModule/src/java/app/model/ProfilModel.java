@@ -24,7 +24,7 @@ public class ProfilModel {
     }
 
     public void updateUser(User u,Costumer c) throws SQLException  {
-
+     
         
         sql.openCon();
 
@@ -38,6 +38,7 @@ public class ProfilModel {
           if(c.getPassword().equals(password)){
             sql.execNonQuery("UPDATE user SET mail ='"+c.getMail()+"' WHERE id='"+u.getUserID()+"' ");
             //System.out.println("passwort gefunden und mail geändernt");
+            c.addError("password", "Ihre Mail Adresse wurde geändert !");
             
           }
 
@@ -45,9 +46,13 @@ public class ProfilModel {
              //System.out.println("passwort falsch"); 
              c.addError("password", "Passwort stimmt nicht überein!");
           }
+          
+          else if (c.getPassword().equals("")){
+              c.addError("password", "Bitte geben Sie Ihr Passwort zur Validierung ein!");
+          }
+          
         sql.closeCon();
 
     }
-    
-    
+      
 }
