@@ -48,6 +48,10 @@ public class ProfilController extends HttpServlet {
                cust.setPassword(req.getParameter("password"));
                //req.getSession().setAttribute("message", new Message(""+cust.getErrors()));
                req.getSession().setAttribute("message", new Message( ""+cust.getErrors().get("password") ));
+               
+               //req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "errortext in bösem rot"));
+               
+               
                updateProfil.updateUser(u,cust);
                
         }

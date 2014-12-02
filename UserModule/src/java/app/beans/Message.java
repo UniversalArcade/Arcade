@@ -25,17 +25,17 @@ public class Message implements Serializable{
     
     public Message(String message){
         this();
-        this.addMessage(Type.SUCCESS.name(), message);
+        this.addMessage(Type.SUCCESS, message);
     }
     
     public Message(Type type, String message){
         this();
-        this.addMessage(type.name(), message);
+        this.addMessage(type, message);
     }
     
     
     
-    public void addMessage(String type, String message){
+    public void addMessage(Type type, String message){
        this.message.add( new MessageElement(type, message) );
     }
     
@@ -50,19 +50,19 @@ public class Message implements Serializable{
     }
     
     public class MessageElement{
-        private String type;
+        private Type type;
         private String message;
         
-        public MessageElement(String type, String message){
+        public MessageElement(Type type, String message){
             this.setType(type);
             this.setMessage(message);
         }
         
         public String getType() {
-            return type;
+            return type.name();
         }
 
-        public void setType(String type) {
+        public void setType(Type type) {
             this.type = type;
         }
 

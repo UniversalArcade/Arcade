@@ -34,11 +34,11 @@ line-height:130%;
 #message {
 }
 
-#message .success {
+#message .SUCCESS {
     color: #00CC00;
 }
 
-#message .error {
+#message .ERROR {
     color: #CC0000;
 }
 

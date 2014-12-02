@@ -37,18 +37,18 @@ public class LoginController extends HttpServlet
                             }
                             else if( user.getRegistred()==0){
                                 //req.getSession().setAttribute("user", user);
-                                req.getSession().setAttribute("message", new Message("Ihr Account wurde noch nicht bestätigt. Bitte prüfen Sie Ihre Emails."));                                             
+                                req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Ihr Account wurde noch nicht bestätigt. Bitte prüfen Sie Ihre Emails."));                                             
                                 req.setAttribute("customer", cust);
                                 view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
                             }
                     }
                     else{                  
-                    req.getSession().setAttribute("message", new Message("User existiert nicht oder Passwort falsch"));     
+                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "User existiert nicht oder Passwort falsch"));     
                     view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");                                    
                 }
                 }   
                 else{                  
-                    req.getSession().setAttribute("message", new Message("User existiert nicht oder Passwort falsch"));     
+                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "User existiert nicht oder Passwort falsch"));     
                     view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");                                    
                 }
                 view.forward(req, res);
