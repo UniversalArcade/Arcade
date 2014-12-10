@@ -30,11 +30,14 @@
                         <a href="GameListController">Spiele Verwalten</a>
                     </p>
                 </li>
-                <li>
+               
+                <!--
+               <li>
                     <p>
                         <a href="ProfilController">Profil</a>
                     </p>
-                </li>
+                </li> 
+               -->
 
                     <c:if test="${user.userLvl >= 200}">
 
