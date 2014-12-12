@@ -72,10 +72,11 @@ public class ImageSlider extends Observable implements Runnable{
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         images = new LinkedList();
         
-        //ids = gameModel.getAllGameIDs();
+        ids = gameModel.getAllGameIDs();
         
         
-        ids = new LinkedList();
+        
+        //ids = new LinkedList();
         /*
         for(int i=5; i>0; i--){
             ids.add(i);
@@ -83,8 +84,8 @@ public class ImageSlider extends Observable implements Runnable{
         */
         //ids.add(7);
         
-        ids.add(214);
-        ids.add(215);
+        //ids.add(214);
+        //ids.add(215);
         //ids.add(4);
         //ids.add(3);
         //ids.add(2);

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -58,9 +59,25 @@ public class GameModel {
         return data.toJSONString();
     }
     
-    public void getAllGameIDs(){
-        // MYSQL Daten aller Games abrufen (ID,Name)
-        // return Dataset
+    public LinkedList<Integer> getAllGameIDs(){
+        
+        LinkedList<Integer> idList = new LinkedList();
+        
+        sql.openCon();
+            ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1");
+            //String path = "";
+            try {
+                while( rs.next() ){
+                    idList.add( rs.getInt( "ID" ) );
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "no valid resultset", ex);
+            }   
+        sql.closeCon();
+        
+        System.out.println("IDLISTE: " + idList);
+        
+        return idList;
     }
     
     public void executeGameByID(int id){
