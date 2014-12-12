@@ -92,6 +92,11 @@ public class GameModel {
             path = "C:/Users/Public/Arcade/Mame/startLinkForDigDug.bat";
         }*/
         
+        //path = "C:/Users/Public/Arcade/Mame/mame.exe";
+        
+        //path = "C:/Users/Public/Arcade/Mame/starterLink.lnk";
+        path = "C:/Users/Public/Arcade/Mame/MameStarter.exe digdug2";
+        
         
         if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
             // TODO Zeit nehmen starten

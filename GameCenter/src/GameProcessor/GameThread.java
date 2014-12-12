@@ -20,7 +20,7 @@ public class GameThread extends Thread{
      public void run(){
          
         processStarted = false; 
-        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:ArcadeNonStore /nosbiectrl /silent");
+        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:ArcadeStore /nosbiectrl /silent");
         try {
             p = builder.start(); // start the Game
             
