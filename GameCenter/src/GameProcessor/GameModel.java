@@ -65,22 +65,23 @@ public class GameModel {
     
     public void executeGameByID(int id){
         
-       
+        StringBuilder path = new StringBuilder();
         sql.openCon();
             ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath, isEmulatorGame FROM generell, games WHERE games.ID = "+ id );
-            String path = "";
+            //String path = "";
             try {
                 if( rs.next() ){
-                    path = rs.getString( "SpieleRoot" );
+                    path.append( rs.getString( "SpieleRoot" ) );
+                     
                     
                     if(rs.getBoolean("isEmulatorGame" )){
-                        path += "/Mame/MameStarter.exe ";
+                        path.append( "/Mame/MameStarter.exe " );
                     }
                     else{
-                        path += "/Games/" + id + "/game/";
+                        path.append( "/Games/" + id + "/game/" );
                     }
                     
-                    path += rs.getString( "ExecutePath" );
+                    path.append( rs.getString( "ExecutePath" ) );
                     log.info("found path: " + path);
                 }
             } catch (SQLException ex) {
@@ -92,7 +93,7 @@ public class GameModel {
         if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
             // TODO Zeit nehmen starten
             Taskmanager task = new Taskmanager();
-            task.executeGame( path );
+            task.executeGame( path.toString() );
             // TODO Zeit nehmen beenden
             // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
             // TODO return false loggen
