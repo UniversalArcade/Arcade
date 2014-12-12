@@ -36,8 +36,7 @@ public class FXGameCenter extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        
-        
+
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
         
@@ -67,47 +66,7 @@ public class FXGameCenter extends Application {
         imageSliderThread.start();
         
         imageSlider.addObserver( bg );
-        
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
-            @Override
-            public void handle(KeyEvent key) {
-                
-                if(imageSlider.getMoveAnimationStatus() == Animation.Status.STOPPED){
-                    if(key.getCode() == KeyCode.D){
-                        imageSlider.updateTransition( -1 );
-                        //bg.triggerBackgroundMoveAnimation( -1 );
-                        
-                    }
-                    else if(key.getCode() == KeyCode.A){
-                        imageSlider.updateTransition( 1 );
-                        //bg.triggerBackgroundMoveAnimation( 1 );
-                    }
-                    
-                    else if(key.getCode() == KeyCode.ENTER){
-                        if(!enterPressed){
-                            //System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
-                            //imageSlider.onKeyEnter();
-                            enterPressed = true;
-                            
-                        }
-                    }
-                }
-            }
-        });
-        
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-             @Override
-             public void handle(KeyEvent key) {
-                if(key.getCode() == KeyCode.ENTER){
-                    enterPressed = false;
-                } 
-             }
-        });
-        
-        
-        
         primaryStage.show();
     }
     

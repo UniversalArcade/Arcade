@@ -187,10 +187,7 @@ public class Background implements Observer, Runnable{
     }    
 
     @Override
-    public void update(Observable o, Object arg) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //System.out.println("HIT ME: " + (int)arg );
-        
+    public void update(Observable o, Object arg) {  
         triggerBackgroundMoveAnimation( (int)arg );
     }
 }

@@ -88,7 +88,6 @@ public class Costumer implements Serializable {
         this.registrationComplete = true;
     }
     
-   
     public void addError(String key, String value){
         error.put(key,value);
     }
