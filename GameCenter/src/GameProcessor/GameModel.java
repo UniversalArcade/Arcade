@@ -65,15 +65,21 @@ public class GameModel {
     
     public void executeGameByID(int id){
         
-        
-        
+       
         sql.openCon();
-            ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath FROM generell, games WHERE games.ID = "+ id );
+            ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath, isEmulatorGame FROM generell, games WHERE games.ID = "+ id );
             String path = "";
             try {
                 if( rs.next() ){
                     path = rs.getString( "SpieleRoot" );
-                    path += "/" + id + "/game/";
+                    
+                    if(rs.getBoolean("isEmulatorGame" )){
+                        path += "/Mame/MameStarter.exe ";
+                    }
+                    else{
+                        path += "/Games/" + id + "/game/";
+                    }
+                    
                     path += rs.getString( "ExecutePath" );
                     log.info("found path: " + path);
                 }
@@ -81,21 +87,6 @@ public class GameModel {
                 log.log(Level.SEVERE, "no valid resultset", ex);
             }   
         sql.closeCon();
-        
-        /*
-        String path = "";
-        
-        if(id == 1){
-            path = "C:/Users/Public/Arcade/Mame/startLinkForDefender.bat";
-        }
-        else if(id == 2){
-            path = "C:/Users/Public/Arcade/Mame/startLinkForDigDug.bat";
-        }*/
-        
-        //path = "C:/Users/Public/Arcade/Mame/mame.exe";
-        
-        //path = "C:/Users/Public/Arcade/Mame/starterLink.lnk";
-        path = "C:/Users/Public/Arcade/Mame/MameStarter.exe digdug2";
         
         
         if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
