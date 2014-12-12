@@ -62,7 +62,7 @@ public class GameModel {
     public LinkedList<Integer> getAllGameIDs(){
         
         LinkedList<Integer> idList = new LinkedList();
-        
+      
         sql.openCon();
             ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1");
             //String path = "";
@@ -76,7 +76,7 @@ public class GameModel {
         sql.closeCon();
         
         System.out.println("IDLISTE: " + idList);
-        
+       
         return idList;
     }
     

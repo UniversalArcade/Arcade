@@ -55,6 +55,11 @@ public class ImageSlider extends Observable implements Runnable{
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
         this.gameModel = new GameModel();
+        this.ids = new LinkedList();
+    }
+    
+    public void setGameIds(LinkedList<Integer> idList){
+        ids = idList;
     }
     
     @Override
@@ -72,7 +77,7 @@ public class ImageSlider extends Observable implements Runnable{
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         images = new LinkedList();
         
-        ids = gameModel.getAllGameIDs();
+        //ids = gameModel.getAllGameIDs();
         
         
         

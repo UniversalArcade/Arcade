@@ -5,27 +5,18 @@
  */
 package fxgamecenter;
 
-
-import com.sun.javafx.scene.traversal.Direction;
-import javafx.animation.Animation;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
+import GameProcessor.GameModel;
 
 
 public class FXGameCenter extends Application {
     
-    
-    
-    private boolean enterPressed;
     private int aniDuration;
     private Pane imagePane;
     private Group imageGroup, bgEffectsGroup;
@@ -33,10 +24,13 @@ public class FXGameCenter extends Application {
     private Scene scene;
     private Background bg;
     private ImageSlider imageSlider;
+    private GameModel gameModel;
     
     @Override
     public void start(Stage primaryStage) {
-
+        
+        gameModel = new GameModel();
+        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
         
@@ -60,6 +54,7 @@ public class FXGameCenter extends Application {
         backgroundThread.start();
         
         imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
+        imageSlider.setGameIds( gameModel.getAllGameIDs() );
         
         Thread imageSliderThread = new Thread (imageSlider);
         imageSliderThread.setDaemon(true);
