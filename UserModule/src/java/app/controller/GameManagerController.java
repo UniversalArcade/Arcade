@@ -39,9 +39,7 @@ public class GameManagerController extends HttpServlet
                         
                         
                         GameManagerModel model = new GameManagerModel();
-                        int gameID = model.insertNewGame(user.getUserID());
-                        Game game = new Game();
-                        game.setGameID(gameID);
+                        Game game = model.insertNewGame(user.getUserID());
                         req.getSession().setAttribute("game", game);
                         
                         res.sendRedirect("/UserModule/" + components.get(0));

@@ -22,10 +22,18 @@ public class ExeChooserModel {
     
     public boolean updateExePath(String path, Game g){
         
+        if(path != null && path != ""){
+            g.updateState("exechooser", "complete");
+        }
+        else{
+            g.updateState("exechooser", "incomplete");
+        }
+        String state = g.stateToJSON();
+        
         SQLHelper sql = new SQLHelper();
         
         sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"' WHERE ID = "+ g.getGameID());
+          boolean success = sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
         
         return success;

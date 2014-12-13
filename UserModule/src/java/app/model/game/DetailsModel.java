@@ -14,10 +14,14 @@ import app.helper.SQLHelper;
 public class DetailsModel {
     
     public boolean updateDetails(Game g){
+        
+        g.updateState("details", "complete");
+        String state = g.stateToJSON();
+        
         SQLHelper sql = new SQLHelper();
         
         sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"', isEmulatorGame='"+g.getEmulationGame()+"' WHERE ID = "+ g.getGameID());
+          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"', isEmulatorGame='"+g.getEmulationGame()+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
         
           if(g.getEmulationGame() == 1){
               ExeChooserModel exeModel = new ExeChooserModel();

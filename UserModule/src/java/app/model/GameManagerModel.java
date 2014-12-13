@@ -3,6 +3,7 @@ package app.model;
 
 
 import app.beans.Game;
+import app.beans.GameComponents;
 import app.beans.User;
 import app.helper.SQLHelper;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 
 public class GameManagerModel {
@@ -28,20 +30,30 @@ public class GameManagerModel {
         return path; 
     }
     
-    public int insertNewGame(int userID){
+    public Game insertNewGame(int userID){
         SQLHelper sql = new SQLHelper();
+        Game game = new Game();
+        GameComponents gc = new GameComponents();
         
+        for( String key : gc.getComponents().keySet()){
+            game.addState(key, "incomplete");
+        }
+        
+        String states = game.stateToJSON();
+                
         sql.openCon();
-            sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
+            sql.execNonQuery("INSERT INTO `games` (userID,editState) VALUES ('"+userID+"','"+states+"')");
             int gameID = sql.getLastID();
         sql.closeCon();
+        
+        game.setGameID(gameID);
         
         String baseDir = mkDir("C:/Users/Public/Arcade/Games/" + gameID);
         mkDir(baseDir + "/game");
         mkDir(baseDir + "/assets");
         mkDir(baseDir + "/tmp");
          
-        return gameID;
+        return game;
     }
     
     public boolean toggleLive(int toggle, Game g){

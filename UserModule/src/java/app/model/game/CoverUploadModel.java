@@ -7,6 +7,7 @@ package app.model.game;
 
 import app.beans.Game;
 import app.helper.FileUpload;
+import app.helper.SQLHelper;
 import app.model.GameManagerModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,6 +42,15 @@ public class CoverUploadModel {
             }
             File destFile = new File(fileStatus.getParent() + "/" + g.getGameID() +".jpg");
             ImageIO.write(img, "jpg", destFile);
+            
+            g.updateState("coverupload", "complete");
+            String state = g.stateToJSON();
+            
+            SQLHelper sql = new SQLHelper();    
+            sql.openCon();
+               boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
+            sql.closeCon();
+            
         } catch (IOException ex) {
             Logger.getLogger(GameManagerModel.class.getName()).log(Level.SEVERE, null, ex);
         }

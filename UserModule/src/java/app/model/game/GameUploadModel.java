@@ -2,6 +2,7 @@ package app.model.game;
 
 import app.beans.Game;
 import app.helper.FileUpload;
+import app.helper.SQLHelper;
 import app.helper.UnZip;
 import java.io.File;
 import javax.servlet.http.HttpServletRequest;
@@ -28,5 +29,14 @@ public class GameUploadModel {
         else{
             System.out.println("NICHT GELÖSCHT");
         }
+        
+        g.updateState("gameupload", "complete");
+        String state = g.stateToJSON();
+        
+        SQLHelper sql = new SQLHelper();    
+        sql.openCon();
+           boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
+        sql.closeCon();
+        
     } 
 }
