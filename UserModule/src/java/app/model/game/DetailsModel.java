@@ -18,6 +18,12 @@ public class DetailsModel {
         
         sql.openCon();
           boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"', isEmulatorGame='"+g.getEmulationGame()+"' WHERE ID = "+ g.getGameID());
+        
+          if(g.getEmulationGame() == 1){
+              ExeChooserModel exeModel = new ExeChooserModel();
+              exeModel.updateExePath(g.getTitle(), g);
+          }  
+          
         sql.closeCon();
         
         return success;

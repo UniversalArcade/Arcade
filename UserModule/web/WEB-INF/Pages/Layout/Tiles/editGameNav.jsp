@@ -39,10 +39,13 @@
                         <a href="gameupload">Game upload</a>
                     </p>
                 </li>
+                
+                <c:if test="${game.emulationGame == 0}">
                 <li>
                     <p>
                         <a href="exechooser">Choose exe file</a>
                     </p>
                 </li>
+                </c:if>
   
     </ul>      

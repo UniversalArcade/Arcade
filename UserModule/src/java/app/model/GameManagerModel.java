@@ -64,7 +64,7 @@ public class GameManagerModel {
         
         sql.openCon();
             
-            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
+            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore,isEmulatorGame FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
             try {
                 if(rs.next()){
                     g.setGameID(gameID);
@@ -74,7 +74,8 @@ public class GameManagerModel {
                     g.setCredits(rs.getString("credits"));
                     g.setGameDuration(rs.getInt("gameDuration"));
                     g.setGameStarts(rs.getInt("gameStarts"));
-                    g.setPermanentStore(rs.getInt("permanentStore")); 
+                    g.setPermanentStore(rs.getInt("permanentStore"));
+                    g.setEmulationGame(rs.getInt("isEmulatorGame"));
                 }
                 else{
                     g = null;

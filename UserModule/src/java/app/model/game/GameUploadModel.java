@@ -14,7 +14,13 @@ public class GameUploadModel {
         FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file = upload.uploadFile(req);
        
-        UnZip.unzipit(file, file.getParent() + "/game");
+        if(g.getEmulationGame() == 1){
+            UnZip.unzipit(file, "C:/Users/Public/Arcade/Mame/roms");
+        }
+        else{
+            UnZip.unzipit(file, file.getParent() + "/game");
+        }
+        
         
         if( file.delete() ){
             System.out.println("gelöscht");
