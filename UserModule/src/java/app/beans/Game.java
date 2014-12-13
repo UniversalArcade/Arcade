@@ -18,7 +18,9 @@ public class Game implements Serializable {
     private boolean inEditMode;
 
     
-    private int gameID, permanentStore, emulationGame, gameDuration, gameStarts;
+    private int gameID, permanentStore, emulationGame, gameDuration, gameStarts, life;
+
+    
 
    
     private String title, credits, description, buttonConfig;
@@ -34,6 +36,14 @@ public class Game implements Serializable {
         this.setEmulationGame(0);
         this.setInEditMode(false);
         states = new LinkedHashMap();
+    }
+    
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
     }
     
     public boolean isInEditMode() {

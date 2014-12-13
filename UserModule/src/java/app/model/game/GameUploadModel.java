@@ -21,6 +21,10 @@ public class GameUploadModel {
              
             if(g.getEmulationGame() == 0){
                 delete = new File("C:/Users/Public/Arcade/Games/" + g.getGameID() + "/game");
+                ExeChooserModel exe = new ExeChooserModel();
+                exe.updateExePath("", g);
+                g.setInEditMode(false);
+                g.setLife(0);  
             }
             else{
                 delete = new File("C:/Users/Public/Arcade/Mame/roms/" + g.getTitle());
@@ -28,6 +32,7 @@ public class GameUploadModel {
              
             try {
                 FileUtils.deleteDirectory(delete);
+                
             } catch (IOException ex) {
                 Logger.getLogger(GameUploadModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -57,7 +62,7 @@ public class GameUploadModel {
         
         SQLHelper sql = new SQLHelper();    
         sql.openCon();
-           boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
+           boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
         sql.closeCon();
         
     } 
