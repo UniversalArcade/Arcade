@@ -38,8 +38,8 @@ public class FXGameCenter extends Application {
         imagePane = new Pane();
         
         bgEffectsGroup = new Group();
-        imagePane.getChildren().add(bgEffectsGroup);
-        imagePane.getChildren().add(imageGroup);
+        imagePane.getChildren().add( bgEffectsGroup );
+        imagePane.getChildren().add( imageGroup );
         
         scene = new Scene(imagePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         imagePane.setStyle("-fx-background-color: #000000;");
@@ -63,6 +63,7 @@ public class FXGameCenter extends Application {
         imageSlider.addObserver( bg );
 
         primaryStage.show();
+        
     }
     
 

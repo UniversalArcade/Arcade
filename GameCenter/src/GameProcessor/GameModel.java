@@ -1,6 +1,5 @@
 package GameProcessor;
 
-import GameProcessor.Taskmanager;
 import helper.SQLHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class GameModel {
-  
+    
+    private GameThread gt; 
+    private Thread executionThread;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
     
     SQLHelper sql;
@@ -108,9 +109,28 @@ public class GameModel {
         
         
         if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
-            // TODO Zeit nehmen starten
-            Taskmanager task = new Taskmanager();
-            task.executeGame( path.toString() );
+
+            if(gt != null){
+                System.out.println("NOT NULL!");
+                
+                if(gt.getGameID() != id){
+                    gt.killProcess();
+                    gt.interrupt();
+                }
+                
+                if( !gt.isAlive() ){
+                    System.out.println("ITS ALIVE!!");
+                     gt = new GameThread( path.toString() );
+                     gt.setGameID(id);
+                     gt.start();
+                }
+            }
+            else{
+                 gt = new GameThread( path.toString() );
+                 gt.setGameID(id);
+                 gt.start();
+            }
+            
             // TODO Zeit nehmen beenden
             // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
             // TODO return false loggen
