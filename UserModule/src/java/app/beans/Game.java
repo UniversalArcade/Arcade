@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 public class Game implements Serializable {
     
@@ -24,7 +25,7 @@ public class Game implements Serializable {
     private JSONArray filePathJSON;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
-    private LinkedHashMap<String, String> states;
+    private HashMap<String, String> states;
     
 
     public Game() {
@@ -146,7 +147,7 @@ public class Game implements Serializable {
         error.clear();
     }
     
-    public LinkedHashMap<String,String> getStates() {
+    public HashMap<String,String> getStates() {
         return states;
     }
     
@@ -162,40 +163,15 @@ public class Game implements Serializable {
     
     public String stateToJSON(){
         JSONObject ob = new JSONObject();
-        
-        
+       
         for(Map.Entry<String, String> entry : states.entrySet()){
             ob.put(entry.getKey(), entry.getValue());
         }
-        
-        
         return ob.toJSONString();
     }
-
-    private class Part{
-        private String name, state;
+    
+    public void JSONToState(String json){
         
-        public Part(String name, String state){
-            this.setName(name);
-            this.setState(state);
-        }
-        
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
+        states = (HashMap<String,String>) JSONValue.parse(json);
     }
-    
-    
 }

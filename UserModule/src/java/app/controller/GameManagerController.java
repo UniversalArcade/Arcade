@@ -50,7 +50,7 @@ public class GameManagerController extends HttpServlet
                        GameManagerModel model = new GameManagerModel();
                        Game game = model.getGameByID(gameID, user.getUserID());
                        if(game != null){
-                           game.setInEditMode(true);
+                           //game.setInEditMode(true);
                            req.getSession().setAttribute("game", game);
                            res.sendRedirect("/UserModule/statistics");  
                        }
@@ -86,6 +86,7 @@ public class GameManagerController extends HttpServlet
                             
                             GameManagerModel model = new GameManagerModel();
                             model.toggleLive(1, game);
+                            model.toggleEditMode(1, game);
                             
                             req.getSession().setAttribute("game", null);
                             //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);

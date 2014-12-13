@@ -65,6 +65,18 @@ public class GameManagerModel {
         
         return success;
     }
+    
+    
+    public boolean toggleEditMode(int toggle, Game g){
+        SQLHelper sql = new SQLHelper();
+        
+        sql.openCon();
+          boolean success = sql.execNonQuery("UPDATE `games` SET editMode = '"+toggle+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
+        
+        return success;
+    }        
+            
    
     public void deleteGame(){
     
@@ -76,7 +88,7 @@ public class GameManagerModel {
         
         sql.openCon();
             
-            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore,isEmulatorGame FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
+            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore,isEmulatorGame,editMode,editState FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
             try {
                 if(rs.next()){
                     g.setGameID(gameID);
@@ -88,6 +100,16 @@ public class GameManagerModel {
                     g.setGameStarts(rs.getInt("gameStarts"));
                     g.setPermanentStore(rs.getInt("permanentStore"));
                     g.setEmulationGame(rs.getInt("isEmulatorGame"));
+                    g.JSONToState(rs.getString("editState"));
+                    
+                    int editMode = rs.getInt("editMode");
+                    if(editMode == 1){
+                        g.setInEditMode(true);
+                    }
+                    else{
+                        g.setInEditMode(false);
+                    }
+                    
                 }
                 else{
                     g = null;
