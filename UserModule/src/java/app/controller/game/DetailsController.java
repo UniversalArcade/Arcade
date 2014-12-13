@@ -44,8 +44,9 @@ public class DetailsController extends HttpServlet
 
                         
                         String perma = req.getParameter("permanentStore");
+                        System.out.println("Perma: " + perma);
                         if(perma != null){
-                            if(perma.equals("on")) game.setPermanentStore(0);
+                            if(perma.equals("on")) game.setPermanentStore(1);
                         }
                         else{
                             game.setPermanentStore(0);
@@ -56,7 +57,7 @@ public class DetailsController extends HttpServlet
                             if(emulationGame.equals("on")) game.setEmulationGame(1);
                         }
                         else{
-                            game.setPermanentStore(0);
+                            game.setEmulationGame(0);
                         }
                         
                         
