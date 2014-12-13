@@ -56,17 +56,27 @@
                    accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
               </td>
            </tr>
-           <tr>  
-              <td width="15%">Emulatorspiel</td>
-              <td width="85%">
-                  <input name="emulationGame" type="checkbox"  ${game.emulationGame == 1 ? "checked" : "" }/>
-                  <c:out value="${game.errors['emulationGame']}"/>
-                  <a onmouseover="InfoBoxAnzeigen(event,'Mame roms oder eigenes Spiel?',20,-30);"
-                   accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
-              </td>
-
-          </tr>
           <tr>
+     
+          <c:choose>
+             <c:when test="${!game.inEditMode}">
+                    
+                    <td width="15%">Emulatorspiel</td>
+                    <td width="85%">
+                        <input name="emulationGame" type="checkbox"  ${game.emulationGame == 1 ? "checked" : "" }/>
+                        <c:out value="${game.errors['emulationGame']}"/>
+                        <a onmouseover="InfoBoxAnzeigen(event,'Mame roms oder eigenes Spiel?',20,-30);"
+                         accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
+                    </td>
+                    
+             </c:when>
+             <c:otherwise>
+                 <td>
+                    <input type="hidden" name="emulationGame" value="${game.emulationGame == 0? null : 'on'}" /> 
+                 </td>
+             </c:otherwise>
+          </c:choose> 
+          </tr>
               <td colspan="2"><input type="submit" name="send" value="${game.inEditMode ? "bearbeiten" : "weiter"}" />
           </tr>
        </table>
