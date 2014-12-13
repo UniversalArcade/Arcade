@@ -13,12 +13,24 @@ public class Game implements Serializable {
     private boolean inEditMode;
 
     
-    private int gameID, permanentStore, gameDuration, gameStarts;
+    private int gameID, permanentStore, emulationGame, gameDuration, gameStarts;
+
+   
     private String title, credits, description, buttonConfig;
     private JSONArray filePathJSON;
     private HashMap error;
     private final String _EMPTY = "Bitte Ausfüllen!";
     
+    
+    
+    
+    
+    public Game() {
+        error = new HashMap();
+        this.setPermanentStore(1);
+        this.setEmulationGame(0);
+        this.setInEditMode(false);
+    }
     
     public boolean isInEditMode() {
         return inEditMode;
@@ -52,13 +64,6 @@ public class Game implements Serializable {
         this.gameStarts = gameStarts;
     }
     
-    
-    public Game() {
-        error = new HashMap();
-        this.setPermanentStore(1);
-        this.setInEditMode(false);
-    }
-    
 
     public int getPermanentStore() {
         return permanentStore;
@@ -66,6 +71,14 @@ public class Game implements Serializable {
 
     public void setPermanentStore(int permanentStore) {
         this.permanentStore = permanentStore;
+    }
+    
+    public int getEmulationGame() {
+        return emulationGame;
+    }
+
+    public void setEmulationGame(int emulationGame) {
+        this.emulationGame = emulationGame;
     }
     
     public JSONArray getFilePathJSON() {
@@ -110,14 +123,7 @@ public class Game implements Serializable {
     }
 
     public void setCredits(String credits) {
-        if(credits.equals("")){
-            System.out.println("CREDITS LEER");
-            error.put("credits",_EMPTY);
-        }
-        else{
-            System.out.println("CREDITS VOLL");
-            this.credits = credits;
-        }
+        this.credits = credits;
     }
     
     public String getDescription() {
@@ -125,12 +131,7 @@ public class Game implements Serializable {
     }
 
     public void setDescription(String description) {
-        if(description.equals("")){
-            error.put("description",_EMPTY);                        
-        }
-        else{
-            this.description = description;
-        }
+        this.description = description;
     }
     
 

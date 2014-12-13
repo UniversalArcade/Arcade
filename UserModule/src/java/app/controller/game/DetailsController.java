@@ -40,17 +40,26 @@ public class DetailsController extends HttpServlet
                         game.setTitle(req.getParameter("title"));
                         game.setDescription(req.getParameter("description"));
                         game.setCredits(req.getParameter("credits"));
+                        
 
-                        System.out.println("perma: " + req.getParameter("permanentStore"));
+                        
                         String perma = req.getParameter("permanentStore");
-
                         if(perma != null){
                             if(perma.equals("on")) game.setPermanentStore(0);
                         }
                         else{
                             game.setPermanentStore(0);
                         }
-
+                        
+                        String emulationGame = req.getParameter("emulationGame");
+                        if(emulationGame != null){
+                            if(emulationGame.equals("on")) game.setEmulationGame(1);
+                        }
+                        else{
+                            game.setPermanentStore(0);
+                        }
+                        
+                        
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(game.getErrors().isEmpty()){
                             DetailsModel model = new DetailsModel();

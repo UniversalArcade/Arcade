@@ -17,7 +17,7 @@ public class DetailsModel {
         SQLHelper sql = new SQLHelper();
         
         sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"' WHERE ID = "+ g.getGameID());
+          boolean success = sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"', isEmulatorGame='"+g.getEmulationGame()+"' WHERE ID = "+ g.getGameID());
         sql.closeCon();
         
         return success;
