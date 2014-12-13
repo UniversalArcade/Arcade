@@ -6,6 +6,7 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Buttonlayout bearbeiten"/> 
+  <tiles:put name="siteName" value="buttonLayout"/> 
   <tiles:put name="body">
 
          <p>

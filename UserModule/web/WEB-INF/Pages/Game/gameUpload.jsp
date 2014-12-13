@@ -5,7 +5,8 @@
 
 
 <tiles:insert template="../Layout/gameLayout.jsp">
-  <tiles:put name="title" value="Poster hochladen"/> 
+  <tiles:put name="title" value="Poster hochladen"/>
+  <tiles:put name="siteName" value="gameUpload"/> 
   <tiles:put name="body">
 
          <p>

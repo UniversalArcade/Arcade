@@ -8,6 +8,7 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Spieledetails bearbeiten"/>
+  <tiles:put name="siteName" value="details"/> 
   <tiles:put name="body">
   
     <p>

@@ -5,6 +5,7 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Choose .exe file"/>
+  <tiles:put name="siteName" value="exeChooser"/> 
   <tiles:put name="dependence">
         <script src="Scripts/d3.js" charset="utf-8"></script>
         <script src="Scripts/exeChooser.js"></script>

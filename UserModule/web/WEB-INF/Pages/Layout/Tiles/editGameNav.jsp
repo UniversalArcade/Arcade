@@ -7,7 +7,8 @@
 
 
 <ul>
-                     
+    
+    <c:out value="Hallo + ${requestScope.currentSite}" />
         
     <!-- nur bei edit modus -->
     <c:if test="${game.inEditMode}">
@@ -41,11 +42,11 @@
                 </li>
                 
                 <c:if test="${game.emulationGame == 0}">
-                <li>
-                    <p>
-                        <a href="exechooser">Choose exe file</a>
-                    </p>
-                </li>
+                    <li>
+                        <p>
+                            <a href="exechooser">Choose exe file</a>
+                        </p>
+                    </li>
                 </c:if>
   
     </ul>      
