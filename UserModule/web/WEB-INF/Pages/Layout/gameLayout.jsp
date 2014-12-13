@@ -17,7 +17,7 @@
             <div class="navi">
                 <jsp:include page="Tiles/navi.jsp" />    
             </div>
-            <div class="navi">
+            <div class="gameNavi">
                 <c:set var="currentSite" scope="request"> 
                     <tiles:getAsString name="siteName"/>
                 </c:set> 

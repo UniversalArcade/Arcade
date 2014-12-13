@@ -62,7 +62,6 @@ public class GameManagerController extends HttpServlet
                                res.sendRedirect("/UserModule/statistics");  
                            }
                            else{
-                               
                                HashMap gameState = game.getStates();
                                for(String item : gameComponents.getComponents().keySet()){
                                    if(gameState.get(item).equals("incomplete")){
@@ -71,15 +70,9 @@ public class GameManagerController extends HttpServlet
                                }
                                res.sendRedirect("/UserModule/details");
                            }
-                           
-                           
                        }
                     }
-                    
                 }
-                
-                
-                
                 
                 System.out.println("component: " + caller);
                 if(components != null){

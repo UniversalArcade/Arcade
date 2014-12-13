@@ -6,13 +6,13 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Poster hochladen"/>
-  <tiles:put name="siteName" value="coverUpload"/> 
+  <tiles:put name="siteName" value="coverupload"/> 
   <tiles:put name="body">
 
     <p>
       Schritt 2 : Cover hochladen
        <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie das Cover Ihres Spiels aus. <br>Es muss eine Mindestauflösung von 640x480 Pixel haben und im .jpg Format sein .',20,-30);"
-                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
+                   accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
     </p>
 
     <form action="coverupload?action=update" method="post" enctype="multipart/form-data">
