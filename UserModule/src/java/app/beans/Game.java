@@ -26,9 +26,10 @@ public class Game implements Serializable {
     private String title, credits, description;
     private JSONArray filePathJSON;
     private HashMap error;
-    private LinkedHashMap buttonLayout;
+    //private LinkedHashMap buttonLayout;
     private final String _EMPTY = "Bitte Ausfüllen!";
     private HashMap<String, String> states;
+    private ArrayList<HashMap<String,String>> buttonLayout;
     
 
     public Game() {
@@ -37,7 +38,9 @@ public class Game implements Serializable {
         this.setEmulationGame(0);
         this.setInEditMode(false);
         states = new LinkedHashMap();
-        buttonLayout = new LinkedHashMap();
+        //buttonLayout = new LinkedHashMap();
+        buttonLayout = new ArrayList();
+        //error.keySet().to
     }
     
     public int getLife() {
@@ -56,22 +59,31 @@ public class Game implements Serializable {
         this.inEditMode = inEditMode;
     }
     
-    public LinkedHashMap getButtonLayout() {
+    public ArrayList getButtonLayout() {
         return buttonLayout;
     }
 
-    /*
-    public void setButtonConfig(String buttonLayout) {
-        this.buttonLayout = buttonLayout;
+    public void flushButtonLayout(){
+        buttonLayout.clear();
     }
-    */
+    
+    public void JSONToButtonLayout(String json){
+       this.flushButtonLayout(); 
+       buttonLayout = (ArrayList<HashMap<String,String>>) JSONValue.parse(json);
+    }
     
     public String buttonLayoutToJSON(){
-        return JSONValue.toJSONString( this.getButtonLayout() );
+        JSONArray ar = new JSONArray();
+        ar.addAll(this.getButtonLayout());
+        
+        return ar.toJSONString();
     }
     
     public void addButton(String key, String value){
-        buttonLayout.put(key, value);
+        //buttonLayout.put(key, value);
+        HashMap tmp = new HashMap();
+        tmp.put(key, value);
+        buttonLayout.add(tmp);
     }
     
     public int getGameDuration() {
@@ -90,7 +102,6 @@ public class Game implements Serializable {
         this.gameStarts = gameStarts;
     }
     
-
     public int getPermanentStore() {
         return permanentStore;
     }
@@ -115,9 +126,7 @@ public class Game implements Serializable {
         this.filePathJSON = filePathJSON;
     }
     
-    
-    
-     public int getGameID() {
+    public int getGameID() {
         return gameID;
     }
 

@@ -38,11 +38,14 @@ public class GameManagerModel {
         for( String key : gc.getComponents().keySet()){
             game.addState(key, "incomplete");
         }
-        
         String states = game.stateToJSON();
-                
+         
+        for(int i=0; i<10; i++){
+            game.addButton("unused", "");
+        }
+        
         sql.openCon();
-            sql.execNonQuery("INSERT INTO `games` (userID,editState) VALUES ('"+userID+"','"+states+"')");
+            sql.execNonQuery("INSERT INTO `games` (userID,editState,buttonConfig) VALUES ('"+userID+"','"+states+"','"+game.buttonLayoutToJSON()+"')");
             int gameID = sql.getLastID();
         sql.closeCon();
         
@@ -94,7 +97,7 @@ public class GameManagerModel {
                     g.setGameID(gameID);
                     g.setTitle(rs.getString("title"));
                     g.setDescription(rs.getString("description"));
-                    //g.setButtonConfig(rs.getString("buttonConfig"));
+                    g.JSONToButtonLayout(rs.getString("buttonConfig"));
                     g.setCredits(rs.getString("credits"));
                     g.setGameDuration(rs.getInt("gameDuration"));
                     g.setGameStarts(rs.getInt("gameStarts"));

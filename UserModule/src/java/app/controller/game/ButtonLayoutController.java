@@ -31,6 +31,8 @@ public class ButtonLayoutController extends HttpServlet
 
                         //String buttons = "";
                         boolean valid = true;
+                        
+                        game.flushButtonLayout();
 
                         for(int i = 1; i <= buttonAmount; i++){
                             String button = req.getParameter("button" + i);
@@ -40,7 +42,7 @@ public class ButtonLayoutController extends HttpServlet
                             }
 
                             if(button.equals("unused")){
-                                game.addButton("#" + i, "unused");
+                                game.addButton("unused","");
                             }
                             else{
                                 String function = req.getParameter("function" + i);
