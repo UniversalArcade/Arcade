@@ -1,9 +1,12 @@
 package GameProcessor;
 
 import helper.SQLHelper;
+import helper.ControllerCom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.LinkedHashMap;
@@ -11,16 +14,21 @@ import java.util.LinkedList;
 import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 public class GameModel {
     
     private GameThread gt; 
     private Thread executionThread;
+    private ControllerCom controllerCom;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
+    
     
     SQLHelper sql;
     public GameModel(){
         sql = new SQLHelper();
+        controllerCom = new ControllerCom();
+        
     }
     
     public String getGameInfoByID(int gameID){
@@ -83,12 +91,16 @@ public class GameModel {
     
     public void executeGameByID(int id){
         
+        String buttonLayout = "";
+        
         StringBuilder path = new StringBuilder();
         sql.openCon();
-            ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath, isEmulatorGame FROM generell, games WHERE games.ID = "+ id );
+            ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig FROM generell, games WHERE games.ID = "+ id );
             //String path = "";
             try {
                 if( rs.next() ){
+                    buttonLayout = rs.getString("buttonConfig");
+                    
                     path.append( rs.getString( "SpieleRoot" ) );
                      
                     
@@ -130,6 +142,29 @@ public class GameModel {
                  gt.setGameID(id);
                  gt.start();
             }
+            
+            System.out.println("bLay" + buttonLayout);
+            ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
+            System.out.println("bLay2" + buttons);
+            
+            
+            int i = 0;
+            StringBuilder controlmsg = new StringBuilder();
+            controlmsg.append("{");
+            for(HashMap hm: buttons){
+                controlmsg.append(hm.keySet().toArray()[0]);
+                
+                if(++i < buttons.size()){
+                    controlmsg.append("~");
+                }
+                
+            }
+            controlmsg.append("}");
+            
+            System.out.println("btn3: " + controlmsg.toString());
+            
+            
+            controllerCom.sendMessage(controlmsg.toString());
             
             // TODO Zeit nehmen beenden
             // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
