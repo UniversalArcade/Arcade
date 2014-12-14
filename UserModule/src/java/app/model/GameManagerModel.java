@@ -94,7 +94,7 @@ public class GameManagerModel {
                     g.setGameID(gameID);
                     g.setTitle(rs.getString("title"));
                     g.setDescription(rs.getString("description"));
-                    g.setButtonConfig(rs.getString("buttonConfig"));
+                    //g.setButtonConfig(rs.getString("buttonConfig"));
                     g.setCredits(rs.getString("credits"));
                     g.setGameDuration(rs.getInt("gameDuration"));
                     g.setGameStarts(rs.getInt("gameStarts"));

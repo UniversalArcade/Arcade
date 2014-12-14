@@ -64,6 +64,5 @@ public class GameUploadModel {
         sql.openCon();
            boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
         sql.closeCon();
-        
     } 
 }

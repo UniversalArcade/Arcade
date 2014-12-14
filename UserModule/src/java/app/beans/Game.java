@@ -23,9 +23,10 @@ public class Game implements Serializable {
     
 
    
-    private String title, credits, description, buttonConfig;
+    private String title, credits, description;
     private JSONArray filePathJSON;
     private HashMap error;
+    private LinkedHashMap buttonLayout;
     private final String _EMPTY = "Bitte Ausfüllen!";
     private HashMap<String, String> states;
     
@@ -36,6 +37,7 @@ public class Game implements Serializable {
         this.setEmulationGame(0);
         this.setInEditMode(false);
         states = new LinkedHashMap();
+        buttonLayout = new LinkedHashMap();
     }
     
     public int getLife() {
@@ -54,12 +56,22 @@ public class Game implements Serializable {
         this.inEditMode = inEditMode;
     }
     
-    public String getButtonConfig() {
-        return buttonConfig;
+    public LinkedHashMap getButtonLayout() {
+        return buttonLayout;
     }
 
-    public void setButtonConfig(String buttonConfig) {
-        this.buttonConfig = buttonConfig;
+    /*
+    public void setButtonConfig(String buttonLayout) {
+        this.buttonLayout = buttonLayout;
+    }
+    */
+    
+    public String buttonLayoutToJSON(){
+        return JSONValue.toJSONString( this.getButtonLayout() );
+    }
+    
+    public void addButton(String key, String value){
+        buttonLayout.put(key, value);
     }
     
     public int getGameDuration() {
