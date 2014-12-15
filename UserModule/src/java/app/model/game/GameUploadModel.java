@@ -39,7 +39,7 @@ public class GameUploadModel {
          }
          
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
-        FileUpload upload = new FileUpload(5000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
+        FileUpload upload = new FileUpload(500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file = upload.uploadFile(req);
        
         if(g.getEmulationGame() == 1){

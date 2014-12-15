@@ -45,8 +45,10 @@ public class ExeChooserController extends HttpServlet
                            res.sendRedirect("/UserModule/gameManager?component=exechooser");
                        }
                        else{
+                           System.out.println("Aufruf Model");
                            ExeChooserModel model = new ExeChooserModel();
                            game = model.getFileStructureAsJSON(game);
+                           System.out.println("JSON:" + game.getFilePathJSON());
                        }
                    }     
                 }

@@ -41,7 +41,7 @@ public class ControllerCom {
        public void run(){
            
         System.out.println("start");
-        ProcessBuilder builder = new ProcessBuilder("python","C:\\Users\\Martin\\Documents\\SVNProjekte\\TeensySerialCom\\TeensySerial\\serialtest.py");
+        ProcessBuilder builder = new ProcessBuilder("python","C:\\Users\\Public\\Arcade\\serialtest.py");
         try {
             
             p = builder.start();  
