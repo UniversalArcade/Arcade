@@ -5,27 +5,18 @@
  */
 package fxgamecenter;
 
-
-import com.sun.javafx.scene.traversal.Direction;
-import javafx.animation.Animation;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
+import GameProcessor.GameModel;
 
 
 public class FXGameCenter extends Application {
     
-    
-    
-    private boolean enterPressed;
     private int aniDuration;
     private Pane imagePane;
     private Group imageGroup, bgEffectsGroup;
@@ -33,10 +24,12 @@ public class FXGameCenter extends Application {
     private Scene scene;
     private Background bg;
     private ImageSlider imageSlider;
+    private GameModel gameModel;
     
     @Override
     public void start(Stage primaryStage) {
         
+        gameModel = new GameModel();
         
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
@@ -45,8 +38,8 @@ public class FXGameCenter extends Application {
         imagePane = new Pane();
         
         bgEffectsGroup = new Group();
-        imagePane.getChildren().add(bgEffectsGroup);
-        imagePane.getChildren().add(imageGroup);
+        imagePane.getChildren().add( bgEffectsGroup );
+        imagePane.getChildren().add( imageGroup );
         
         scene = new Scene(imagePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         imagePane.setStyle("-fx-background-color: #000000;");
@@ -61,54 +54,16 @@ public class FXGameCenter extends Application {
         backgroundThread.start();
         
         imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
+        imageSlider.setGameIds( gameModel.getAllGameIDs() );
         
         Thread imageSliderThread = new Thread (imageSlider);
         imageSliderThread.setDaemon(true);
         imageSliderThread.start();
         
         imageSlider.addObserver( bg );
-        
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
-            @Override
-            public void handle(KeyEvent key) {
-                
-                if(imageSlider.getMoveAnimationStatus() == Animation.Status.STOPPED){
-                    if(key.getCode() == KeyCode.D){
-                        imageSlider.updateTransition( -1 );
-                        //bg.triggerBackgroundMoveAnimation( -1 );
-                        
-                    }
-                    else if(key.getCode() == KeyCode.A){
-                        imageSlider.updateTransition( 1 );
-                        //bg.triggerBackgroundMoveAnimation( 1 );
-                    }
-                    
-                    else if(key.getCode() == KeyCode.ENTER){
-                        if(!enterPressed){
-                            //System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
-                            //imageSlider.onKeyEnter();
-                            enterPressed = true;
-                            
-                        }
-                    }
-                }
-            }
-        });
-        
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-             @Override
-             public void handle(KeyEvent key) {
-                if(key.getCode() == KeyCode.ENTER){
-                    enterPressed = false;
-                } 
-             }
-        });
-        
-        
-        
         primaryStage.show();
+        
     }
     
 

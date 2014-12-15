@@ -40,10 +40,16 @@ public class ExeChooserController extends HttpServlet
                 else{
                    
                    if(game != null){
-
-                       ExeChooserModel model = new ExeChooserModel();
-                       game = model.getFileStructureAsJSON(game);
-
+                       
+                       if(game.getEmulationGame() == 1){
+                           res.sendRedirect("/UserModule/gameManager?component=exechooser");
+                       }
+                       else{
+                           System.out.println("Aufruf Model");
+                           ExeChooserModel model = new ExeChooserModel();
+                           game = model.getFileStructureAsJSON(game);
+                           System.out.println("JSON:" + game.getFilePathJSON());
+                       }
                    }     
                 }
                 req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);

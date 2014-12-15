@@ -3,6 +3,7 @@ package app.model;
 
 
 import app.beans.Game;
+import app.beans.GameComponents;
 import app.beans.User;
 import app.helper.SQLHelper;
 import java.io.File;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 
 public class GameManagerModel {
@@ -28,20 +30,33 @@ public class GameManagerModel {
         return path; 
     }
     
-    public int insertNewGame(int userID){
+    public Game insertNewGame(int userID){
         SQLHelper sql = new SQLHelper();
+        Game game = new Game();
+        GameComponents gc = new GameComponents();
+        
+        for( String key : gc.getComponents().keySet()){
+            game.addState(key, "incomplete");
+        }
+        String states = game.stateToJSON();
+         
+        for(int i=0; i<10; i++){
+            game.addButton("unused", "");
+        }
         
         sql.openCon();
-            sql.execNonQuery("INSERT INTO `games` (userID) VALUES ('"+userID+"')");
+            sql.execNonQuery("INSERT INTO `games` (userID,editState,buttonConfig) VALUES ('"+userID+"','"+states+"','"+game.buttonLayoutToJSON()+"')");
             int gameID = sql.getLastID();
         sql.closeCon();
+        
+        game.setGameID(gameID);
         
         String baseDir = mkDir("C:/Users/Public/Arcade/Games/" + gameID);
         mkDir(baseDir + "/game");
         mkDir(baseDir + "/assets");
         mkDir(baseDir + "/tmp");
          
-        return gameID;
+        return game;
     }
     
     public boolean toggleLive(int toggle, Game g){
@@ -53,6 +68,18 @@ public class GameManagerModel {
         
         return success;
     }
+    
+    
+    public boolean toggleEditMode(int toggle, Game g){
+        SQLHelper sql = new SQLHelper();
+        
+        sql.openCon();
+          boolean success = sql.execNonQuery("UPDATE `games` SET editMode = '"+toggle+"' WHERE ID = "+ g.getGameID());
+        sql.closeCon();
+        
+        return success;
+    }        
+            
    
     public void deleteGame(){
     
@@ -64,17 +91,28 @@ public class GameManagerModel {
         
         sql.openCon();
             
-            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
+            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore,isEmulatorGame,editMode,editState FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
             try {
                 if(rs.next()){
                     g.setGameID(gameID);
                     g.setTitle(rs.getString("title"));
                     g.setDescription(rs.getString("description"));
-                    g.setButtonConfig(rs.getString("buttonConfig"));
+                    g.JSONToButtonLayout(rs.getString("buttonConfig"));
                     g.setCredits(rs.getString("credits"));
                     g.setGameDuration(rs.getInt("gameDuration"));
                     g.setGameStarts(rs.getInt("gameStarts"));
-                    g.setPermanentStore(rs.getInt("permanentStore")); 
+                    g.setPermanentStore(rs.getInt("permanentStore"));
+                    g.setEmulationGame(rs.getInt("isEmulatorGame"));
+                    g.JSONToState(rs.getString("editState"));
+                    
+                    int editMode = rs.getInt("editMode");
+                    if(editMode == 1){
+                        g.setInEditMode(true);
+                    }
+                    else{
+                        g.setInEditMode(false);
+                    }
+                    
                 }
                 else{
                     g = null;

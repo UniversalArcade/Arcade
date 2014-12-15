@@ -5,6 +5,7 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Choose .exe file"/>
+  <tiles:put name="siteName" value="exechooser"/> 
   <tiles:put name="dependence">
         <script src="Scripts/d3.js" charset="utf-8"></script>
         <script src="Scripts/exeChooser.js"></script>
@@ -14,7 +15,7 @@
 
         <p> Ausführbare Datei auswählen 
          <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie hier die Startdatei Ihres Spiels aus. (.exe ,.bat o.ä.)',20,-30);"
-        accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
+        accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
         </p>
        
          

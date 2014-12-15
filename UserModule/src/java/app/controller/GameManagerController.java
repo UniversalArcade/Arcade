@@ -5,14 +5,17 @@ package app.controller;
 
 import app.beans.User;
 import app.beans.Game;
+import app.beans.GameComponents;
 import app.beans.Message;
 import app.helper.Permission;
+
 
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameManagerController extends HttpServlet
@@ -21,6 +24,9 @@ public class GameManagerController extends HttpServlet
        throws ServletException, IOException
        {
     	  try{
+                GameComponents gameComponents = new GameComponents();
+                
+              
                 List<String> components = new ArrayList();
                 components.add("details");
                 components.add("coverupload");
@@ -39,9 +45,7 @@ public class GameManagerController extends HttpServlet
                         
                         
                         GameManagerModel model = new GameManagerModel();
-                        int gameID = model.insertNewGame(user.getUserID());
-                        Game game = new Game();
-                        game.setGameID(gameID);
+                        Game game = model.insertNewGame(user.getUserID());
                         req.getSession().setAttribute("game", game);
                         
                         res.sendRedirect("/UserModule/" + components.get(0));
@@ -52,16 +56,23 @@ public class GameManagerController extends HttpServlet
                        GameManagerModel model = new GameManagerModel();
                        Game game = model.getGameByID(gameID, user.getUserID());
                        if(game != null){
-                           game.setInEditMode(true);
                            req.getSession().setAttribute("game", game);
-                           res.sendRedirect("/UserModule/statistics");  
+                           
+                           if(game.isInEditMode()){
+                               res.sendRedirect("/UserModule/statistics");  
+                           }
+                           else{
+                               HashMap gameState = game.getStates();
+                               for(String item : gameComponents.getComponents().keySet()){
+                                   if(gameState.get(item).equals("incomplete")){
+                                       res.sendRedirect("/UserModule/" + item);  
+                                   }
+                               }
+                               res.sendRedirect("/UserModule/details");
+                           }
                        }
                     }
-                    
                 }
-                
-                
-                
                 
                 System.out.println("component: " + caller);
                 if(components != null){
@@ -88,6 +99,7 @@ public class GameManagerController extends HttpServlet
                             
                             GameManagerModel model = new GameManagerModel();
                             model.toggleLive(1, game);
+                            model.toggleEditMode(1, game);
                             
                             req.getSession().setAttribute("game", null);
                             //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);

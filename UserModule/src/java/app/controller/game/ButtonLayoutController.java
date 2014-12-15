@@ -29,8 +29,10 @@ public class ButtonLayoutController extends HttpServlet
 
                         int buttonAmount = 10; 
 
-                        String buttons = "";
+                        //String buttons = "";
                         boolean valid = true;
+                        
+                        game.flushButtonLayout();
 
                         for(int i = 1; i <= buttonAmount; i++){
                             String button = req.getParameter("button" + i);
@@ -39,9 +41,12 @@ public class ButtonLayoutController extends HttpServlet
                                 break;
                             }
 
-                            buttons += req.getParameter("button" + i);
-                            if(i < buttonAmount){
-                                buttons += ";"; 
+                            if(button.equals("unused")){
+                                game.addButton("unused","");
+                            }
+                            else{
+                                String function = req.getParameter("function" + i);
+                                game.addButton(button, function);
                             }
                         }
 
@@ -49,7 +54,7 @@ public class ButtonLayoutController extends HttpServlet
                             System.out.println("BUTTONS VALID");
                              ButtonLayoutModel model = new ButtonLayoutModel();
 
-                             if (model.updateButtonLayout(buttons, game) ){
+                             if (model.updateButtonLayout(game) ){
                                  req.getSession().setAttribute("message", new Message("Button Layout erfolgreich bearbeitet"));
                                  res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
                              }

@@ -6,6 +6,7 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
     <tiles:put name="title" value="Statistiken zu ${game.title}"/> 
+    <tiles:put name="siteName" value="statistics"/> 
   <tiles:put name="body">
       <p>
           TODO: dein spiel ist live / nicht live (ändern)

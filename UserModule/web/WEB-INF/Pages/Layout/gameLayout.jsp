@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,10 @@
             <div class="navi">
                 <jsp:include page="Tiles/navi.jsp" />    
             </div>
-            <div class="navi">
+            <div class="gameNavi">
+                <c:set var="currentSite" scope="request"> 
+                    <tiles:getAsString name="siteName"/>
+                </c:set> 
                 <jsp:include page="Tiles/editGameNav.jsp" />    
             </div>
             <div id="message">

@@ -1,6 +1,7 @@
 
 package fxgamecenter;
 
+import GameProcessor.GameModel;
 import java.util.LinkedList;
 import java.util.Observable;
 import javafx.animation.Animation;
@@ -20,10 +21,19 @@ import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 
 import javafx.util.Duration;
 
 public class ImageSlider extends Observable implements Runnable{
+    
+    public enum State{
+        SLIDER, DETAILS
+    }
+    
+    private State state;
     private LinkedList<ImageView> images;
     private LinkedList<Integer> ids;
     private boolean enterPressed;
@@ -31,20 +41,25 @@ public class ImageSlider extends Observable implements Runnable{
     private int imgThresh, imagesVisible, moveAniDuration;
     private ParallelTransition moveImagesTransition;
     private FadeTransition fadeIncoming, fadeOutgoing;
-    private TranslateTransition translateTransition;
+    private TranslateTransition translateTransition, moveSliderGroupToTop;
     private ScaleTransition scaleBigTransition, scaleNormalTransition;
     
     private Timeline outerGlowAnimation;
     private Group imageGroup;
     
     private Scene scene;
-    //private Background bg;
-    
+    private GameModel gameModel;
     
     public ImageSlider(Scene scene, Group group, int moveAniDuration){
         this.scene = scene;
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
+        this.gameModel = new GameModel();
+        this.ids = new LinkedList();
+    }
+    
+    public void setGameIds(LinkedList<Integer> idList){
+        ids = idList;
     }
     
     @Override
@@ -54,25 +69,32 @@ public class ImageSlider extends Observable implements Runnable{
     
     public void init(){
         
+        state = State.SLIDER;
         imagesVisible = 5;
         //moveAniDuration = 500;
         enterPressed = false; 
         imgThresh = 20;
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         images = new LinkedList();
-        ids = new LinkedList();
+        
+        //ids = gameModel.getAllGameIDs();
+        
+        
+        
+        //ids = new LinkedList();
         /*
         for(int i=5; i>0; i--){
             ids.add(i);
         }
         */
         //ids.add(7);
-        ids.add(6);
-        ids.add(5);
-        ids.add(4);
-        ids.add(3);
-        ids.add(2);
-        ids.add(1);
+        
+        //ids.add(214);
+        //ids.add(215);
+        //ids.add(4);
+        //ids.add(3);
+        //ids.add(2);
+        //ids.add(1);
         
         moveImagesTransition = new ParallelTransition();
         //make shure there are enough images to display, if not: fill array with already existing ids
@@ -87,16 +109,62 @@ public class ImageSlider extends Observable implements Runnable{
             public void handle(ActionEvent event) {
                 updateElements();
             }
-        }); 
+        });
+        
+        
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent key) {
+                
+                if(getMoveAnimationStatus() == Animation.Status.STOPPED){
+                    if(key.getCode() == KeyCode.D){
+                        updateTransition( -1 );
+                    }
+                    else if(key.getCode() == KeyCode.A){
+                        updateTransition( 1 );
+                    }
+                    else if(key.getCode() == KeyCode.ENTER){
+                        if(!enterPressed){
+                            //loadDetailsPage();
+                            gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
+                            System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
+                            //imageSlider.onKeyEnter();
+                            enterPressed = true;
+                        }
+                    }
+                }
+            }
+        });
+        
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+             @Override
+             public void handle(KeyEvent key) {
+                if(key.getCode() == KeyCode.ENTER){
+                    enterPressed = false;
+                } 
+             }
+        });
+        
+    }
+    
+    private void loadDetailsPage(){
+        moveSliderGroupToTop.play();
+    }
+    
+    private void stateEngine(){
+        if(state == State.DETAILS){
+            updateTransition( 1 );
+        }
     }
     
     public void prepareStartUpImages(){
         
-        
         int toAdd = imagesVisible + 2 - ids.size();
         
         for(int i=0; i < toAdd; i++){
-            ids.add(ids.get(0));
+            ids.add( ids.get( 0 ) );
         }
         
         LinkedList<Integer> tmp = new LinkedList();
@@ -156,11 +224,17 @@ public class ImageSlider extends Observable implements Runnable{
     
     public Image loadImageFromID(int id){
        // image, backgroundloading
-       //return new Image("file:pics/G" + id + ".jpg", true);
-        return new Image("file:pics/G" + id + ".jpg",true);
+        //return new Image("file:pics/G" + id + ".jpg",true);
+        return new Image("file:C:\\Users\\Public\\Arcade\\Games\\" + id + "\\assets\\" + id + ".jpg",true);
+        
     }
     
     public void prepareTransition(){
+        
+        moveSliderGroupToTop = new TranslateTransition(Duration.millis(200), imageGroup);
+        moveSliderGroupToTop.setToY(30);   
+        moveSliderGroupToTop.setInterpolator(Interpolator.EASE_BOTH);
+        
         outerGlowAnimation = new Timeline();
         
         translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);

@@ -30,6 +30,7 @@
                         <a href="GameListController">Spiele Verwalten</a>
                     </p>
                 </li>
+<<<<<<< HEAD
                
                 <!--
                <li>
@@ -38,6 +39,9 @@
                     </p>
                 </li> 
                -->
+=======
+                
+>>>>>>> 22753a304fc8167a8b93e74d03b4ea6bb35deac1
 
                     <c:if test="${user.userLvl >= 200}">
 
