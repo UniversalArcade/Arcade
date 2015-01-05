@@ -9,32 +9,32 @@ boolean handshaked = false;
 int enterCount = 0;
 
 int buttonPins[BUTTON_SIZE] = {
-  2,  // Button 5  
-  7,  // Button 3
-  8,  // Button 1
-  11, // LEFT  
-  12, // Right
   14, // Down
   15, // UP
-  16, // Button 0
+  12, // Right
+  11, // LEFT
+  8,  // Button 1 
+  16, // Button 0 
+  7,  // Button 3
   17, // Button 2
   18, // Button 4
+  2,  // Button 5  
   19  // Button Menu
 };
 
 
 // TODO M2 : Build dynamic allocation via serial input
 int buttonFunctions[BUTTON_SIZE] = {
-  KEY_E, // Button 5
-  KEY_F, // Button 3
-  MODIFIERKEY_SHIFT, // Button 1
+  KEY_0, // Button 5
+  KEY_0, // Button 3
+  KEY_D, // Button 1
   KEY_A, // LEFT
-  KEY_D, // Right
-  KEY_S, // DOWN
-  KEY_W, // UP
-  KEY_SPACE, // Button 0
-  KEY_L, // Button 2
-  KEY_O, // Button 4
+  KEY_ENTER, // Right
+  KEY_ENTER, // DOWN
+  KEY_ENTER, // UP
+  KEY_ENTER, // Button 0
+  KEY_ENTER, // Button 2
+  KEY_ENTER, // Button 4
   KEY_ESC, // Button Menu
 };
 
