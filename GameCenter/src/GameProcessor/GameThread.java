@@ -47,8 +47,8 @@ public class GameThread extends Thread{
     
     public void killProcess(){
         if( p.isAlive() ){
-            p.destroy(); // close process
-            //p.destroyForcibly();
+            //p.destroy(); // close process
+            p.destroyForcibly();
             System.out.println("terminated");
         }
     }

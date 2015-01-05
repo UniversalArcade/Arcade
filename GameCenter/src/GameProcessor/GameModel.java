@@ -13,11 +13,13 @@ import java.util.logging.Logger;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-public class GameModel {
+public class GameModel implements Observer{
     
     private GameThread gt; 
     private Thread executionThread;
@@ -28,9 +30,10 @@ public class GameModel {
     SQLHelper sql;
     public GameModel(){
         sql = new SQLHelper();
-        controllerCom = new ControllerCom();
+        //controllerCom = new ControllerCom();
         
         pipeCom = new PipeCom();
+        pipeCom.addObserver(this);
         Thread pipeComThread = new Thread( pipeCom );
         pipeComThread.setDaemon(true);
         pipeComThread.start();
@@ -182,4 +185,20 @@ public class GameModel {
             // TODO return false loggen
         }    
     }   
+
+    @Override
+    public void update(Observable o, Object arg) {
+        String toDo = (String)arg;
+        switch(toDo)
+        {
+            case("stopGame"):
+                gt.killProcess();
+                pipeCom.setMessage("btSET:ENTER,ENTER,ENTER,A,D,0,0,ENTER,ENTER,ENTER,");
+                break;
+            case("showOverlay"):
+                break;
+            default:
+                break;
+        }
+    }
 }

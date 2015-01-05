@@ -6,13 +6,14 @@
 package helper;
 
 import java.io.RandomAccessFile;
+import java.util.Observable;
 import java.util.Random;
 
 /**
  *
  * @author Martin
  */
-public class PipeCom implements Runnable{
+public class PipeCom extends Observable implements Runnable {
     
     private int packetID;
     private String message;
@@ -63,31 +64,13 @@ public class PipeCom implements Runnable{
             try 
             {
                 RandomAccessFile pipe = new RandomAccessFile("\\\\.\\pipe\\testpipe", "rw");
-
                 //String echoText = packetID +":btSET:A,B,C,D," + "\n";
                 String sendText = getMessage();
-
                 // write to pipe
                 pipe.write ( sendText.getBytes() );
-
                 // read response
                 String responseText = pipe.readLine();
-                if(responseText != null && responseText.length() > 0)
-                {
-                    String[] parts = responseText.split(":");
-                    if(parts.length > 1)
-                    {
-                       if(parts[0] != null && parts[0].length() > 0)
-                       {
-                           int newPacketID = Integer.parseInt(parts[0]);
-                           if(newPacketID != packetID)
-                           {
-                               //packetID = newPacketID;
-                               //DO ACTION LIKE CLOSE GAME / SHOW OVERLAY
-                           }
-                       }
-                    }
-                }
+                processIncomingCommand(responseText);
                 //System.out.println("Response: " + responseText );
                 pipe.close();
                 Thread.sleep(200);
@@ -98,4 +81,53 @@ public class PipeCom implements Runnable{
         }
     }
     
+    private void processIncomingCommand(String input)
+    {
+        if(input != null && input.length() > 0)
+        {
+            String[] parts = input.split(":");
+            if(parts.length > 1)
+            {
+               if(parts[0] != null && parts[0].length() > 0)
+               {
+                   int newPacketID = Integer.parseInt(parts[0]);
+                   if(newPacketID != packetID)
+                   {
+                       
+                       switch(parts[1])
+                       {
+                           case("spFunc"):
+                               switch(parts[2])
+                               {
+                                    case("0"):
+                                       this.setMessage(parts[1] + ":" + parts[2]);
+                                       System.out.println("show overlay");
+                                       setChanged(); //Observable
+                                       notifyObservers("showOverlay"); 
+                                        
+                                       break;
+                                    case("1"):
+                                        //this.incrementPacketID();
+                                        this.setMessage(parts[1] + ":" + parts[2]);
+                                        System.out.println("STOP GAME");
+                                        
+                                        setChanged(); //Observable
+                                        notifyObservers("stopGame");                                        
+                                        break;
+                                   default:
+                                       //error
+                                       break;
+                               }
+                               break;
+                           default:
+                               //error
+                               break;
+                       }
+                       //packetID = newPacketID;
+                       //DO ACTION LIKE CLOSE GAME / SHOW OVERLAY
+                   }
+               }
+            }
+        }
+    }
 }
