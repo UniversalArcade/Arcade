@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GameProcessor.GameModel;
+import helper.PipeCom;
 
 
 public class FXGameCenter extends Application {
@@ -26,10 +27,13 @@ public class FXGameCenter extends Application {
     private ImageSlider imageSlider;
     private GameModel gameModel;
     
+    
     @Override
     public void start(Stage primaryStage) {
         
         gameModel = new GameModel();
+        
+        
         
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;

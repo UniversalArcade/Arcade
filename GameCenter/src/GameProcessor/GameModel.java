@@ -2,6 +2,7 @@ package GameProcessor;
 
 import helper.SQLHelper;
 import helper.ControllerCom;
+import helper.PipeCom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,12 +23,17 @@ public class GameModel {
     private Thread executionThread;
     private ControllerCom controllerCom;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
-    
+    private PipeCom pipeCom;
     
     SQLHelper sql;
     public GameModel(){
         sql = new SQLHelper();
         controllerCom = new ControllerCom();
+        
+        pipeCom = new PipeCom();
+        Thread pipeComThread = new Thread( pipeCom );
+        pipeComThread.setDaemon(true);
+        pipeComThread.start();
         
     }
     
