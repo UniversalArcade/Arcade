@@ -156,21 +156,26 @@ public class GameModel {
             
             int i = 0;
             StringBuilder controlmsg = new StringBuilder();
-            controlmsg.append("{");
+            controlmsg.append("btSET:");
             for(HashMap hm: buttons){
                 controlmsg.append(hm.keySet().toArray()[0]);
                 
+                /*
                 if(++i < buttons.size()){
-                    controlmsg.append("~");
+                    controlmsg.append(":");
                 }
-                
+                */
+                controlmsg.append(",");
             }
-            controlmsg.append("}");
+            String buttonConfig = controlmsg.toString();
+            buttonConfig = buttonConfig.replace("unused", "0");
             
-            System.out.println("btn3: " + controlmsg.toString());
+            
+            System.out.println("btn3: " + buttonConfig);
+            pipeCom.setMessage(buttonConfig);
             
             
-            controllerCom.sendMessage(controlmsg.toString());
+            //controllerCom.sendMessage(controlmsg.toString());
             
             // TODO Zeit nehmen beenden
             // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer

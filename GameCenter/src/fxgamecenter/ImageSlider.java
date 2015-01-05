@@ -50,11 +50,11 @@ public class ImageSlider extends Observable implements Runnable{
     private Scene scene;
     private GameModel gameModel;
     
-    public ImageSlider(Scene scene, Group group, int moveAniDuration){
+    public ImageSlider(Scene scene, Group group, int moveAniDuration, GameModel gameModel){
         this.scene = scene;
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
-        this.gameModel = new GameModel();
+        this.gameModel = gameModel;
         this.ids = new LinkedList();
     }
     

@@ -6,6 +6,7 @@
 package helper;
 
 import java.io.RandomAccessFile;
+import java.util.Random;
 
 /**
  *
@@ -18,7 +19,8 @@ public class PipeCom implements Runnable{
     private final Object lock = new Object();
     
     public PipeCom(){
-        packetID = -1;
+        Random rand = new Random();
+        packetID = rand.nextInt(5000);
         setMessage("0");
         //message = "0:0";
     }
@@ -55,7 +57,7 @@ public class PipeCom implements Runnable{
    
     @Override
     public void run(){
-       
+
         while(true)
         {
             try 
@@ -80,15 +82,15 @@ public class PipeCom implements Runnable{
                            int newPacketID = Integer.parseInt(parts[0]);
                            if(newPacketID != packetID)
                            {
-                               packetID = newPacketID;
+                               //packetID = newPacketID;
                                //DO ACTION LIKE CLOSE GAME / SHOW OVERLAY
                            }
                        }
                     }
                 }
-                System.out.println("Response: " + responseText );
+                //System.out.println("Response: " + responseText );
                 pipe.close();
-                Thread.sleep(100);
+                Thread.sleep(200);
             } catch (Exception e) {
             // TODO Auto-generated catch block
                 e.printStackTrace();

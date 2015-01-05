@@ -33,8 +33,6 @@ public class FXGameCenter extends Application {
         
         gameModel = new GameModel();
         
-        
-        
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
         
@@ -57,7 +55,7 @@ public class FXGameCenter extends Application {
         backgroundThread.setDaemon(true);
         backgroundThread.start();
         
-        imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
+        imageSlider = new ImageSlider(scene, imageGroup, aniDuration, gameModel);
         imageSlider.setGameIds( gameModel.getAllGameIDs() );
         
         Thread imageSliderThread = new Thread (imageSlider);
