@@ -21,15 +21,18 @@ import org.json.simple.JSONValue;
 
 public class GameModel implements Observer{
     
-    private GameThread gt; 
+    private GameThread gt;
+    private OverlayThread ot;
     private Thread executionThread;
     private ControllerCom controllerCom;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
     private PipeCom pipeCom;
+    private String buttonFuncString;
     
     SQLHelper sql;
     public GameModel(){
         sql = new SQLHelper();
+        buttonFuncString = "";
         //controllerCom = new ControllerCom();
         
         pipeCom = new PipeCom();
@@ -155,12 +158,7 @@ public class GameModel implements Observer{
             System.out.println("bLay" + buttonLayout);
             ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
             System.out.println("bLay2" + buttons);
-            
-            
-            
-            
-             
-            
+
             StringBuilder controlmsg = new StringBuilder();
             controlmsg.append("btSET:");
             for(HashMap hm: buttons){
@@ -168,13 +166,22 @@ public class GameModel implements Observer{
                 controlmsg.append(",");
             }
            
-            
             String buttonConfig = controlmsg.toString();
             buttonConfig = buttonConfig.replace("unused", "0");
             
             
             System.out.println("btn3: " + buttonConfig);
             pipeCom.setMessage(buttonConfig);
+            
+            StringBuilder buttonFunc = new StringBuilder();
+            
+            for(HashMap hm: buttons){
+                buttonFunc.append(hm.values().toArray()[0]);
+                buttonFunc.append(",");
+            }
+            
+            buttonFuncString = buttonFunc.toString();
+            System.out.println("ButtonFunc: " + buttonFunc.toString());
             
             
             //controllerCom.sendMessage(controlmsg.toString());
@@ -185,16 +192,48 @@ public class GameModel implements Observer{
         }    
     }   
 
+    private void killOverlay()
+    {
+        if(ot != null && ot.isAlive())
+        {
+            ot.killProcess();
+            ot.interrupt();
+        }
+    }
+    
+    private void showOverlay()
+    {
+        if(ot != null && ot.isAlive())
+        {
+            killOverlay();
+        }
+        else
+        {
+            if(gt != null && gt.isAlive())
+            {
+                ot = new OverlayThread(buttonFuncString);
+                ot.start();
+            }
+        }
+    }
+    
     @Override
     public void update(Observable o, Object arg) {
         String toDo = (String)arg;
         switch(toDo)
         {
             case("stopGame"):
-                gt.killProcess();
+                killOverlay();
+                
+                if(gt != null && gt.isAlive()){
+                    gt.killProcess();
+                    gt.interrupt();
+                }
                 pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             case("showOverlay"):
+                System.out.println("show Overlay");
+                showOverlay();
                 break;
             default:
                 break;

@@ -54,8 +54,7 @@ public class PipeCom extends Observable implements Runnable {
             packetID = 0;
         }
     }
-    
-   
+
     @Override
     public void run(){
 
@@ -73,7 +72,7 @@ public class PipeCom extends Observable implements Runnable {
                 processIncomingCommand(responseText);
                 //System.out.println("Response: " + responseText );
                 pipe.close();
-                Thread.sleep(200);
+                Thread.sleep(300);
             } catch (Exception e) {
             // TODO Auto-generated catch block
                 e.printStackTrace();
