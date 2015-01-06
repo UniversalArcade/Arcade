@@ -2,7 +2,8 @@ package GameProcessor;
 
 import helper.SQLHelper;
 import helper.ControllerCom;
-import helper.PipeCom;
+import helper.InPipe;
+import helper.OutPipe;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,20 +27,32 @@ public class GameModel implements Observer{
     private Thread executionThread;
     private ControllerCom controllerCom;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
-    private PipeCom pipeCom;
+    
+    private InPipe inpipe;
+    private OutPipe outPipe;
+    
     private String buttonFuncString;
     
     SQLHelper sql;
     public GameModel(){
+        
+        
         sql = new SQLHelper();
         buttonFuncString = "";
         //controllerCom = new ControllerCom();
         
-        pipeCom = new PipeCom();
-        pipeCom.addObserver(this);
-        Thread pipeComThread = new Thread( pipeCom );
-        pipeComThread.setDaemon(true);
-        pipeComThread.start();
+        
+        inpipe = new InPipe();
+        inpipe.addObserver(this);
+        Thread inpipeThread = new Thread(inpipe);
+        inpipeThread.setDaemon(true);
+        inpipeThread.start();
+        
+        outPipe = new OutPipe();
+        //outPipe.addObserver(this);
+        Thread outPipeThread = new Thread( outPipe );
+        outPipeThread.setDaemon(true);
+        outPipeThread.start();
         
     }
     
@@ -178,7 +191,7 @@ public class GameModel implements Observer{
             
             
             System.out.println("btn3: " + buttonConfig);
-            pipeCom.setMessage(buttonConfig);
+            outPipe.setMessage(buttonConfig);
             
             
             
@@ -241,14 +254,14 @@ public class GameModel implements Observer{
                     //gt.interrupt();
                     killGameThread();
                 }
-                pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             case("showOverlay"):
                 showOverlay();
                 break;
             case("gameStopped"):
                 killOverlay();
-                pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             default:
                 break;

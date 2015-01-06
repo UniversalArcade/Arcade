@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GameProcessor.GameModel;
-import helper.PipeCom;
+import helper.OutPipe;
 
 
 public class FXGameCenter extends Application {
