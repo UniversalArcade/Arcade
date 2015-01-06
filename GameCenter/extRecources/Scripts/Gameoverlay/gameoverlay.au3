@@ -1,5 +1,9 @@
 #include <GDIPlus.au3>
 
+If $CmdLine[0] <= 0 Then
+Exit
+EndIf
+
 Global $iGUIWidth = @DesktopWidth
 Global $iGUIHeight = @DesktopHeight
 $BGWidth = 1100
@@ -7,8 +11,12 @@ $BGHeight = 700; 800
 $TopLeftBGx = $iGUIWidth / 2 - $BGWidth / 2
 $TopLeftBGy = $iGUIHeight / 2 - $BGHeight / 2
 
-$values = StringSplit("Hoch,Runter,Links,Rechts,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
-;$values = StringSplit(",,,,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
+
+$values = StringSplit($CmdLine[1],',')
+;$values = StringSplit("Hoch,Runter,Links,Rechts,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
+;$values = StringSplit(",,Left,Right,Shoot,Dodge,Atom Bomb,,,",',')
+;$values = StringSplit("Jump,Duck,Left,Right,Shoot,Dodge,Atom Bomb,Blaster,EXPLOSION!,Too long Text",',')
+;$values = StringSplit(",,,,,,,,,",',')
 
 Global $vUser32DLL = DllOpen("User32.dll")
 $tSize = DllStructCreate($tagSIZE)
@@ -68,9 +76,11 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 
 
 	;_GDIPlus_GraphicsDrawEllipse($hGraphics, 130, 100, 200, 200, $hPen)
-	$thresh = 20;
+	$thresh = 10;
 	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx-$thresh,$TopLeftBGy-$thresh,$BGWidth+$thresh*2,$BGHeight+$thresh*2,$hBrushBackgroundFrame);
+
 	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx,$TopLeftBGy,$BGWidth,$BGHeight,$hBrushBackground);
+	;_GDIPlus_DrawImagePoints($hGraphics,$bgWood,$TopLeftBGx,$TopLeftBGy ,$TopLeftBGx + $BGWidth,$TopLeftBGy,$TopLeftBGx,$TopLeftBGy + $BGHeight)
 
 	;_GDIPlus_GraphicsFillEllipse($hGraphics, 200, 200, 200, 200, $hBrush)
 	;_GDIPlus_GraphicsFillEllipse($hGraphics, 500, 500, 200, 200, $hBrush)
