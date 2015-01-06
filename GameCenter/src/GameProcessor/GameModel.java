@@ -157,19 +157,18 @@ public class GameModel implements Observer{
             System.out.println("bLay2" + buttons);
             
             
-            int i = 0;
+            
+            
+             
+            
             StringBuilder controlmsg = new StringBuilder();
             controlmsg.append("btSET:");
             for(HashMap hm: buttons){
                 controlmsg.append(hm.keySet().toArray()[0]);
-                
-                /*
-                if(++i < buttons.size()){
-                    controlmsg.append(":");
-                }
-                */
                 controlmsg.append(",");
             }
+           
+            
             String buttonConfig = controlmsg.toString();
             buttonConfig = buttonConfig.replace("unused", "0");
             
@@ -193,7 +192,7 @@ public class GameModel implements Observer{
         {
             case("stopGame"):
                 gt.killProcess();
-                pipeCom.setMessage("btSET:ENTER,ENTER,ENTER,A,D,0,0,ENTER,ENTER,ENTER,");
+                pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             case("showOverlay"):
                 break;
