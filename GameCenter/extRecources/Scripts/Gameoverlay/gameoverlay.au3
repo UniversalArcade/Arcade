@@ -2,8 +2,8 @@
 
 Global $iGUIWidth = @DesktopWidth
 Global $iGUIHeight = @DesktopHeight
-$BGWidth = 1000;
-$BGHeight = 800;
+$BGWidth = 1100
+$BGHeight = 700; 800
 $TopLeftBGx = $iGUIWidth / 2 - $BGWidth / 2
 $TopLeftBGy = $iGUIHeight / 2 - $BGHeight / 2
 
@@ -38,11 +38,13 @@ _GDIPlus_GraphicsSetSmoothingMode($hGraphics, 2)
 
 ; BEISPIEL:
 $hBrush = _GDIPlus_BrushCreateSolid(0xFFFF0000)
-$hBrushBackground = _GDIPlus_BrushCreateSolid(0xFF1BFA02)
+$hBrushBackground = _GDIPlus_BrushCreateSolid(0xFFFFFF99)
+$hBrushBackgroundFrame = _GDIPlus_BrushCreateSolid(0xFFFF9933)
 $hFormat = _GDIPlus_StringFormatCreate()
 $hFamily = _GDIPlus_FontFamilyCreate("Arial")
 $hFont = _GDIPlus_FontCreate($hFamily, 18)
 $tLayout = _GDIPlus_RectFCreate(0, 0, 0, 0)
+$buttonWhite = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonWhite.png")
 $buttonRed = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonRed.png")
 $buttonGreen = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonGreen.png")
 $buttonYellow = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonYellow.png")
@@ -66,6 +68,8 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 
 
 	;_GDIPlus_GraphicsDrawEllipse($hGraphics, 130, 100, 200, 200, $hPen)
+	$thresh = 20;
+	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx-$thresh,$TopLeftBGy-$thresh,$BGWidth+$thresh*2,$BGHeight+$thresh*2,$hBrushBackgroundFrame);
 	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx,$TopLeftBGy,$BGWidth,$BGHeight,$hBrushBackground);
 
 	;_GDIPlus_GraphicsFillEllipse($hGraphics, 200, 200, 200, 200, $hBrush)
@@ -85,9 +89,9 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 	$joyscalingFactor = 0.8
 	$joysizeWidth = 163 * $joyscalingFactor
 	$joysizeHeight = 267 * $joyscalingFactor
-	$joystartX = $TopLeftBGx + 150;
+	$joystartX = $TopLeftBGx + 200;
 	;$startY = $TopLeftBGy + 200;
-	$joystartY = $iGUIHeight / 2  - $joysizeHeight / 2;
+	$joystartY = $iGUIHeight / 2  - $joysizeHeight / 2 + 80;
 
 	$joyStickToDisplay = Null
 	;$values[0] != ""
@@ -143,20 +147,105 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 		EndIf
 		#EndRegion RIGHTARROW
 
-
-
-
-
-
 	Else
 		_GDIPlus_DrawImagePoints($hGraphics,$joystickInactive,$joystartX,$joystartY ,$joystartX + $joysizeWidth,$joystartY,$joystartX,$joystartY + $joysizeHeight)
 
 	EndIf
-
-
-
 	#EndRegion JOYSTICK
 
+	#REGION BUTTONS
+
+	$buttonStartX = $joystartX + $joysizeWidth + 130;
+	$buttonStartY = $joyStartY + $joysizeHeight/2 + 50 ;
+
+	$sizeWidth = 260 * ($joyscalingFactor - 0.2)
+	$sizeHeight = 250 * ($joyscalingFactor - 0.2)
+
+
+	#Region BUTTON_1
+	$startX = $buttonStartX
+	$startY = $buttonStartY
+
+	If StringLen($values[5]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonRed,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[5], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_1
+
+	#Region BUTTON_2
+	;$startX = $buttonStartX
+	$startY = $buttonStartY - $sizeHeight - 50
+
+	If StringLen($values[6]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonRed,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[6], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_2
+
+	#Region BUTTON_3
+	$startX = $buttonStartX + $sizeWidth + 40
+	$startY = $buttonStartY - 40
+
+	If StringLen($values[7]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonYellow,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[7], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_3
+
+	#Region BUTTON_4
+	;$startX = $buttonStartX + $sizeWidth + 40
+	$startY = $buttonStartY - $sizeHeight - 40 - 50
+
+	If StringLen($values[8]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonYellow,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[8], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_4
+
+	#Region BUTTON_5
+	$startX = $buttonStartX + $sizeWidth * 2 + 40 * 2
+	$startY = $buttonStartY - 40 * 2
+
+	If StringLen($values[9]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonGreen,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[9], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_5
+
+	#Region BUTTON_6
+	;$startX = $buttonStartX + $sizeWidth + 40
+	$startY = $buttonStartY - $sizeHeight - 40 * 2 - 50
+
+	If StringLen($values[10]) > 0 Then
+		_GDIPlus_DrawImagePoints($hGraphics,$buttonGreen,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+		drawText($values[10], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+	Else
+	    _GDIPlus_DrawImagePoints($hGraphics,$buttonInactive,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	EndIf
+	#EndRegion BUTTON_6
+
+	#Region BUTTON_MENU
+	$startX = $TopLeftBGx + 40
+	$startY = $TopLeftBGy + 40
+
+	_GDIPlus_DrawImagePoints($hGraphics,$buttonWhite,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+	_GDIPlus_GraphicsDrawString($hGraphics, "Kurz drücken: Overlay Ausblenden",  $startX + $sizeWidth, $startY + 35, "Arial", 18)
+	_GDIPlus_GraphicsDrawString($hGraphics, "Lange drücken: Spiel beenden und zurück zur Spieleauswahl",  $startX + $sizeWidth, $startY + $sizeHeight - 70, "Arial", 18)
+
+	#EndRegion BUTTON_MENU
+
+
+	#EndRegion BUTTONS
 
 
 
