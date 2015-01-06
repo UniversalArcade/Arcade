@@ -3,9 +3,10 @@
 package GameProcessor;
 
 import java.io.IOException;
+import java.util.Observable;
 
 
-public class GameThread extends Thread{
+public class GameRunnable extends Observable implements Runnable{
      
      private Process p;
      //rename to running
@@ -14,10 +15,11 @@ public class GameThread extends Thread{
      private int gameID;
      
      
-     public GameThread( String executionPath ){
+     public GameRunnable( String executionPath ){
          this.executionPath = executionPath;
      }
      
+     @Override
      public void run(){
          
         //processStarted = false; 
@@ -32,8 +34,12 @@ public class GameThread extends Thread{
                 int returnval = p.waitFor(); // hält den Thread solange an wie process läuft ---> liefert auch rückgabewert?! vielleicht exitValue unnötig
                 //processStarted = false;
                 System.out.println( "WaitForValue " + returnval );
+                setChanged(); //Observable
+                notifyObservers("gameStopped"); 
                 //System.out.println( "Exitvalue " + p.exitValue() );  // wenn Programm normal beendet dann exitvalue = 0
             } catch ( InterruptedException ex ) {
+                
+                
                 System.out.println( "ERROR bei waitfor()" );
                 //processStarted = false;
             }

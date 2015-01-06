@@ -21,7 +21,7 @@ import org.json.simple.JSONValue;
 
 public class GameModel implements Observer{
     
-    private GameThread gt;
+    private GameRunnable gt;
     private OverlayThread ot;
     private Thread executionThread;
     private ControllerCom controllerCom;
@@ -138,32 +138,39 @@ public class GameModel implements Observer{
                 System.out.println("NOT NULL!");
                 
                 if(gt.getGameID() != id){
-                    gt.killProcess();
-                    gt.interrupt();
+                    killGameThread();
                 }
                 
-                if( !gt.isAlive() ){
+                //if( ! (gt.isAlive()) ){
+                if( ! (executionThread == null || executionThread.isAlive()) ){
                     System.out.println("ITS ALIVE!!");
-                     gt = new GameThread( path.toString() );
+                     gt = new GameRunnable( path.toString() );
+                     gt.addObserver(this);
                      gt.setGameID(id);
-                     gt.start();
+                     executionThread = new Thread( gt );
+                     executionThread.start();
                 }
             }
             else{
-                 gt = new GameThread( path.toString() );
+                 gt = new GameRunnable( path.toString() );
+                 gt.addObserver(this);
                  gt.setGameID(id);
-                 gt.start();
+                 executionThread = new Thread( gt );
+                 executionThread.start();
             }
             
             System.out.println("bLay" + buttonLayout);
             ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
             System.out.println("bLay2" + buttons);
 
+            StringBuilder buttonFunc = new StringBuilder();
             StringBuilder controlmsg = new StringBuilder();
             controlmsg.append("btSET:");
             for(HashMap hm: buttons){
                 controlmsg.append(hm.keySet().toArray()[0]);
                 controlmsg.append(",");
+                buttonFunc.append(hm.values().toArray()[0]);
+                buttonFunc.append(",");
             }
            
             String buttonConfig = controlmsg.toString();
@@ -173,24 +180,28 @@ public class GameModel implements Observer{
             System.out.println("btn3: " + buttonConfig);
             pipeCom.setMessage(buttonConfig);
             
-            StringBuilder buttonFunc = new StringBuilder();
             
-            for(HashMap hm: buttons){
-                buttonFunc.append(hm.values().toArray()[0]);
-                buttonFunc.append(",");
-            }
             
             buttonFuncString = buttonFunc.toString();
             System.out.println("ButtonFunc: " + buttonFunc.toString());
-            
-            
-            //controllerCom.sendMessage(controlmsg.toString());
             
             // TODO Zeit nehmen beenden
             // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
             // TODO return false loggen
         }    
-    }   
+    }
+    
+    private void killGameThread()
+    {
+        if(executionThread != null && executionThread.isAlive())
+        {
+            if(gt != null)
+            {
+                gt.killProcess();
+            }
+            executionThread.interrupt();
+        }
+    }
 
     private void killOverlay()
     {
@@ -209,7 +220,7 @@ public class GameModel implements Observer{
         }
         else
         {
-            if(gt != null && gt.isAlive())
+            if(gt != null && executionThread != null && executionThread.isAlive())
             {
                 ot = new OverlayThread(buttonFuncString);
                 ot.start();
@@ -225,15 +236,19 @@ public class GameModel implements Observer{
             case("stopGame"):
                 killOverlay();
                 
-                if(gt != null && gt.isAlive()){
-                    gt.killProcess();
-                    gt.interrupt();
+                if(gt != null && executionThread != null && executionThread.isAlive()){
+                    //gt.killProcess();
+                    //gt.interrupt();
+                    killGameThread();
                 }
                 pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             case("showOverlay"):
-                System.out.println("show Overlay");
                 showOverlay();
+                break;
+            case("gameStopped"):
+                killOverlay();
+                pipeCom.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             default:
                 break;
