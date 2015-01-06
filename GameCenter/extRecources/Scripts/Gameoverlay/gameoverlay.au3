@@ -7,7 +7,7 @@ $BGHeight = 800;
 $TopLeftBGx = $iGUIWidth / 2 - $BGWidth / 2
 $TopLeftBGy = $iGUIHeight / 2 - $BGHeight / 2
 
-$values = StringSplit("HochHochHoch,Runter,Links,Rechts,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
+$values = StringSplit("Hoch,Runter,Links,Rechts,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
 ;$values = StringSplit(",,,,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
 
 Global $vUser32DLL = DllOpen("User32.dll")
@@ -41,7 +41,7 @@ $hBrush = _GDIPlus_BrushCreateSolid(0xFFFF0000)
 $hBrushBackground = _GDIPlus_BrushCreateSolid(0xFF1BFA02)
 $hFormat = _GDIPlus_StringFormatCreate()
 $hFamily = _GDIPlus_FontFamilyCreate("Arial")
-$hFont = _GDIPlus_FontCreate($hFamily, 10)
+$hFont = _GDIPlus_FontCreate($hFamily, 18)
 $tLayout = _GDIPlus_RectFCreate(0, 0, 0, 0)
 $buttonRed = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonRed.png")
 $buttonGreen = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonGreen.png")
@@ -49,7 +49,10 @@ $buttonYellow = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonYell
 $buttonInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonInactive.png")
 $joystick = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Joystick.png")
 $joystickInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/JoystickInactive.png")
-$arrow = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
+$arrowUp = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
+$arrowDown = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
+$arrowLeft = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
+$arrowRight = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
 
 $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @SEC, $hFont, $tLayout, $hFormat)
 ;While Sleep(20)
@@ -80,9 +83,9 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 	#Region JOYSTICK
 
 	$joyscalingFactor = 0.8
-	$joysizeWidth = 314 * $joyscalingFactor
-	$joysizeHeight = 400 * $joyscalingFactor
-	$joystartX = $TopLeftBGx + 100;
+	$joysizeWidth = 163 * $joyscalingFactor
+	$joysizeHeight = 267 * $joyscalingFactor
+	$joystartX = $TopLeftBGx + 150;
 	;$startY = $TopLeftBGy + 200;
 	$joystartY = $iGUIHeight / 2  - $joysizeHeight / 2;
 
@@ -91,23 +94,57 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 	If StringLen($values[1]) > 0 Or StringLen($values[2]) > 0 Or StringLen($values[3]) > 0 Or StringLen($values[4]) > 0  Then
 		_GDIPlus_DrawImagePoints($hGraphics,$joystick,$joystartX,$joystartY ,$joystartX + $joysizeWidth,$joystartY,$joystartX,$joystartY + $joysizeHeight)
 
+
 		$sizeWidth = 124 * $joyscalingFactor
 		$sizeHeight = 110 * $joyscalingFactor
 
 		#Region UPARROW
 		If StringLen($values[1]) > 0 Then
-
 			$startX = $joystartX + $joysizeWidth/2 - $sizeWidth / 2 - 5;
 			$startY = $joyStartY - $sizeHeight + 15;
 
-			$arrowUp = $arrow
+
 			_GDIPlus_ImageRotateFlip($arrowUp, 1)
 			_GDIPlus_DrawImagePoints($hGraphics,$arrowUp,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
 			drawText($values[1], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
-
-
 		EndIf
 		#EndRegion UPARROW
+
+		#Region DOWNARROW
+		If StringLen($values[2]) > 0 Then
+			$startX = $joystartX + $joysizeWidth/2 - $sizeWidth / 2;
+			$startY = $joyStartY + $joysizeHeight - 15;
+
+
+			_GDIPlus_ImageRotateFlip($arrowDown, 3)
+			_GDIPlus_DrawImagePoints($hGraphics,$arrowDown,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+			drawText($values[2], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+		EndIf
+		#EndRegion DOWNARROW
+
+		#Region LEFTARROW
+		If StringLen($values[3]) > 0 Then
+			$startX = $joystartX - $joysizeWidth / 2 - $sizeWidth/2 + 10;
+			$startY = $joyStartY + $joysizeHeight / 2 - $sizeHeight / 2 ;
+
+			_GDIPlus_DrawImagePoints($hGraphics,$arrowLeft,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+			drawText($values[3], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+		EndIf
+		#EndRegion LEFTARROW
+
+		#Region RIGHTARROW
+		If StringLen($values[4]) > 0 Then
+			$startX = $joystartX + $joysizeWidth;
+			$startY = $joyStartY + $joysizeHeight / 2 - $sizeHeight / 2 ;
+
+			_GDIPlus_ImageRotateFlip($arrowRight, 2)
+			_GDIPlus_DrawImagePoints($hGraphics,$arrowRight,$startX,$startY ,$startX + $sizeWidth,$startY,$startX,$startY + $sizeHeight)
+			drawText($values[4], $startX + $sizeWidth/2 ,$startY + $sizeHeight/2)
+		EndIf
+		#EndRegion RIGHTARROW
+
+
+
 
 
 
@@ -135,7 +172,8 @@ while Sleep(20)
 Func drawText($input, $x, $y)
 	$textSize = _GDIPlus_GraphicsMeasureString($hGraphics, $input, $hFont, $tLayout, $hFormat)
 	$width = DllStructGetData($textSize[0],3)
-	_GDIPlus_GraphicsDrawString($hGraphics, $input, $x - $width / 2, $y)
+	$height = DllStructGetData($textSize[0],4)
+	_GDIPlus_GraphicsDrawString($hGraphics, $input, $x - $width / 2, $y - $height / 2, "Arial", 18)
 EndFunc
 
 
