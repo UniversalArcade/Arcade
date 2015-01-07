@@ -37,7 +37,8 @@ public class ImageSlider extends Observable implements Runnable{
     private LinkedList<ImageView> images;
     private LinkedList<Integer> ids;
     private boolean enterPressed;
-    private double imgSizeX;
+    private double imgSizeX, imgSizeY;
+    private double[] origImageSize = {500.0,800.0};
     private int imgThresh, imagesVisible, moveAniDuration;
     private ParallelTransition moveImagesTransition;
     private FadeTransition fadeIncoming, fadeOutgoing;
@@ -69,18 +70,17 @@ public class ImageSlider extends Observable implements Runnable{
     
     public void init(){
         
+        
         state = State.SLIDER;
-        imagesVisible = 5;
+        imagesVisible = 5; // 5
         //moveAniDuration = 500;
         enterPressed = false; 
         imgThresh = 20;
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
+        imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
         images = new LinkedList();
         
         //ids = gameModel.getAllGameIDs();
-        
-        
-        
         //ids = new LinkedList();
         /*
         for(int i=5; i>0; i--){
@@ -100,9 +100,6 @@ public class ImageSlider extends Observable implements Runnable{
         //make shure there are enough images to display, if not: fill array with already existing ids
         this.prepareStartUpImages();
         this.prepareTransition();
-        
-        
-        
          
         moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
             @Override
@@ -185,7 +182,7 @@ public class ImageSlider extends Observable implements Runnable{
         for(int i=0; i < (imagesVisible + 2); i++){
             
             ImageView imageView = new ImageView( loadImageFromID(ids.get(i) ) );
-            imageView.setFitHeight(500);
+            imageView.setFitHeight(imgSizeY); // 500
             imageView.setFitWidth(imgSizeX);
             imageView.setCache(true);
             imageView.setCacheHint(CacheHint.SPEED);

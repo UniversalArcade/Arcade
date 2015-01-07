@@ -60,7 +60,7 @@ public class InPipe extends Observable implements Runnable {
                 //processIncomingCommand(responseText);
                 //System.out.println("Response: " + responseText );
                 pipe.close();
-                Thread.sleep(200); // 300
+                Thread.sleep(100); // 300
             } catch (Exception e) {
             // TODO Auto-generated catch block
                 
