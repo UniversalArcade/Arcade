@@ -15,7 +15,7 @@ public class GameUploadController extends HttpServlet
        throws ServletException, IOException
        {
     	  try{
-                res.setContentType("text/html");
+              res.setContentType("text/html");
               
                 String action = req.getParameter("action");
                 System.out.println("action: " + action);

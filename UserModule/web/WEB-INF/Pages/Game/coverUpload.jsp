@@ -6,7 +6,22 @@
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Poster hochladen"/>
-  <tiles:put name="siteName" value="coverupload"/> 
+  <tiles:put name="siteName" value="coverupload"/>
+  <tiles:put name="dependence">
+        <script src="Scripts/jquery-2.1.1.js"></script>
+
+        <script language="Javascript">
+	$(document).ready(function(){
+          $('#fileInput').change(function(){
+              $('#fileSubmit').removeAttr("disabled");
+          });  
+            
+	  $('#fileSubmit').click(function(){
+             $('#upload').show(); 
+          });
+	});
+	</script>
+  </tiles:put>
   <tiles:put name="body">
 
     <p>
@@ -16,11 +31,11 @@
     </p>
 
     <form action="coverupload?action=update" method="post" enctype="multipart/form-data">
-           
-        <input type="file" name="file" />
+        <input id="fileInput" type="file" name="file" accept="image/jpeg"/>
                 <br />
-            <input type="submit" value="Upload Picture" />
+            <input id="fileSubmit" type="submit" value="Upload Picture" disabled="disabled"  />
     </form>
+    <div id="upload" style="display:none;">Uploading..</div>   
 
   </tiles:put>
 </tiles:insert>

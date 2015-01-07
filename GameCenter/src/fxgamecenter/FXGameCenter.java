@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GameProcessor.GameModel;
+import helper.OutPipe;
 
 
 public class FXGameCenter extends Application {
@@ -25,6 +26,7 @@ public class FXGameCenter extends Application {
     private Background bg;
     private ImageSlider imageSlider;
     private GameModel gameModel;
+    
     
     @Override
     public void start(Stage primaryStage) {
@@ -53,7 +55,7 @@ public class FXGameCenter extends Application {
         backgroundThread.setDaemon(true);
         backgroundThread.start();
         
-        imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
+        imageSlider = new ImageSlider(scene, imageGroup, aniDuration, gameModel);
         imageSlider.setGameIds( gameModel.getAllGameIDs() );
         
         Thread imageSliderThread = new Thread (imageSlider);

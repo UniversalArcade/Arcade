@@ -6,9 +6,9 @@ import java.util.HashMap;
 public class ButtonLayout implements Serializable{
   
     //private HashMap chars;
-    private String[] devices = {"Tastatur", "Maus"}; // + Joystick
-    private String[] keyboard = {"ENTER","SHIFT","FOO"}; // + ...
-    private String[] mouse = {"Left click", "right click"}; // + ...
+    private String[] devices = {"Tastatur"}; // + Joystick
+    private String[] keyboard = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0","ENTER","CTRL","SHIFT","ALT","BACKSPACE","TAB","SPACE","MINUS","SEMICOLON","TILDE","COMMA","PERIOD","CAPS_LOCK","RIGHT","LEFT","DOWN","UP"};
+    //private String[] mouse = {"Left click", "right click"}; // + ...
     private HashMap buttons;
     private HashMap teensyConversion;
     
@@ -18,11 +18,8 @@ public class ButtonLayout implements Serializable{
         teensyConversion = new HashMap();
         
         buttons.put(devices[0], keyboard);
-        buttons.put(devices[1], mouse);
+        //buttons.put(devices[1], mouse);
     }
-    
-    
-    
     
     public String[] getDevices() {
         return devices;
@@ -40,12 +37,13 @@ public class ButtonLayout implements Serializable{
         this.buttons = buttons;
     }
     
-
+    /*
     private void setUpTeensyConversion(){
        teensyConversion.put("A", "KEY_A");
        teensyConversion.put("B", "KEY_B");
        //...
     }
+    */
     
 
 }

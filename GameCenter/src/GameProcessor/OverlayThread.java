@@ -5,23 +5,23 @@ package GameProcessor;
 import java.io.IOException;
 
 
-public class GameThread extends Thread{
+public class OverlayThread extends Thread{
      
      private Process p;
      //rename to running
      private boolean processStarted;
-     private String executionPath;
+     private String parameters;
      private int gameID;
      
      
-     public GameThread( String executionPath ){
-         this.executionPath = executionPath;
+     public OverlayThread( String parameters ){
+         this.parameters = parameters;
      }
      
      public void run(){
          
         //processStarted = false; 
-        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:ArcadeStore /nosbiectrl /silent");
+        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/Gameoverlay/gameoverlay.exe", parameters);
         try {
             p = builder.start(); // start the Game
             
@@ -31,7 +31,7 @@ public class GameThread extends Thread{
             try {
                 int returnval = p.waitFor(); // hält den Thread solange an wie process läuft ---> liefert auch rückgabewert?! vielleicht exitValue unnötig
                 //processStarted = false;
-                System.out.println( "WaitForValue " + returnval );
+                System.out.println( "Overlay waitfor " + returnval );
                 //System.out.println( "Exitvalue " + p.exitValue() );  // wenn Programm normal beendet dann exitvalue = 0
             } catch ( InterruptedException ex ) {
                 System.out.println( "ERROR bei waitfor()" );
@@ -47,9 +47,9 @@ public class GameThread extends Thread{
     
     public void killProcess(){
         if( p.isAlive() ){
-            p.destroy(); // close process
-            //p.destroyForcibly();
-            System.out.println("terminated");
+            //p.destroy(); // close process
+            p.destroyForcibly();
+            System.out.println("Overlay terminated");
         }
     }
     

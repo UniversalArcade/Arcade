@@ -3,6 +3,7 @@ $waitForExe = "SandboxieDcomLaunch.exe"
 ProcessWait($waitForExe)
 
 while ProcessExists("starter.exe") And ProcessExists($waitForExe)
+	Sleep(50)
 WEnd
 
 If ProcessExists($waitForExe) Then
@@ -12,6 +13,4 @@ EndIf
 If ProcessExists("starter.exe") Then
 	ProcessClose("starter.exe")
 EndIf
-
-MouseMove(800,400)
 
