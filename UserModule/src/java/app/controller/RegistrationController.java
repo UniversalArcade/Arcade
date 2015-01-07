@@ -43,11 +43,11 @@ public class RegistrationController extends HttpServlet
                 Costumer cust = new Costumer();
                 cust.setMail(req.getParameter("mail"));
                 
-                String test = req.getParameter("password");
-                String SHATest = SecurityHelper.getSHAHash(test);
+                String nonSHA = req.getParameter("password");
+                String SHAPW = SecurityHelper.getSHAHash(nonSHA);
                 
-                cust.setPassword(SHATest);
-                cust.setPasswordWDH(SHATest);
+                cust.setPassword(SHAPW);
+                cust.setPasswordWDH(SHAPW);
                 
                 System.out.println(cust.getErrors());
                 if( cust.getErrors().isEmpty() ){
