@@ -6,6 +6,7 @@ import app.model.RegistrationModel;
 
 import app.beans.Costumer;
 import app.beans.Message;
+import app.helper.MailHelper;
 import app.helper.SecurityHelper;
 import java.io.*;
 import javax.servlet.*;
@@ -21,28 +22,17 @@ public class RegistrationController extends HttpServlet
     public void doPost(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  
-              
-                //SecurityHelper sec = new SecurityHelper();
-                //System.out.println(sec.getSHAHash("abc"));
-                
-               
-                // SHA Experiment
-                /*
-                MessageDigest md = MessageDigest.getInstance( "SHA" );
-                byte[] digest = md.digest( "ABCDEFGHIJKLMNO".getBytes() );
-                String msg = "";
-                for ( byte b : digest )
-                    msg += b; // funzt so nicht
-                
-                System.out.println("AHA: " + msg);
-                //System.out.println("JA : " + digest.toString());
-                
-                */        
-                        
+     
                 Costumer cust = new Costumer();
-                cust.setMail(req.getParameter("mail"));
                 
+                
+                String uncheckedMail =  req.getParameter("mail");
+                boolean checked = MailHelper.checkFormat(req.getParameter("mail"));
+                cust.setMail(req.getParameter("mail"));
+                if(!checked){
+                   cust.addError("mail", "");
+                   req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Es können nur @haw-hamburg.de Email Adressen genutzt werden."));  
+                }
                 String nonSHA = req.getParameter("password");
                 String SHAPW = SecurityHelper.getSHAHash(nonSHA);
                 

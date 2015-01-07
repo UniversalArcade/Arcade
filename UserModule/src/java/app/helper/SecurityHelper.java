@@ -13,17 +13,6 @@ import java.util.logging.Logger;
 public class SecurityHelper {
     int random;
     
-    /**
-     *
-     * @return
-     */
-    public Integer createRandom(){
-        Random ran = new Random();
-        random = 100000 + ran.nextInt(900000);  
-        String randomValue = Integer.toString(random);
-        System.out.println("RandomValue "+randomValue);  
-        return random;
-    }
     
     public static String getSHAHash(String input){
         
@@ -36,7 +25,7 @@ public class SecurityHelper {
             
             byte byteData[] = md.digest();
             
-            //convert the byte to hex format method 1
+
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < byteData.length; i++) {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
