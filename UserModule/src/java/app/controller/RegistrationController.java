@@ -6,6 +6,7 @@ import app.model.RegistrationModel;
 
 import app.beans.Costumer;
 import app.beans.Message;
+import app.helper.SecurityHelper;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -41,8 +42,13 @@ public class RegistrationController extends HttpServlet
                         
                 Costumer cust = new Costumer();
                 cust.setMail(req.getParameter("mail"));
-                cust.setPassword(req.getParameter("password"));
-                cust.setPasswordWDH(req.getParameter("passwordWDH"));
+                
+                String test = req.getParameter("password");
+                String SHATest = SecurityHelper.getSHAHash(test);
+                
+                cust.setPassword(SHATest);
+                cust.setPasswordWDH(SHATest);
+                
                 System.out.println(cust.getErrors());
                 if( cust.getErrors().isEmpty() ){
                     RegistrationModel register = new RegistrationModel();

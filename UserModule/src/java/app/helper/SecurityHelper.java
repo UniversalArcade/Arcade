@@ -1,6 +1,7 @@
 package app.helper;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,31 +25,30 @@ public class SecurityHelper {
         return random;
     }
     
-    
-    public SecurityHelper(){}
-    
-    public String getSHAHash(String input){
+    public static String getSHAHash(String input){
         
         
         try {
-            MessageDigest md = MessageDigest.getInstance( "SHA" );
-            byte[] digest = md.digest( input.getBytes() );
+            String password =input ;
             
-            /*String msg = "";
-            for ( byte b : digest )
-            msg += b;
-            */
-            //return msg;
-            return digest.toString();
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
             
+            byte byteData[] = md.digest();
             
+            //convert the byte to hex format method 1
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
             
-            //return "";
-        } catch (Exception ex) {
+            System.out.println("Hex format : " + sb.toString());
+            return sb.toString();
+         
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(SecurityHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-        return "";
+    return "";
     }
     
 }

@@ -5,6 +5,7 @@ import app.model.LoginModel;
 import app.beans.Costumer;
 import app.beans.Message;
 import app.beans.User;
+import app.helper.SecurityHelper;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +22,11 @@ public class LoginController extends HttpServlet
                 RequestDispatcher view = null;               
                 Costumer cust = new Costumer();
                 cust.setMail(req.getParameter("mail"));
-                cust.setPassword(req.getParameter("password"));
+                
+                String nonSHA = req.getParameter("password");
+                String SHAPW = SecurityHelper.getSHAHash(nonSHA);
+                
+                cust.setPassword(SHAPW);
                 
                 if(cust.getErrors().isEmpty()){
                     System.out.println("EMPTY");                   
