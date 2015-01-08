@@ -2,7 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
+<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Poster hochladen"/>
@@ -23,12 +23,20 @@
 	</script>
   </tiles:put>
   <tiles:put name="body">
-
+      
     <p>
       Schritt 2 : Cover hochladen
        <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie das Cover Ihres Spiels aus. <br>Es muss eine Mindestauflösung von 640x480 Pixel haben und im .jpg Format sein .',20,-30);"
                    accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
     </p>
+    
+    <c:if test="${game.states['coverupload'] == 'complete'}">
+        
+        <p>
+            <img src="getImage" width="250" height="400" />
+        </p>
+        
+    </c:if>
 
     <form action="coverupload?action=update" method="post" enctype="multipart/form-data">
         <input id="fileInput" type="file" name="file" accept="image/jpeg"/>

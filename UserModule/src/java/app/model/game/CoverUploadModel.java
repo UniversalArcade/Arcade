@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.imgscalr.Scalr;
 
@@ -42,7 +43,6 @@ public class CoverUploadModel {
             }
             File destFile = new File(fileStatus.getParent() + "/" + g.getGameID() +".jpg");
             ImageIO.write(img, "jpg", destFile);
-            
             g.updateState("coverupload", "complete");
             String state = g.stateToJSON();
             
