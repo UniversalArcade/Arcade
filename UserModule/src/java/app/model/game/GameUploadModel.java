@@ -18,7 +18,7 @@ public class GameUploadModel {
     
      public int uploadGame(HttpServletRequest req, Game g){
         
-         if(g.isInEditMode()){
+         //if(g.isInEditMode()){
             File delete = null;
              
             if(g.getEmulationGame() == 0){
@@ -38,7 +38,7 @@ public class GameUploadModel {
             } catch (IOException ex) {
                 Logger.getLogger(GameUploadModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-         }
+         //}
          
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         FileUpload upload = new FileUpload(2* 500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");

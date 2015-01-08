@@ -174,7 +174,10 @@ public class Game implements Serializable {
         this.description = description;
     }
     
-
+    public void addError(String key, String value){
+        error.put(key, value);
+    }
+    
     public HashMap getErrors(){
         return error;
     }
