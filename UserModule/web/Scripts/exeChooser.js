@@ -17,8 +17,11 @@ function init(fileArray){
            
     bread.append("a")
            .attr("href","#")
-           .text("> / ")
            .attr("class","bcBase")
+           .append("img")
+           .attr("src","./img/home152.png")
+           .attr("width","28")
+           .attr("height","28")
            .on("click",onBreadCrumbBase);
    
    div = d3.select(".fileChooser")
@@ -133,7 +136,7 @@ function updateBreadCrumb(){
              .enter()
              .append("a")
              .attr("href",function(d,i){return i;})
-             .text(function(d){return d.name + " / ";}) 
+             .text(function(d){return d.name;}) 
              .attr("class","bcElement")
              .on("click", onBreadCrumb);
     }

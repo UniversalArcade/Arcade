@@ -220,7 +220,63 @@ h2 {
     color:#0000FF;
 }
 
+.fileChooser .file{
+    color:#0000FF;
+    margin: 0px;
+    padding-left: 30px;
+    background-image: url('img/text70.png');
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+}
 
+.fileChooser .folder{
+    color:#0000FF;
+    margin: 0px;
+    padding-left: 30px;
+    background-image: url('img/open131.png');
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+}
+
+.fileChooser {
+    background-color: #FFCC00;
+    padding: 15px;
+    margin: 0px 0px 20px 0px;
+}
+
+.fileChooserBreadCrumb {
+    background-color: #FFFFCC;
+    padding: 5px 5px 5px 5px;
+}
+
+.fileChooserBreadCrumb p {
+    padding: 0px;
+    margin: 0px;
+}
+
+.fileChooserBreadCrumb a img {
+    padding: 0px 0px 0px 0px;
+    margin:  0px 0px -7px 0px;
+}
+
+.fileChooserBreadCrumb a:after {
+    content: url('img/play12.png');
+    transform: scale(.5);
+    padding: 0px 7px 0px 7px;
+    margin:  0px 0px 0px 0px;
+}
+
+
+.fileChooserExplorer {
+    background-color: #FFFFCC;
+    margin: 10px 0px;
+    padding: 5px 5px 5px 5px;
+}
+
+.fileChooserExplorer p {
+    padding: 2px 0px 10px 0px;
+    margin: 0px;
+}
 
 .top{
 	float:left;
