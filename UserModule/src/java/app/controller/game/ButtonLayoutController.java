@@ -17,7 +17,10 @@ public class ButtonLayoutController extends HttpServlet
        {
     	  try{
                 res.setContentType("text/html");
-
+                
+                
+                ButtonLayout buttonLayout = new ButtonLayout();
+                
                 String action = req.getParameter("action");
                 System.out.println("action: " + action);
                 
@@ -47,17 +50,26 @@ public class ButtonLayoutController extends HttpServlet
                             else{
                                 String function = req.getParameter("function" + i);
                                 game.addButton(button, function);
+                                buttonLayout.addButtonForIllegalTest(button); 
                             }
                         }
 
                         if(valid){
-                            System.out.println("BUTTONS VALID");
-                             ButtonLayoutModel model = new ButtonLayoutModel();
+                            
+                            Message comboMessage = buttonLayout.testForIllegalCombinations();
+                            
+                            if(comboMessage == null){
+                                System.out.println("BUTTONS VALID");
+                                ButtonLayoutModel model = new ButtonLayoutModel();
 
-                             if (model.updateButtonLayout(game) ){
-                                 req.getSession().setAttribute("message", new Message("Button Layout erfolgreich bearbeitet"));
-                                 res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
-                             }
+                                if (model.updateButtonLayout(game) ){
+                                    req.getSession().setAttribute("message", new Message("Button Layout erfolgreich bearbeitet"));
+                                    res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
+                                }
+                            }
+                            else{
+                                req.getSession().setAttribute("message", comboMessage);
+                            }
                         }
                     }
                 }
