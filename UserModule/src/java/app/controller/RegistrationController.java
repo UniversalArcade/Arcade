@@ -24,24 +24,24 @@ public class RegistrationController extends HttpServlet
        {
      
                 Costumer cust = new Costumer();
-                
+                Message messageObjekt = new Message();
                 
                 String uncheckedMail =  req.getParameter("mail");
                 boolean checked = MailHelper.checkFormat(req.getParameter("mail"));
                 cust.setMail(req.getParameter("mail"));
                 if(!checked){
-                   cust.addError("mail", "");
-                   req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Es können nur @haw-hamburg.de Email Adressen genutzt werden."));  
+                   cust.addError("mail", ""); 
+                   messageObjekt.addMessage(Message.Type.ERROR, "Es können nur @haw-hamburg.de Email Adressen genutzt werden.");
                 }
                 String nonSHA = req.getParameter("password");
                 String nonSHAPW = req.getParameter("passwordWDH");
                 String SHAPW = SecurityHelper.getSHAHash(nonSHA);
                 boolean PWH =  SecurityHelper.checkPW(nonSHA, nonSHAPW);
                 if(!PWH){
-                   cust.addError("mail", "");
-                   req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Das eingegeben Passwort stimmt nicht überein."));  
+                   cust.addError("mail", "");               
+                   messageObjekt.addMessage(Message.Type.ERROR, "Das eingegeben Passwort stimmt nicht überein.");
                 }
-                
+                req.getSession().setAttribute("message",messageObjekt);
                 System.out.println(cust.getErrors());
                 if( cust.getErrors().isEmpty() ){
                     cust.setPassword(SHAPW);
