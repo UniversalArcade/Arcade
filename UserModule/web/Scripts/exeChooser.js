@@ -140,9 +140,14 @@ function updateBreadCrumb(){
 }
 
 function onClick(){
+    
+    console.log("Onclick Methode");
+    
     d3.event.preventDefault();
    
-    var clicked = d3.event.target.__data__;
+    clicked = d3.event.target.__data__;
+    
+    console.log("clicked" + clicked);
     
     if(stack.length > 0)
     {
@@ -167,7 +172,7 @@ function onClick(){
     }
     else
     {
-        tes = d3.event.srcElement.className = "selected";
+        tes = d3.event.target.className= "selected";   
     }
 
     updateFormField();
