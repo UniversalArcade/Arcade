@@ -55,15 +55,11 @@ public class ButtonLayout implements Serializable{
         Message errors = new Message();
         boolean found = false;
         
-        for(IllegalButtonCombo combo : buttonCombos){
-            System.out.println("COMBO: " + combo.getComboString());
-            
+        for(IllegalButtonCombo combo : buttonCombos){            
             for(String button : buttonConfig)
             {
                 combo.test(button);
                 if(combo.foundIllegal()){
-                    
-                    
                     errors.addMessage(Message.Type.ERROR, "Die Tastenkombination " + combo.getComboString() + " ist nicht erlaubt!");
                     found = true;
                 }
@@ -98,9 +94,7 @@ public class ButtonLayout implements Serializable{
         public void test(String testString){
             if(combo[0].equals(testString) || combo[1].equals(testString) || (combo.length == 3 && combo[2].equals(testString)))
             {
-                System.out.println("UP BEI : " + testString);
                 found++;
-                System.out.println("foundcount: " + found);
             }
         }
         
