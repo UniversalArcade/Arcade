@@ -38,7 +38,7 @@ public class RegistrationController extends HttpServlet
                 String SHAPW = SecurityHelper.getSHAHash(nonSHA);
                 boolean PWH =  SecurityHelper.checkPW(nonSHA, nonSHAPW);
                 if(!PWH){
-                    cust.addError("mail", "");
+                   cust.addError("mail", "");
                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Das eingegeben Passwort stimmt nicht überein."));  
                 }
                 
