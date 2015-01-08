@@ -3,7 +3,7 @@ function init(fileArray){
    //bla = [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
    //bla = [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[{"type":"file","name":"blubb.bmp"}]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
    //bla =  [{"type":"folder","name":"dir1","child":[{"type":"folder","name":"dir2","child":[{"type":"file","name":"blubb.bmp"}]},{"type":"file","name":"drei.txt"},{"type":"file","name":"vier.txt"}]},{"type":"file","name":"eins.txt"},{"type":"file","name":"zwei.txt"}]
-    bla = fileArray;
+   bla = fileArray;
 
    console.log(bla); 
 
@@ -15,7 +15,7 @@ function init(fileArray){
            .attr("class","fileChooserBreadCrumb")
            .append("p");
            
-      bread.append("a")
+    bread.append("a")
            .attr("href","#")
            .text("> / ")
            .attr("class","bcBase")
@@ -31,8 +31,8 @@ function init(fileArray){
 function updateFormField(){
     var concatPath = "";
     
-    if(stack[stack.length -1].type == "file"){
-        stack.forEach(function(x){concatPath = concatPath + "/" + x.name});    
+    if(stack.length > 0 && stack[stack.length -1].type === "file"){
+        stack.forEach(function(x){concatPath = concatPath + "/" + x.name;});    
         d3.select(".exePathSubmit").attr("disabled",null);
     }
     else{
@@ -82,7 +82,7 @@ function updateBreadCrumb(){
              .enter()
              .append("a")
              .attr("href",function(d,i){return i;})
-             .text(function(d){return d.name;}) 
+             .text(function(d){return d.name + " / ";}) 
              .attr("class","bcElement")
              .on("click", onBreadCrumb);
     }
