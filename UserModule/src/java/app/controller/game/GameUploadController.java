@@ -28,11 +28,24 @@ public class GameUploadController extends HttpServlet
                         String contentType = req.getContentType();
                         if ((contentType.indexOf("multipart/form-data") >= 0)) {
                             GameUploadModel model = new GameUploadModel();
-                            model.uploadGame(req, game);
-                            req.getSession().setAttribute("message", new Message("Spiel erfolgreich hochgeladen"));
-                            res.sendRedirect("/UserModule/gameManager?component=gameupload");
+                            int uploadStatus = model.uploadGame(req, game);
+                            System.out.println("habe status: " + uploadStatus);
+                            switch(uploadStatus){
+                                case 1:
+                                    req.getSession().setAttribute("message", new Message("Spiel erfolgreich hochgeladen"));
+                                    res.sendRedirect("/UserModule/gameManager?component=gameupload");
+                                    break;
+                                case -1:
+                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 1GB"));
+                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
+                                    break;    
+                                default:
+                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload"));
+                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
+                                    break;
+                            }
                         }else{
-                            // Fehler beim hochladen
+                           req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
                         }  
                    } 
                 }

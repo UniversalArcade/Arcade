@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.io.FileUtils;
 
 
 public class GameUploadModel {
     
-     public void uploadGame(HttpServletRequest req, Game g){
+     public int uploadGame(HttpServletRequest req, Game g){
         
          if(g.isInEditMode()){
             File delete = null;
@@ -39,30 +41,38 @@ public class GameUploadModel {
          }
          
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
-        FileUpload upload = new FileUpload(500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
-        File file = upload.uploadFile(req);
-       
-        if(g.getEmulationGame() == 1){
-            UnZip.unzipit(file, "C:/Users/Public/Arcade/Mame/roms");
-        }
-        else{
-            UnZip.unzipit(file, file.getParent() + "/game");
-        }
-        
-        
-        if( file.delete() ){
-            System.out.println("gelöscht");
-        }
-        else{
-            System.out.println("NICHT GELÖSCHT");
-        }
-        
-        g.updateState("gameupload", "complete");
-        String state = g.stateToJSON();
-        
-        SQLHelper sql = new SQLHelper();    
-        sql.openCon();
-           boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
-        sql.closeCon();
+        FileUpload upload = new FileUpload(2* 500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
+        File file;
+         try {
+             file = upload.uploadFile(req);
+             if(file != null){
+                if(g.getEmulationGame() == 1){
+                    UnZip.unzipit(file, "C:/Users/Public/Arcade/Mame/roms");
+                }
+                else{
+                    UnZip.unzipit(file, file.getParent() + "/game");
+                }
+
+
+                if( file.delete() ){
+                    System.out.println("gelöscht");
+                }
+                else{
+                    System.out.println("NICHT GELÖSCHT");
+                }
+
+                g.updateState("gameupload", "complete");
+                String state = g.stateToJSON();
+
+                SQLHelper sql = new SQLHelper();    
+                sql.openCon();
+                   boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
+                sql.closeCon();
+            }   
+         } 
+         catch ( FileUploadBase.SizeLimitExceededException e ){ return -1; }
+         catch (FileUploadException ex){ return -2; } 
+         catch (Exception ex) { return -2; }
+      return 1;  
     } 
 }

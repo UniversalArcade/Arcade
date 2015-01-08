@@ -19,9 +19,6 @@ public class CoverUploadController extends HttpServlet
        {
     	  try{
                 res.setContentType("text/html");
-              
-                
-                
                 String action = req.getParameter("action");
                 System.out.println("action: " + action);
                 
@@ -34,11 +31,28 @@ public class CoverUploadController extends HttpServlet
                         String contentType = req.getContentType();
                         if ( (contentType.indexOf("multipart/form-data") >= 0) ) {
                              CoverUploadModel model = new CoverUploadModel();
-                             model.uploadImage(req, game);
-                             req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
-                             res.sendRedirect("/UserModule/gameManager?component=coverupload");
+                             
+                             int uploadStatus = model.uploadImage(req, game);
+                              switch(uploadStatus){
+                                case 1:
+                                    req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
+                                    res.sendRedirect("/UserModule/gameManager?component=coverupload");
+                                    break;
+                                case -1:
+                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"));
+                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
+                                    break;    
+                                default:
+                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload"));
+                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
+                                    break;
+                            }
+                             
+                             
+                             //req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
+                             //res.sendRedirect("/UserModule/gameManager?component=coverupload");
                         }else{
-                            // Fehler beim hochladen
+                            req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
                         } 
                     }
                 }
