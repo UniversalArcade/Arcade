@@ -30,6 +30,8 @@ public class ButtonLayout implements Serializable{
     private void setUpIllegalButtonCombinations(){
         buttonCombos = new ArrayList();
         buttonCombos.add(new IllegalButtonCombo("ALT","TAB"));
+        buttonCombos.add(new IllegalButtonCombo("STRG","TAB"));
+        buttonCombos.add(new IllegalButtonCombo("CTRL","ALT","ENTER"));
     }
     
     public String[] getDevices() {
@@ -58,11 +60,15 @@ public class ButtonLayout implements Serializable{
         boolean found = false;
         
         for(IllegalButtonCombo combo : buttonCombos){
+            System.out.println("COMBO: " + combo.getComboString());
+            
             for(String button : buttonConfig)
             {
                 combo.test(button);
                 if(combo.foundIllegal()){
-                    errors.addMessage(Message.Type.ERROR, "Die Tastenkombination " + combo.getCombo()[0] + " - " + combo.getCombo()[1] + " ist nicht erlaubt!");
+                    
+                    
+                    errors.addMessage(Message.Type.ERROR, "Die Tastenkombination " + combo.getComboString() + " ist nicht erlaubt!");
                     found = true;
                 }
             }
@@ -85,10 +91,20 @@ public class ButtonLayout implements Serializable{
             found = 0;
         }
         
+        public IllegalButtonCombo( String key1, String key2, String key3 ){
+            combo = new String[3];
+            combo[0] = key1;
+            combo[1] = key2;
+            combo[2] = key3;
+            found = 0;
+        }
+        
         public void test(String testString){
-            if(combo[0].equals(testString) || combo[1].equals(testString))
+            if(combo[0].equals(testString) || combo[1].equals(testString) || (combo.length == 3 && combo[2].equals(testString)))
             {
+                System.out.println("UP BEI : " + testString);
                 found++;
+                System.out.println("foundcount: " + found);
             }
         }
         
@@ -96,9 +112,19 @@ public class ButtonLayout implements Serializable{
             return combo;
         }
         
+        public String getComboString(){
+            StringBuilder builder = new StringBuilder();
+            int i = 0;
+            for(String key : combo)
+            {
+                builder.append(key);
+                if(++i < combo.length) builder.append(" - ");
+            }
+            return builder.toString();
+        }
         
         public boolean foundIllegal(){
-            if(found == 2){
+            if(found == combo.length){
                 return true;
             }
             return false;
