@@ -216,6 +216,11 @@ h2 {
 	color:#00CC00;	
 }
 
+.fileChooser .file .selected {
+    color:#0000FF;
+}
+
+
 
 .top{
 	float:left;

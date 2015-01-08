@@ -2,6 +2,7 @@
 <%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
 <tiles:insert template="../Layout/gameLayout.jsp">
   <tiles:put name="title" value="Choose .exe file"/>
@@ -10,7 +11,7 @@
         <script src="Scripts/d3.js" charset="utf-8"></script>
         <script src="Scripts/exeChooser.js"></script>
   </tiles:put>
-  <tiles:put name="bodyAttr" value="onload = 'init(${game.filePathJSON})' " />
+  <tiles:put name="bodyAttr" value="onload = 'init(${game.filePathJSON}); setSelectedFilePath(${game.fullFilePath});' " />
   <tiles:put name="body">
 
         <p> Ausführbare Datei auswählen 

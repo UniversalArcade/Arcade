@@ -28,6 +28,57 @@ function init(fileArray){
    construct(bla);  
 }
 
+function setSelectedFilePath(filePathJSON){
+    
+    fp = filePathJSON;
+    
+    if(filePathJSON.file != null)
+    {    
+        split = filePathJSON.file.split("/");
+        split.shift();
+
+        tmp = bla;
+        var foundindex = 0;
+
+        for(var i = 0; i < split.length; i++)
+        {
+            for(var j = 0; j < tmp.length; j++)
+            {  
+                if(tmp[j].name == split[i])
+                {
+                    if(i === 0)
+                    {
+                        stack[i] = tmp[j];
+                    }
+                    else
+                    {
+                        stack[i] = tmp[j];
+                    }
+
+                    if(tmp[j].type === "file")
+                    {
+                        if(stack.length > 1)
+                        {
+                            construct(stack[stack.length -2].child);
+                        }
+                        else
+                        {
+                            construct(tmp);
+                        }
+                        foundindex = j;
+                    }
+                    tmp = tmp[j].child;
+                    break;
+                }
+            }
+        }
+        d3.selectAll(".fileChooserExplorer p:nth-of-type(" + (foundindex + 1) + ") a")
+              .attr("class","selected")
+
+        updateFormField();      
+    }
+}
+
 function updateFormField(){
     var concatPath = "";
     
@@ -90,23 +141,35 @@ function updateBreadCrumb(){
 
 function onClick(){
     d3.event.preventDefault();
-    
+   
     var clicked = d3.event.target.__data__;
     
-    if(stack.length > 0){
+    if(stack.length > 0)
+    {
         //if last element is a file, delete that element and use incoming element instead
-        if(stack[stack.length -1].type == "file"){
+        if(stack[stack.length -1].type == "file")
+        {
+            // Hier selected element css setzten als normal
             stack.pop();
         }
     }
     
+    d3.selectAll(".selected")
+            .attr("class","normal");
+    
+    
     //stack.push( { type : clicked.type, name : clicked.name });
     stack.push( clicked );
     // if incoming element is a folder, jump into this folder
-    if(clicked.type == "folder"){ 
+    if(clicked.type == "folder")
+    { 
         construct(clicked.child);  
     }
-    
+    else
+    {
+        tes = d3.event.srcElement.className = "selected";
+    }
+
     updateFormField();
     updateBreadCrumb();   
 }
@@ -125,7 +188,7 @@ function construct(base){
       .append("p")
       .attr("class",function(d){return d.type})
       .append("a")
-      .attr("class","bar")
+      .attr("class","normal")
       .attr("href","#")
       .text(function(d){return d.name})
       .on("click", onClick);

@@ -9,10 +9,15 @@ import app.beans.Game;
 import app.helper.SQLHelper;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.*;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -42,6 +47,25 @@ public class ExeChooserModel {
     public Game getFileStructureAsJSON(Game g){
         JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\game");
         g.setFilePathJSON(jsonarr);
+        
+        SQLHelper sql = new SQLHelper();
+        
+        try {
+            sql.openCon();
+            ResultSet rs = sql.execQuery("SELECT executePath FROM games WHERE ID = "+ g.getGameID());
+            if(rs.next())
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("file", rs.getString("executePath"));
+                
+                g.setFullFilePath(obj.toJSONString());
+            }
+            sql.closeCon();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ExeChooserModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return g;
     }
     
