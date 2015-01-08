@@ -40,4 +40,14 @@ public class SecurityHelper {
     return "";
     }
     
+    
+    public static boolean checkPW(String PW, String PWH){
+        System.out.println(""+PW + PWH);
+        if(PW.equals(PWH)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }

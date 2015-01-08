@@ -34,13 +34,18 @@ public class RegistrationController extends HttpServlet
                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Es können nur @haw-hamburg.de Email Adressen genutzt werden."));  
                 }
                 String nonSHA = req.getParameter("password");
+                String nonSHAPW = req.getParameter("passwordWDH");
                 String SHAPW = SecurityHelper.getSHAHash(nonSHA);
-                
-                cust.setPassword(SHAPW);
-                cust.setPasswordWDH(SHAPW);
+                boolean PWH =  SecurityHelper.checkPW(nonSHA, nonSHAPW);
+                if(!PWH){
+                    cust.addError("mail", "");
+                   req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Das eingegeben Passwort stimmt nicht überein."));  
+                }
                 
                 System.out.println(cust.getErrors());
                 if( cust.getErrors().isEmpty() ){
+                    cust.setPassword(SHAPW);
+                    cust.setPasswordWDH(SHAPW);
                     RegistrationModel register = new RegistrationModel();
                     cust = register.newRegistration(cust) ;
                     if ( cust.getErrors().isEmpty() ){
