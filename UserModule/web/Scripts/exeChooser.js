@@ -35,7 +35,7 @@ function setSelectedFilePath(filePathJSON){
     
     fp = filePathJSON;
     
-    if(filePathJSON.file != null)
+    if(filePathJSON.file != null && filePathJSON.file != "")
     {    
         split = filePathJSON.file.split("/");
         split.shift();
