@@ -14,9 +14,16 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import GameProcessor.GameModel;
 import helper.OutPipe;
+import GameProcessor.CheckNewGamesRunnable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
-public class FXGameCenter extends Application {
+public class FXGameCenter extends Application{
     
     private int aniDuration;
     private Pane imagePane;
@@ -30,9 +37,7 @@ public class FXGameCenter extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        
-        gameModel = new GameModel();
-        
+  
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
         aniDuration = 500;
         
@@ -55,8 +60,7 @@ public class FXGameCenter extends Application {
         backgroundThread.setDaemon(true);
         backgroundThread.start();
         
-        imageSlider = new ImageSlider(scene, imageGroup, aniDuration, gameModel);
-        imageSlider.setGameIds( gameModel.getAllGameIDs() );
+        imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
         
         Thread imageSliderThread = new Thread (imageSlider);
         imageSliderThread.setDaemon(true);
@@ -75,5 +79,10 @@ public class FXGameCenter extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+//    @Override
+//    public void update(Observable o, Object arg) {
+//       
+//    }
     
 }

@@ -1,9 +1,11 @@
 
 package fxgamecenter;
 
+import GameProcessor.CheckNewGamesRunnable;
 import GameProcessor.GameModel;
 import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Observer;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -13,6 +15,7 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
@@ -27,7 +30,8 @@ import javafx.scene.input.KeyEvent;
 
 import javafx.util.Duration;
 
-public class ImageSlider extends Observable implements Runnable{
+public class ImageSlider extends Observable implements Runnable, Observer{
+
     
     public enum State{
         SLIDER, DETAILS
@@ -44,23 +48,44 @@ public class ImageSlider extends Observable implements Runnable{
     private FadeTransition fadeIncoming, fadeOutgoing;
     private TranslateTransition translateTransition, moveSliderGroupToTop;
     private ScaleTransition scaleBigTransition, scaleNormalTransition;
-    
     private Timeline outerGlowAnimation;
     private Group imageGroup;
-    
     private Scene scene;
     private GameModel gameModel;
-    
-    public ImageSlider(Scene scene, Group group, int moveAniDuration, GameModel gameModel){
+
+    public ImageSlider(Scene scene, Group group, int moveAniDuration){
         this.scene = scene;
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
-        this.gameModel = gameModel;
+        this.gameModel = new GameModel();
         this.ids = new LinkedList();
+        this.setGameIds();
+        
+        CheckNewGamesRunnable ght = new CheckNewGamesRunnable();
+        ght.addObserver(this);
+        
+        
+        Thread checkThread = new Thread(ght);
+        checkThread.setDaemon(true);
+        checkThread.start();
     }
     
-    public void setGameIds(LinkedList<Integer> idList){
-        ids = idList;
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("OBSERVED !");
+        LinkedList list = (LinkedList)arg;
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                setGameIds();
+                init();
+            }
+        });
+    }
+
+    public void setGameIds(){
+        ids = gameModel.getAllGameIDs();
     }
     
     @Override
@@ -69,8 +94,6 @@ public class ImageSlider extends Observable implements Runnable{
     }
     
     public void init(){
-        
-        
         state = State.SLIDER;
         imagesVisible = 5; // 5
         //moveAniDuration = 500;
@@ -79,22 +102,6 @@ public class ImageSlider extends Observable implements Runnable{
         imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
         imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
         images = new LinkedList();
-        
-        //ids = gameModel.getAllGameIDs();
-        //ids = new LinkedList();
-        /*
-        for(int i=5; i>0; i--){
-            ids.add(i);
-        }
-        */
-        //ids.add(7);
-        
-        //ids.add(214);
-        //ids.add(215);
-        //ids.add(4);
-        //ids.add(3);
-        //ids.add(2);
-        //ids.add(1);
         
         moveImagesTransition = new ParallelTransition();
         //make shure there are enough images to display, if not: fill array with already existing ids
@@ -158,6 +165,8 @@ public class ImageSlider extends Observable implements Runnable{
     
     public void prepareStartUpImages(){
         
+        imageGroup.getChildren().clear();
+        
         int toAdd = imagesVisible + 2 - ids.size();
         
         for(int i=0; i < toAdd; i++){
@@ -220,7 +229,7 @@ public class ImageSlider extends Observable implements Runnable{
     }
     
     public Image loadImageFromID(int id){
-       // image, backgroundloading
+        //image, backgroundloading
         //return new Image("file:pics/G" + id + ".jpg",true);
         return new Image("file:C:\\Users\\Public\\Arcade\\Games\\" + id + "\\assets\\" + id + ".jpg",true);
         
