@@ -26,6 +26,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 
 import javafx.util.Duration;
@@ -49,12 +53,13 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     private TranslateTransition translateTransition, moveSliderGroupToTop;
     private ScaleTransition scaleBigTransition, scaleNormalTransition;
     private Timeline outerGlowAnimation;
-    private Group imageGroup;
+    private Group imageGroup, textInfoGroup;
     private Scene scene;
     private GameModel gameModel;
 
-    public ImageSlider(Scene scene, Group group, int moveAniDuration){
+    public ImageSlider(Scene scene, Group group, Group textInfoGroup, int moveAniDuration){
         this.scene = scene;
+        this.textInfoGroup = textInfoGroup;
         this.imageGroup = group;
         this.moveAniDuration = moveAniDuration;
         this.gameModel = new GameModel();
@@ -63,8 +68,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         
         CheckNewGamesRunnable ght = new CheckNewGamesRunnable();
         ght.addObserver(this);
-        
-        
+
         Thread checkThread = new Thread(ght);
         checkThread.setDaemon(true);
         checkThread.start();
@@ -83,6 +87,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                         public void run() {
                             setGameIds();
                             init();
+                            setTextInfo("Datenbank update","db.png");
                         }
                     });
                     break;
@@ -90,6 +95,54 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                     break;
             }
         }
+    }
+    
+    public void setTextInfo(String text, String icon){
+        textInfoGroup.getChildren().clear();
+        
+        
+        
+        if(icon != null && icon.length() > 0){
+            ImageView imageView = new ImageView( new Image("file:C:\\Users\\Public\\Arcade\\img\\" + icon,true) );
+            imageView.setFitHeight(64); // 500
+            imageView.setFitWidth(64);
+            imageView.setX(20);
+            imageView.setY(20);
+            textInfoGroup.getChildren().add(imageView);
+        }
+        
+        if(text != null && text.length() > 0){
+            Text t = new Text();
+            t.setX(64 + 20 + 20);
+            t.setY(20 + 40);
+            t.setText(text);
+            t.setFill(Color.YELLOW);
+            t.setFont(Font.font(null, FontWeight.BOLD, 20));
+            textInfoGroup.getChildren().add(t);
+        }
+        
+        Timeline fade = new Timeline(); 
+        fade.getKeyFrames().addAll(
+            new KeyFrame(Duration.ZERO, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FadeTransition fadeText = new FadeTransition(Duration.millis(2000), textInfoGroup);
+                    fadeText.setFromValue(0.0f);
+                    fadeText.setToValue(1.0f);
+                    fadeText.play();
+                }  
+            }),
+            new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FadeTransition fadeText = new FadeTransition(Duration.millis(2000), textInfoGroup);
+                    fadeText.setFromValue(1.0f);
+                    fadeText.setToValue(0.0f);
+                    fadeText.play();
+                }  
+            })    
+        );
+        fade.play();
     }
 
     public void setGameIds(){

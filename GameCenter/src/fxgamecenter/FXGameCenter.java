@@ -27,7 +27,7 @@ public class FXGameCenter extends Application{
     
     private int aniDuration;
     private Pane imagePane;
-    private Group imageGroup, bgEffectsGroup;
+    private Group imageGroup, bgEffectsGroup, textInfoGroup;
     
     private Scene scene;
     private Background bg;
@@ -42,11 +42,14 @@ public class FXGameCenter extends Application{
         aniDuration = 500;
         
         imageGroup = new Group();
+        textInfoGroup = new Group();
+        
         imagePane = new Pane();
         
         bgEffectsGroup = new Group();
         imagePane.getChildren().add( bgEffectsGroup );
         imagePane.getChildren().add( imageGroup );
+        imagePane.getChildren().add( textInfoGroup );
         
         scene = new Scene(imagePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         imagePane.setStyle("-fx-background-color: #000000;");
@@ -60,7 +63,7 @@ public class FXGameCenter extends Application{
         backgroundThread.setDaemon(true);
         backgroundThread.start();
         
-        imageSlider = new ImageSlider(scene, imageGroup, aniDuration);
+        imageSlider = new ImageSlider(scene, imageGroup, textInfoGroup, aniDuration);
         
         Thread imageSliderThread = new Thread (imageSlider);
         imageSliderThread.setDaemon(true);
