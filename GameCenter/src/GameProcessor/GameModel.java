@@ -114,6 +114,24 @@ public class GameModel implements Observer{
         return idList;
     }
     
+    public HashMap<String,String> getAllGameTitles(){
+        
+        HashMap<String,String> map = new HashMap();
+        
+        sql.openCon();
+            ResultSet rs = sql.execQuery("SELECT ID, title FROM games WHERE live=1 ORDER BY ID DESC");
+            try {
+                while( rs.next() ){
+                    map.put(String.valueOf(rs.getInt( "ID" )), rs.getString( "title" ));
+                }
+            } catch (SQLException ex) {
+                log.log(Level.SEVERE, "no valid resultset", ex);
+            }   
+        sql.closeCon();
+        
+        return map;
+    }
+    
     public void executeGameByID(int id){
         
         String buttonLayout = "";

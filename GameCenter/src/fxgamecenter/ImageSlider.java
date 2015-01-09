@@ -3,6 +3,7 @@ package fxgamecenter;
 
 import GameProcessor.CheckNewGamesRunnable;
 import GameProcessor.GameModel;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -18,6 +19,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -52,26 +54,34 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     private FadeTransition fadeIncoming, fadeOutgoing;
     private TranslateTransition translateTransition, moveSliderGroupToTop;
     private ScaleTransition scaleBigTransition, scaleNormalTransition;
-    private Timeline outerGlowAnimation;
-    private Group imageGroup, textInfoGroup;
+    private Timeline outerGlowAnimation, titleTimeline;
+    private Group imageGroup, textInfoGroup, gameTitleGroup;
     private Scene scene;
     private GameModel gameModel;
+    private HashMap<String,String> titles;
+    private String currentTitle;
 
-    public ImageSlider(Scene scene, Group group, Group textInfoGroup, int moveAniDuration){
+    public ImageSlider(Scene scene, Group group, Group textInfoGroup, Group gameTitleGroup, int moveAniDuration){
         this.scene = scene;
         this.textInfoGroup = textInfoGroup;
         this.imageGroup = group;
+        this.gameTitleGroup = gameTitleGroup;
         this.moveAniDuration = moveAniDuration;
         this.gameModel = new GameModel();
         this.ids = new LinkedList();
-        this.setGameIds();
+        this.titles = new HashMap();
+        this.setGameData();
         
         CheckNewGamesRunnable ght = new CheckNewGamesRunnable();
         ght.addObserver(this);
-
+        
+        //setTextInfo("Datenbank update","db.png");
+        
         Thread checkThread = new Thread(ght);
         checkThread.setDaemon(true);
         checkThread.start();
+        
+        currentTitle = "";
     }
     
     @Override
@@ -85,7 +95,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                     Platform.runLater(new Runnable(){
                         @Override
                         public void run() {
-                            setGameIds();
+                            setGameData();
                             init();
                             setTextInfo("Datenbank update","db.png");
                         }
@@ -99,8 +109,6 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     
     public void setTextInfo(String text, String icon){
         textInfoGroup.getChildren().clear();
-        
-        
         
         if(icon != null && icon.length() > 0){
             ImageView imageView = new ImageView( new Image("file:C:\\Users\\Public\\Arcade\\img\\" + icon,true) );
@@ -118,6 +126,8 @@ public class ImageSlider extends Observable implements Runnable, Observer{
             t.setText(text);
             t.setFill(Color.YELLOW);
             t.setFont(Font.font(null, FontWeight.BOLD, 20));
+            //Bounds b = t.getBoundsInLocal();
+            //System.out.println("bounds:" + b);
             textInfoGroup.getChildren().add(t);
         }
         
@@ -145,8 +155,9 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         fade.play();
     }
 
-    public void setGameIds(){
+    public void setGameData(){
         ids = gameModel.getAllGameIDs();
+        titles = gameModel.getAllGameTitles(); 
     }
     
     @Override
@@ -287,6 +298,43 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         
         ids = tmp;
         tmp = null;
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                updateTitle(titles.get( String.valueOf(ids.get( (int)(ids.size() / 2))) ));
+            }
+        });
+    }
+    
+    private void updateTitle(String newText){
+            
+            
+            Timeline fade = new Timeline(); 
+            fade.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, new KeyValue(gameTitleGroup.opacityProperty(), 1.0)),
+                new KeyFrame(Duration.millis(moveAniDuration / 2), new KeyValue(gameTitleGroup.opacityProperty(), 0.0)),
+                new KeyFrame(Duration.millis(moveAniDuration / 2), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        gameTitleGroup.getChildren().clear();
+                        
+                        String text = newText;
+                        Text t = new Text();
+                        t.setText(text);
+                        t.setFill(Color.YELLOW);
+                        t.setFont(Font.font("Karmatic Arcade", FontWeight.NORMAL, 50));
+                        Bounds textBounds = t.getBoundsInLocal();
+
+                        t.setX(scene.getWidth() / 2 - textBounds.getWidth() / 2);
+                        t.setY(scene.getHeight() - 100);
+                        gameTitleGroup.getChildren().add(t);
+                    }  
+                }),
+                new KeyFrame(Duration.millis(moveAniDuration + 200), new KeyValue(gameTitleGroup.opacityProperty(), 1.0))
+            );
+            fade.play();
+            System.out.println("titles:" + titles);  
     }
     
     public Image loadImageFromID(int id){
@@ -303,6 +351,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         moveSliderGroupToTop.setInterpolator(Interpolator.EASE_BOTH);
         
         outerGlowAnimation = new Timeline();
+        titleTimeline = new Timeline();
         
         translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
         translateTransition.setFromX(0);   
@@ -346,12 +395,12 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                 
                 fadeIncoming.setNode(images.getFirst());
                 fadeOutgoing.setNode(images.get(images.size()-2));
-                
+                updateTitle( titles.get( String.valueOf(ids.get( (int)(ids.size() / 2) - 1)) ) );
                 nextCenter = images.get( (int)(images.size() / 2) -1 );
             }
             else{
                 translateTransition.setToX( imgSizeX * -1 + imgThresh * -1 );
-                
+                updateTitle( titles.get( String.valueOf(ids.get( (int)(ids.size() / 2) + 1)) ) );
                 fadeIncoming.setNode(images.getLast());
                 fadeOutgoing.setNode(images.get(1));
                 
@@ -384,7 +433,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                     new KeyValue(nowBlurEffect.widthProperty(), 0)
                 )
             );
-            moveImagesTransition.play();           
+            moveImagesTransition.play();
     }
     
     public Animation.Status getMoveAnimationStatus(){
@@ -422,6 +471,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         newImage.setCache(true);
         newImage.setCacheHint(CacheHint.SPEED);
         imageGroup.setTranslateX(0);
+        
     }
     
     
