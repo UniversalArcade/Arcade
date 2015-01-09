@@ -73,15 +73,23 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     @Override
     public void update(Observable o, Object arg) {
         System.out.println("OBSERVED !");
-        LinkedList list = (LinkedList)arg;
         
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                setGameIds();
-                init();
+        String toDo = (String)arg;
+        if(toDo != null && toDo.length() > 0){
+            switch(toDo){
+                case "ChangedIDs":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setGameIds();
+                            init();
+                        }
+                    });
+                    break;
+                default:
+                    break;
             }
-        });
+        }
     }
 
     public void setGameIds(){

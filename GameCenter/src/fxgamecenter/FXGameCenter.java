@@ -79,10 +79,5 @@ public class FXGameCenter extends Application{
     public static void main(String[] args) {
         launch(args);
     }
-
-//    @Override
-//    public void update(Observable o, Object arg) {
-//       
-//    }
     
 }

@@ -98,7 +98,7 @@ public class GameModel implements Observer{
         LinkedList<Integer> idList = new LinkedList();
       
         sql.openCon();
-            ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1");
+            ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1 ORDER BY ID DESC");
             //String path = "";
             try {
                 while( rs.next() ){
