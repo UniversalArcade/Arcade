@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GameProcessor;
 
 import java.sql.ResultSet;
@@ -14,10 +9,6 @@ import java.util.logging.Logger;
 
 import helper.SQLHelper;
 
-/**
- *
- * @author Martin
- */
 public class CheckNewGamesRunnable extends Observable implements Runnable{
     
     LinkedList<Integer> oldIDs = new LinkedList();
@@ -36,7 +27,6 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
                  
                 newIDs = getAllGameIDs();
                 if(!newIDs.equals(oldIDs)){
-                    System.out.println("gesendet");
                     this.setChanged();
                     this.notifyObservers("ChangedIDs");
                     oldIDs = (LinkedList<Integer>)newIDs.clone();
@@ -60,8 +50,6 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
             } catch (SQLException ex) {}   
         sql.closeCon();
         
-        System.out.println("IDLISTE CheckThread: " + idList);
-       
         return idList;
     }
 }

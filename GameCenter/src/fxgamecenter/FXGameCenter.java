@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class FXGameCenter extends Application{
+public class FXGameCenter extends Application implements Observer{
     
     private int aniDuration;
     private Pane imagePane;
@@ -33,6 +33,7 @@ public class FXGameCenter extends Application{
     private Background bg;
     private ImageSlider imageSlider;
     private GameModel gameModel;
+    private Thread backgroundThread;
     
     
     @Override
@@ -61,11 +62,12 @@ public class FXGameCenter extends Application{
 
         bg = new Background(scene, bgEffectsGroup, aniDuration);
         
-        Thread backgroundThread = new Thread( bg );
+        backgroundThread = new Thread( bg );
         backgroundThread.setDaemon(true);
         backgroundThread.start();
-        
         imageSlider = new ImageSlider(scene, imageGroup, textInfoGroup, gameTitleGroup, aniDuration);
+        
+        imageSlider.addObserver(this);
         
         Thread imageSliderThread = new Thread (imageSlider);
         imageSliderThread.setDaemon(true);
@@ -75,6 +77,7 @@ public class FXGameCenter extends Application{
 
         primaryStage.show();
         
+        
     }
     
 
@@ -83,6 +86,15 @@ public class FXGameCenter extends Application{
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        
+        int state = (int)arg;
+        if(state == 2){
+            
+        }
     }
     
 }

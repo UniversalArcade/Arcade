@@ -138,7 +138,7 @@ public class GameModel implements Observer{
         
         StringBuilder path = new StringBuilder();
         sql.openCon();
-            ResultSet rs = sql.execQuery( "SELECT SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig FROM generell, games WHERE games.ID = "+ id );
+            ResultSet rs = sql.execQuery( "SELECT title, SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig FROM generell, games WHERE games.ID = "+ id );
             //String path = "";
             try {
                 if( rs.next() ){
@@ -149,12 +149,14 @@ public class GameModel implements Observer{
                     
                     if(rs.getBoolean("isEmulatorGame" )){
                         path.append( "/Mame/MameStarter.exe " );
+                        path.append( rs.getString( "title" ) + " ");
+                        path.append( id );
                     }
                     else{
                         path.append( "/Games/" + id + "/game/" );
+                        path.append( rs.getString( "ExecutePath" ) );
                     }
-                    
-                    path.append( rs.getString( "ExecutePath" ) );
+
                     log.info("found path: " + path);
                 }
             } catch (SQLException ex) {

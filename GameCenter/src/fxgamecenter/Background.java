@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -32,6 +34,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
@@ -58,19 +61,39 @@ public class Background implements Observer, Runnable{
         this.scene = scene;
         this.parentAniduration = parentAniduration;
         circleGroups = new ArrayList();
+        
+        
     }
     
     @Override 
     public void run(){
         init();
+        
+        
     }
     
     
     
     public void init(){
-
-        for (int i = 0; i < 150; i++) {
-            Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
+        
+       
+        
+        //150
+        for (int i = 0; i < 600; i++) {
+            //Circle circle = new Circle(rand.nextDouble() * radius + 10, Color.web("white", 0.05));
+            
+            radius = 15;
+            Rectangle circle = new Rectangle(rand.nextDouble() * radius * 2 + 10, rand.nextDouble() * radius * 2 + 10);
+            circle.setRotate(rand.nextDouble() * 360);
+            /*
+            Polygon circle = new Polygon();
+            circle.getPoints().addAll(new Double[]{
+            0.0, 0.0,
+            100.0, 10.0,
+            10.0, 100.0 });
+            */
+            
+            
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStroke(Color.web("white", 0.16));
             circle.setStrokeWidth(4);
@@ -127,7 +150,8 @@ public class Background implements Observer, Runnable{
                             counter = 0;
                         }
 
-                        circle.setTranslateY(circle.getTranslateY() - dy);   
+                        circle.setTranslateY(circle.getTranslateY() - dy);
+                        circle.setRotate(circle.getRotate() + rand.nextDouble() * 1);
                     }
                 });
                 bubbleTimeline.getKeyFrames().add(moveBall);
@@ -188,6 +212,10 @@ public class Background implements Observer, Runnable{
 
     @Override
     public void update(Observable o, Object arg) {  
-        triggerBackgroundMoveAnimation( (int)arg );
+        
+        int state = (int)arg;
+        if(state < 2){        
+            triggerBackgroundMoveAnimation( (int)arg );
+        }
     }
 }

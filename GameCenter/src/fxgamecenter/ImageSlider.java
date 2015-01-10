@@ -202,6 +202,10 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                     }
                     else if(key.getCode() == KeyCode.ENTER){
                         if(!enterPressed){
+                            
+                            setChanged();
+                            notifyObservers(2);
+                            
                             //loadDetailsPage();
                             gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
                             System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
