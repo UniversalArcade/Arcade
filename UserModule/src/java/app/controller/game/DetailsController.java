@@ -23,7 +23,6 @@ public class DetailsController extends HttpServlet
                 System.out.println("details id: " + blubb.getGameID());
                 
                 res.setContentType("text/html");
-                RequestDispatcher view;
                 
                 String action = req.getParameter("action");
                 System.out.println("Details action: " + action );

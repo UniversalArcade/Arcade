@@ -12,22 +12,20 @@ import java.sql.SQLException;
 public class LoginModel {
    
    
-    public User login(Costumer c) throws Exception{
+    public User login(Costumer c) throws SQLException, IllegalArgumentException, SecurityException{
         
         User user = new User();
-        
             try(SQLHelper sql = new SQLHelper()){
                 ResultSet rs = sql.execQuery("SELECT id, userlvl,isregistred FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
-        
-                if(rs.next()){
+                if(!rs.next()) throw new IllegalArgumentException();
+                else
+                {
+                    if(rs.getInt("isregistred") == 0) throw new SecurityException();
+                    user.setRegistred(rs.getInt("isregistred"));
                     user.setUserID( rs.getInt("id") );
                     user.setUserLvl( rs.getInt("userlvl") );
-                    user.setRegistred(rs.getInt("isregistred"));
-                     System.out.println("Registred Status:" + user.getRegistred());
                 }
             }
-            catch(SQLException e){}
-        
         return user;
     }
 }
