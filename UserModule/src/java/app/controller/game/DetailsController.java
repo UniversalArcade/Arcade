@@ -54,31 +54,11 @@ public class DetailsController extends HttpServlet
                         else{
                             game.setEmulationGame(0);
                         }
-                        
-                        //String oldTitle = game.getTitle();
                                                 
                         game.setTitle(req.getParameter("title"));
                         game.setDescription(req.getParameter("description"));
                         game.setCredits(req.getParameter("credits"));
-                        //model.testTitle(game);
-                        
-//                        if(oldTitle == null)
-//                        {
-//                            oldTitle="ARCADE_PRESET_NAME";
-//                        }  
-//                        
-//                        if(oldTitle.length() > 0 
-//                                && game.getEmulationGame() == 1 
-//                                && !game.getTitle().equals(oldTitle))
-//                        {
-//                            System.out.println("CASE");
-//                            File testExist = new File("C:/Users/Public/Arcade/Mame/roms/" + game.getTitle());
-//                            if(testExist.exists()){
-//                                game.addError("title", "Fehler!");
-//                                req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Ein Emulatorspiel mit diesem Titel existiert bereits,<br> Emulatorspiele müssen einen Eindeutigen Namen haben"));
-//                            }
-//                        }
-
+                       
                         // Wenn keine fehlerhaften Eingaben vorhanden, Spiel in die Datenbank einfügen
                         if(game.getErrors().isEmpty()){
                             if( model.updateDetails(game) ){                                

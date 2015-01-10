@@ -8,6 +8,9 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.game.GameUploadModel;
+import java.util.zip.ZipException;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
 
 public class GameUploadController extends HttpServlet
 {
@@ -30,26 +33,20 @@ public class GameUploadController extends HttpServlet
                             
                             
                             GameUploadModel model = new GameUploadModel();
-                            int uploadStatus = model.uploadGame(req, game);
-                            System.out.println("habe status: " + uploadStatus);
-                            switch(uploadStatus){
-                                case 1:
-                                    req.getSession().setAttribute("message", new Message("Spiel erfolgreich hochgeladen"));
-                                    res.sendRedirect("/UserModule/gameManager?component=gameupload");
-                                    break;
-                                case -1:
-                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 1GB"));
-                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
-                                    break;    
-                                case -2:
-                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload"));
-                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
-                                    break;
-                                case -3:
-                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim entzippen"));
-                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
-                                    break;   
+                            Message message = new Message();
+                            
+                            try{
+                                model.uploadGame(req, game);
+                                message.addMessage(Message.Type.SUCCESS, "Spiel erfolgreich hochgeladen");
+                                res.sendRedirect("/UserModule/gameManager?component=gameupload");
                             }
+                            catch (ZipException zip){ message.addMessage( Message.Type.ERROR, "Fehler beim entzippen!"); }
+                            catch (FileUploadBase.SizeLimitExceededException e ){ message.addMessage( Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 1GB" );}
+                            catch (FileUploadException ex){ message.addMessage( Message.Type.ERROR, "Fehler beim Upload" );} 
+                            catch (Exception ex) { message.addMessage( Message.Type.ERROR, "Unbekannter Fehler beim Upload" );}
+                            finally{
+                                req.getSession().setAttribute("message", message);
+                            }       
                         }else{
                            req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
                         }  

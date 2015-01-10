@@ -11,6 +11,8 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
 
 public class CoverUploadController extends HttpServlet
 {
@@ -26,31 +28,26 @@ public class CoverUploadController extends HttpServlet
                     
                     Game game = (Game) req.getSession().getAttribute("game");
                     
+                    Message message = new Message();
+                    
                     if( action.equals("update") ){
                         
                         String contentType = req.getContentType();
                         if ( (contentType.indexOf("multipart/form-data") >= 0) ) {
                              CoverUploadModel model = new CoverUploadModel();
                              
-                             int uploadStatus = model.uploadImage(req, game);
-                              switch(uploadStatus){
-                                case 1:
-                                    req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
-                                    res.sendRedirect("/UserModule/gameManager?component=coverupload");
-                                    break;
-                                case -1:
-                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"));
-                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
-                                    break;    
-                                default:
-                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload"));
-                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
-                                    break;
-                            }
-                             
-                             
-                             //req.getSession().setAttribute("message", new Message("Cover erfolgreich hochgeladen"));
-                             //res.sendRedirect("/UserModule/gameManager?component=coverupload");
+                             try{
+                                model.uploadImage(req, game);
+                                message.addMessage(Message.Type.SUCCESS, "Cover erfolgreich hochgeladen");
+                                System.out.println("ALLES GUT");
+                                res.sendRedirect("/UserModule/gameManager?component=coverupload");
+                             }
+                             catch (FileUploadBase.SizeLimitExceededException e ){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); }
+                             catch (FileUploadException e){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); } 
+                             catch (Exception e) { message.addMessage(Message.Type.ERROR, "Fehler beim upload "); }
+                             finally{
+                                 req.getSession().setAttribute("message",message);
+                             }
                         }else{
                             req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
                         } 

@@ -5,6 +5,7 @@ import app.helper.FileUpload;
 import app.helper.SQLHelper;
 import app.helper.UnZip;
 import java.io.File;
+import java.io.IOException;
 import java.util.zip.ZipException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -15,25 +16,25 @@ import org.apache.commons.io.FilenameUtils;
 
 public class GameUploadModel {
     
-     public int uploadGame(HttpServletRequest req, Game g){
+     public void uploadGame(HttpServletRequest req, Game g) throws ZipException, FileUploadBase.SizeLimitExceededException, FileUploadException, Exception {
         
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         FileUpload upload = new FileUpload(2* 500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
-        File file;
-         try {
-             file = upload.uploadFile(req);
-             //FileUtils.getMimeType()?
+         //try {
+             File file = upload.uploadFile(req);
              if(file != null){
                 FileUtils.cleanDirectory(new File("C:/Users/Public/Arcade/Games/" + g.getGameID() + "/game")); 
                 ExeChooserModel exe = new ExeChooserModel();
                  
-                if(g.getEmulationGame() == 1){
-                    
+                if(g.getEmulationGame() == 1){ 
                     String fileName = FilenameUtils.getBaseName(file.getAbsolutePath());
                     exe.updateExePath(fileName, g);
                     
                     File destCopy = new File(file.getParent() + "/game/");
-                    FileUtils.moveFileToDirectory(file, destCopy, true);
+                    //try{
+                        FileUtils.moveFileToDirectory(file, destCopy, true);
+                    //}
+                    //catch(IOException | NullPointerException n){ return -4; }
                 }
                 else{
                     UnZip.unzipit(file, file.getParent() + "/game");
@@ -42,7 +43,6 @@ public class GameUploadModel {
                     g.setInEditMode(false);
                     g.setLife(0); 
                     FileUtils.deleteQuietly(file);
-                      
                 }
                 
                 g.updateState("gameupload", "complete");
@@ -53,12 +53,9 @@ public class GameUploadModel {
                    boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
                 sql.closeCon();
             }   
-         } 
-         catch (ZipException zip){ return -3; }
-         catch (FileUploadBase.SizeLimitExceededException e ){ return -1; }
-         catch (FileUploadException ex){ return -2; } 
-         catch (Exception ex) { return -2; }
+         //} 
+        
          
-      return 1;  
+      //return 1;  
     } 
 }
