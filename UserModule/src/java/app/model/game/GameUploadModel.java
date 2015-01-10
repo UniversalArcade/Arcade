@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -45,6 +46,7 @@ public class GameUploadModel {
         File file;
          try {
              file = upload.uploadFile(req);
+             //FileUtils.getMimeType()?
              if(file != null){
                 if(g.getEmulationGame() == 1){
                     UnZip.unzipit(file, "C:/Users/Public/Arcade/Mame/roms");
@@ -52,8 +54,7 @@ public class GameUploadModel {
                 else{
                     UnZip.unzipit(file, file.getParent() + "/game");
                 }
-
-
+                
                 if( file.delete() ){
                     System.out.println("gelöscht");
                 }
@@ -70,9 +71,11 @@ public class GameUploadModel {
                 sql.closeCon();
             }   
          } 
-         catch ( FileUploadBase.SizeLimitExceededException e ){ return -1; }
+         catch (ZipException zip){ return -3; }
+         catch (FileUploadBase.SizeLimitExceededException e ){ return -1; }
          catch (FileUploadException ex){ return -2; } 
          catch (Exception ex) { return -2; }
+         
       return 1;  
     } 
 }

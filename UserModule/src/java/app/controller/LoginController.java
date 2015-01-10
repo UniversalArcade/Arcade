@@ -71,24 +71,26 @@ public class LoginController extends HttpServlet
                 res.setContentType("text/html");
                 RequestDispatcher view;
                 
-                
-                String action; 
-                
-                if((action = req.getParameter("action")) != null){
-                    if(action.equals("logout")){
-                        req.getSession().setAttribute("user", null);                        
-                    }
+                //redirect to gameList if user already logged in
+                if(req.getSession().getAttribute("user") != null){
+                    res.sendRedirect("/UserModule/GameListController");
                 }
-                  
-                view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");  
-                view.forward(req, res);
-               
-                      
+                else{
+                    String action; 
+
+                    if((action = req.getParameter("action")) != null){
+                        if(action.equals("logout")){
+                            req.getSession().setAttribute("user", null);                        
+                        }
+                    }
+
+                    view = req.getRequestDispatcher("/WEB-INF/Pages/login.jsp");
+
+                    view.forward(req, res); 
+                }
           }
           catch(Exception e){
             req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
           }
-            
-        
     }
 }

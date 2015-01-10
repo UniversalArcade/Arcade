@@ -27,6 +27,8 @@ public class GameUploadController extends HttpServlet
                    if( action.equals("update") ){
                         String contentType = req.getContentType();
                         if ((contentType.indexOf("multipart/form-data") >= 0)) {
+                            
+                            
                             GameUploadModel model = new GameUploadModel();
                             int uploadStatus = model.uploadGame(req, game);
                             System.out.println("habe status: " + uploadStatus);
@@ -39,10 +41,14 @@ public class GameUploadController extends HttpServlet
                                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 1GB"));
                                     req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
                                     break;    
-                                default:
+                                case -2:
                                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload"));
                                     req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
                                     break;
+                                case -3:
+                                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim entzippen"));
+                                    req.getRequestDispatcher("/WEB-INF/Pages/Game/gameUpload.jsp").forward(req, res);
+                                    break;   
                             }
                         }else{
                            req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));

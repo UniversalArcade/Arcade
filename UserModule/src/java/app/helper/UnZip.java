@@ -9,13 +9,14 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 
 public class UnZip {
     
-    public static void unzipit(File file, String outputDir){
+    public static void unzipit(File file, String outputDir) throws ZipException, IOException{
  
         try (ZipFile zipFile = new ZipFile(file)) {
             
@@ -37,8 +38,6 @@ public class UnZip {
                     IOUtils.closeQuietly(out);
                 }
             }
-        } catch (IOException ex) {
-            Logger.getLogger(UnZip.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 }
