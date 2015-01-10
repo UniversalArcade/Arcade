@@ -35,23 +35,23 @@ public class ExeChooserModel {
         }
         String state = g.stateToJSON();
         
-        SQLHelper sql = new SQLHelper();
+       
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
+         }
+         catch(SQLException e){}
         
-        sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-        sql.closeCon();
+          
         
-        return success;
+        
+        return true;
     }
     
     public Game getFileStructureAsJSON(Game g){
         JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\game");
         g.setFilePathJSON(jsonarr);
         
-        SQLHelper sql = new SQLHelper();
-        
-        try {
-            sql.openCon();
+       try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT executePath FROM games WHERE ID = "+ g.getGameID());
             if(rs.next())
             {
@@ -60,12 +60,9 @@ public class ExeChooserModel {
                 
                 g.setFullFilePath(obj.toJSONString());
             }
-            sql.closeCon();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ExeChooserModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+         }
+         catch(SQLException e){}
+
         return g;
     }
     

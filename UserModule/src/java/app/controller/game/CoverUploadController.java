@@ -11,6 +11,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
+import java.sql.SQLException;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -44,7 +45,9 @@ public class CoverUploadController extends HttpServlet
                              }
                              catch (FileUploadBase.SizeLimitExceededException e ){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); }
                              catch (FileUploadException e){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); } 
+                             catch (SQLException e) { message.addMessage(Message.Type.ERROR, "Datenbankfehler: " + e.getMessage()); }
                              catch (Exception e) { message.addMessage(Message.Type.ERROR, "Fehler beim upload "); }
+                             
                              finally{
                                  req.getSession().setAttribute("message",message);
                              }

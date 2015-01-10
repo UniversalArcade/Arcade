@@ -12,6 +12,7 @@ import app.model.GameManagerModel;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -48,10 +49,11 @@ public class CoverUploadModel {
         g.updateState("coverupload", "complete");
         String state = g.stateToJSON();
 
-        SQLHelper sql = new SQLHelper();    
-        sql.openCon();
-           boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
-        sql.closeCon();
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
+        }
+        //catch(SQLException e){}
+        //catch(Exception e){}
 
         fileStatus.delete();
     }

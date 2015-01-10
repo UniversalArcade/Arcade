@@ -6,6 +6,7 @@ import app.helper.SQLHelper;
 import app.helper.UnZip;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.zip.ZipException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -48,10 +49,12 @@ public class GameUploadModel {
                 g.updateState("gameupload", "complete");
                 String state = g.stateToJSON();
 
-                SQLHelper sql = new SQLHelper();    
-                sql.openCon();
-                   boolean success = sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
-                sql.closeCon();
+                try(SQLHelper sql = new SQLHelper()){
+                    sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
+                }
+                catch(SQLException e){}
+                  
+                
             }   
          //} 
         

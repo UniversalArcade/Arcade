@@ -17,20 +17,14 @@ import java.util.logging.Logger;
 
 
 public class RegistrationModel {
-    SQLHelper sql;
-    
-   
-    
-    public RegistrationModel(){
-        sql = new SQLHelper();   
-    }
+
     
     public Costumer newRegistration(Costumer c){
-        sql.openCon();
-           
+        
+        try(SQLHelper sql = new SQLHelper()){
             //Check if there's another user with that mail
             ResultSet rs = sql.execQuery("SELECT id FROM user WHERE mail='"+c.getMail()+"'");
-            try {
+            
                 if( !rs.next() ){
                     
             
@@ -56,35 +50,28 @@ public class RegistrationModel {
                 else{
                     c.addError("mail", "E-mail-Adresse existiert bereits");
                 }      
-            } catch (SQLException ex) {
-                Logger.getLogger(RegistrationModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        sql.closeCon();
-        
+         }
+         catch(SQLException e){}   
+
         return c;
     }
-    
-    /**
-     *
-     * @param URLString
-     */
+
     public void activateUser(String URLString){
-       sql.openCon(); 
-        ResultSet rs = sql.execQuery("SELECT id FROM user WHERE registerActivationString='"+URLString+"'");
-        try {
+       
+        try(SQLHelper sql = new SQLHelper()){
+            ResultSet rs = sql.execQuery("SELECT id FROM user WHERE registerActivationString='"+URLString+"'");
+        
             //System.out.println("registerActivationString: "+URLString);
             if( !rs.next() ){
                 System.out.println("registerActivationString not found");                            
             } 
             else {
                 sql.execNonQuery("UPDATE user SET isregistred ='1' WHERE registerActivationString='"+URLString+"' ");         
-            }      
-        } catch (SQLException ex) {
-            Logger.getLogger(RegistrationModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       sql.closeCon();
+            }    
+         }
+         catch(SQLException e){}
+         
+
     }
-    // einfügen updateUser () -> wenn daten geändert werden soll auch eine mail versand werden. Wenn mail geändert -> mail an alt und neu. Wenn PW geändert mail an aktuelle adresse.
-    // Email Versand auch hier einfügen . Funktonen werden für den Email Versand ausgelagert in MailVersand.java in Helper
     
 }
