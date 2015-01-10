@@ -55,13 +55,6 @@ public class FileUpload {
             while ( i.hasNext() ) {
                FileItem fi = (FileItem)i.next();
                
-               // application/zip
-               // application/octet-stream
-               // x-zip-compressed
-               
-               System.out.println("ContentType: " + fi.getContentType());
-               System.out.println("FileType: " + fi.getName());
-               
                if ( !fi.isFormField() ){
                     // Get the uploaded file parameters
                     String fieldName = fi.getFieldName();

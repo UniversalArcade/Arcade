@@ -5,42 +5,18 @@ import app.helper.FileUpload;
 import app.helper.SQLHelper;
 import app.helper.UnZip;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipException;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 
 public class GameUploadModel {
     
      public int uploadGame(HttpServletRequest req, Game g){
         
-         //if(g.isInEditMode()){
-            File delete = null;
-             
-            if(g.getEmulationGame() == 0){
-                delete = new File("C:/Users/Public/Arcade/Games/" + g.getGameID() + "/game");
-                ExeChooserModel exe = new ExeChooserModel();
-                exe.updateExePath("", g);
-                g.setInEditMode(false);
-                g.setLife(0);  
-            }
-            else{
-                delete = new File("C:/Users/Public/Arcade/Mame/roms/" + g.getTitle());
-            }
-             
-            try {
-                FileUtils.deleteDirectory(delete);
-                
-            } catch (IOException ex) {
-                Logger.getLogger(GameUploadModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-         //}
-         
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         FileUpload upload = new FileUpload(2* 500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
         File file;
@@ -48,20 +24,27 @@ public class GameUploadModel {
              file = upload.uploadFile(req);
              //FileUtils.getMimeType()?
              if(file != null){
+                FileUtils.cleanDirectory(new File("C:/Users/Public/Arcade/Games/" + g.getGameID() + "/game")); 
+                ExeChooserModel exe = new ExeChooserModel();
+                 
                 if(g.getEmulationGame() == 1){
-                    UnZip.unzipit(file, "C:/Users/Public/Arcade/Mame/roms");
+                    
+                    String fileName = FilenameUtils.getBaseName(file.getAbsolutePath());
+                    exe.updateExePath(fileName, g);
+                    
+                    File destCopy = new File(file.getParent() + "/game/");
+                    FileUtils.moveFileToDirectory(file, destCopy, true);
                 }
                 else{
                     UnZip.unzipit(file, file.getParent() + "/game");
+                    
+                    exe.updateExePath("", g);
+                    g.setInEditMode(false);
+                    g.setLife(0); 
+                    FileUtils.deleteQuietly(file);
+                      
                 }
                 
-                if( file.delete() ){
-                    System.out.println("gelöscht");
-                }
-                else{
-                    System.out.println("NICHT GELÖSCHT");
-                }
-
                 g.updateState("gameupload", "complete");
                 String state = g.stateToJSON();
 
