@@ -54,27 +54,15 @@ public class OutPipe extends Observable implements Runnable {
                 
                 if(sendText != null && sendText.length() > 0)
                 {
-                    RandomAccessFile pipe = new RandomAccessFile("\\\\.\\pipe\\javaOUTpipe", "rw");
-                //String echoText = packetID +":btSET:A,B,C,D," + "\n";
-               
-                // write to pipe
-                
-                    pipe.write ( sendText.getBytes() );
-                    // read response
-
-                    //String responseText = pipe.readLine();
-                    //processIncomingCommand(responseText);
-                    //System.out.println("Response: " + responseText );
-                    pipe.close();
-                    Thread.sleep(300);
+                    try (RandomAccessFile pipe = new RandomAccessFile("\\\\.\\pipe\\javaOUTpipe", "rw")) {
+                        pipe.write ( sendText.getBytes() );
+                    }
+                    finally{
+                        Thread.sleep(300);
+                    }
+                    
                 }
-                
-                
-               
-            } catch (Exception e) {
-            // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            } catch (Exception e) {}
         }
     }
 }

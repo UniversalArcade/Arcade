@@ -17,7 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-public class GameModel implements Observer{
+public class GameModel extends Observable implements Observer{
     
     private GameRunnable gt;
     private OverlayThread ot;
@@ -136,15 +136,13 @@ public class GameModel implements Observer{
                     if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
 
                 if(gt != null){
-                    System.out.println("NOT NULL!");
-
+                   
                     if(gt.getGameID() != id){
                         killGameThread();
                     }
 
-                    //if( ! (gt.isAlive()) ){
+                    
                     if( ! (executionThread == null || executionThread.isAlive()) ){
-                        System.out.println("ITS ALIVE!!");
                          gt = new GameRunnable( path.toString(), permanentStore );
                          gt.addObserver(this);
                          gt.setGameID(id);
@@ -160,9 +158,9 @@ public class GameModel implements Observer{
                      executionThread.start();
                 }
 
-                System.out.println("bLay" + buttonLayout);
+               
                 ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
-                System.out.println("bLay2" + buttons);
+              
 
                 StringBuilder buttonFunc = new StringBuilder();
                 StringBuilder controlmsg = new StringBuilder();
@@ -176,15 +174,10 @@ public class GameModel implements Observer{
 
                 String buttonConfig = controlmsg.toString();
                 buttonConfig = buttonConfig.replace("unused", "0");
-
-
-                System.out.println("btn3: " + buttonConfig);
+                
                 outPipe.setMessage(buttonConfig);
-
-
-
                 buttonFuncString = buttonFunc.toString();
-                System.out.println("ButtonFunc: " + buttonFunc.toString());
+                
 
                 }
             }  
@@ -250,6 +243,14 @@ public class GameModel implements Observer{
             case("gameStopped"):
                 killOverlay();
                 outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                break;
+            case("ConnLost"):
+                setChanged();
+                notifyObservers("ConnLost");
+                break;
+            case("ConnEstablished"):
+                setChanged();
+                notifyObservers("ConnEstablished");
                 break;
             default:
                 break;

@@ -68,6 +68,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         this.gameTitleGroup = gameTitleGroup;
         this.moveAniDuration = moveAniDuration;
         this.gameModel = new GameModel();
+        gameModel.addObserver(this);
         this.ids = new LinkedList();
         this.titles = new HashMap();
         this.setGameData();
@@ -86,8 +87,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("OBSERVED !");
-        
+ 
         String toDo = (String)arg;
         if(toDo != null && toDo.length() > 0){
             switch(toDo){
@@ -97,7 +97,23 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                         public void run() {
                             setGameData();
                             init();
-                            setTextInfo("Datenbank update","db.png");
+                            setTextInfo("Datenbank update","db.png", Color.YELLOW);
+                        }
+                    });
+                    break;
+                case "ConnLost":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Verbindung zum Controller verloren, bitte warten...","joystick_red.png", Color.RED);
+                        }
+                    });
+                    break;
+                case "ConnEstablished":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Verbindung zum Controller hergestellt","joystick_green.png", Color.GREEN);
                         }
                     });
                     break;
@@ -107,7 +123,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         }
     }
     
-    public void setTextInfo(String text, String icon){
+    public void setTextInfo(String text, String icon, Color color){
         textInfoGroup.getChildren().clear();
         
         if(icon != null && icon.length() > 0){
@@ -124,7 +140,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
             t.setX(64 + 20 + 20);
             t.setY(20 + 40);
             t.setText(text);
-            t.setFill(Color.YELLOW);
+            t.setFill(color);
             t.setFont(Font.font(null, FontWeight.BOLD, 20));
             //Bounds b = t.getBoundsInLocal();
             //System.out.println("bounds:" + b);
@@ -177,8 +193,10 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         
         moveImagesTransition = new ParallelTransition();
         //make shure there are enough images to display, if not: fill array with already existing ids
-        this.prepareStartUpImages();
-        this.prepareTransition();
+        
+       
+        
+        
          
         moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
             @Override
@@ -208,7 +226,6 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                             
                             //loadDetailsPage();
                             gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
-                            System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
                             //imageSlider.onKeyEnter();
                             enterPressed = true;
                         }
@@ -226,6 +243,15 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                 } 
              }
         });
+        
+         Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            prepareStartUpImages();
+                            prepareTransition();
+                            
+                        }
+                    });
         
     }
     
@@ -338,7 +364,6 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                 new KeyFrame(Duration.millis(moveAniDuration + 200), new KeyValue(gameTitleGroup.opacityProperty(), 1.0))
             );
             fade.play();
-            System.out.println("titles:" + titles);  
     }
     
     public Image loadImageFromID(int id){
@@ -477,8 +502,4 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         imageGroup.setTranslateX(0);
         
     }
-    
-    
-    
-    
 }

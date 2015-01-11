@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import helper.SQLHelper;
 
@@ -16,7 +14,6 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
     
     @Override
     public void run() {
-        System.out.println("IM THREAD");
         
         oldIDs = getAllGameIDs();
         newIDs = (LinkedList<Integer>)oldIDs.clone();

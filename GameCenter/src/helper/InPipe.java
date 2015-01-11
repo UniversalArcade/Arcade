@@ -17,8 +17,6 @@ import java.util.Random;
 public class InPipe extends Observable implements Runnable {
     
   
-    private final Object lock = new Object();
-    
     public InPipe(){
         Random rand = new Random();
     }
@@ -28,49 +26,24 @@ public class InPipe extends Observable implements Runnable {
         
         while(true)
         {
-            try 
-            {
-                RandomAccessFile pipe = new RandomAccessFile("\\\\.\\pipe\\javaINpipe", "r");
-                //String echoText = packetID +":btSET:A,B,C,D," + "\n";
-                //String sendText = getMessage();
-                // write to pipe
-                //pipe.write ( sendText.getBytes() );
-                // read response
+            try(RandomAccessFile pipe = new RandomAccessFile("\\\\.\\pipe\\javaINpipe", "r")){
+
+                String responseText = pipe.readLine();
                 
-                
-                
-                //System.out.println("INPIPE: warte auf Message");
-                //System.out.println("Pipe groesse:  " + pipe.length());
-                
-                    String responseText = pipe.readLine();
-                    //System.out.println("INPIPE: Habe Message: " + responseText);
-                    
-                    if(responseText.length() > 3)
-                    {
-                         //System.out.println("Verarbeite Message");
-                        processIncomingCommand(responseText);
-                       
-                    }
-                    
-               
-                
-                //if(pipe.length())
-                
-                
-                //processIncomingCommand(responseText);
-                //System.out.println("Response: " + responseText );
-                pipe.close();
+                if(responseText.length() > 3)
+                {
+                    processIncomingCommand(responseText);
+                }
+
                 Thread.sleep(100); // 300
-            } catch (Exception e) {
-            // TODO Auto-generated catch block
-                
-            }
+            } 
+            catch (Exception e) {}
         }
     }
     
     private void processIncomingCommand(String input)
     {
-        
+        System.out.println("INPUT: " + input);
         if(input != null && input.length() > 0)
         {
             String[] parts = input.split(":");
@@ -97,10 +70,24 @@ public class InPipe extends Observable implements Runnable {
                                     break;
                             }
                             break;
-                        default:
-                            System.out.println("666:");
-                            //error
+                        case("Conn"):
+                            switch(parts[1])
+                            {
+                                case("0"):
+                                    setChanged(); //Observable
+                                    notifyObservers("ConnLost"); 
+
+                                    break;
+                                 case("1"):
+                                     System.out.println("SENDE CONNEST");
+                                     
+                                     setChanged(); //Observable
+                                     notifyObservers("ConnEstablished");                                        
+                                     break;
+                            }
                             break;
+                            
+                            
                     }
                }
             }
