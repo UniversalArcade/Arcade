@@ -3,11 +3,7 @@
 #include <Constants.au3>
 #include <File.au3>
 
-MsgBox($MB_OK, "bla", "Ausgeführt")
-
 If $CmdLine[0] > 0 Then
-
-	MsgBox($MB_OK, "bla", "in if" & $CmdLine[0])
 
 	_FileWriteToLine("C:\Users\Public\Arcade\Mame\mame.ini",1, "rompath                   C:\Users\Public\Arcade\Games\" & $CmdLine[2] & "\game", 1)
 
