@@ -35,10 +35,9 @@ public class GameRunnable extends Observable implements Runnable{
      
      @Override
      public void run(){
-         
-        //processStarted = false; 
-        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:"+ getPermanentStore() +" /nosbiectrl /silent");
 
+        //ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:"+ getPermanentStore() +" /nosbiectrl /silent");
+        ProcessBuilder builder = new ProcessBuilder("starter.exe", executionPath, "/box:"+ getPermanentStore() +" /nosbiectrl /silent");
         try {
             p = builder.start(); // start the Game
             p.waitFor(); // hält den Thread solange an wie process läuft ---> liefert auch rückgabewert?! vielleicht exitValue unnötig
