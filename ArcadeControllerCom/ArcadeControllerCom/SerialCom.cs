@@ -15,6 +15,7 @@ namespace ArcadeControllerCom
         // member will be accessed by multiple threads.
         private volatile bool _shouldStop;
         private SerialPort currentPort;
+        
 
         public bool isPortOpen { get; set; }
 
@@ -45,19 +46,24 @@ namespace ArcadeControllerCom
 
         public void DoWork()
         {
-            if(findSerialPort())
+            findSerialPort();
+
+            while (!_shouldStop)
             {
-                while (!_shouldStop)
+                try
                 {
-                    Thread.Sleep(1);
+                    if (!currentPort.IsOpen)
+                    {
+                        findSerialPort();
+                    }
+
+                    Thread.Sleep(10);
                 }
-                currentPort.Close();
-                //SendMessageToForm("Thread Terminated");
+                catch (Exception) {
+                    Console.WriteLine("EX2");
+                }
             }
-            else 
-            {
-                SendMessageToForm("Error: konnte Controller nicht finden");
-            }
+            currentPort.Close();
         }
 
         private bool findSerialPort() 
@@ -89,6 +95,7 @@ namespace ArcadeControllerCom
                                     {
                                         initComPort();
                                         SendMessageToForm("Handshake mit Controller an Port " + port + " erfolgreich");
+                                        SendMessageToForm("Conn:1",true);
                                         return true;
                                     }
                                 }
@@ -101,14 +108,18 @@ namespace ArcadeControllerCom
                         }
                         catch (System.TimeoutException ex)
                         {
+                            currentPort.Close();
                             SendMessageToForm("Handshake mit Controller an Port " + port + " fehlgeschlagen: Zeitüberschreitung");
                             continue;
                         }
                     }
                     catch (System.UnauthorizedAccessException)
                     {
-
+                        currentPort.Close();
                         continue;
+                    }
+                    catch (System.IO.IOException) {
+                        currentPort.Close();
                     }
 
                 }
@@ -119,7 +130,9 @@ namespace ArcadeControllerCom
                 SendMessageToForm("Keine Serial Ports gefunden");
                 return false;
             }
-
+            SendMessageToForm("Error: konnte Controller nicht finden");
+            SendMessageToForm("Conn:0", true);
+            
             return false;
         }
 
@@ -131,11 +144,36 @@ namespace ArcadeControllerCom
 
         public void sendSerialMessage(string msg)
         {
-            if(currentPort.IsOpen && isPortOpen)
+            if (currentPort.IsOpen && isPortOpen)
             {
-                currentPort.WriteLine(msg);
-                SendMessageToForm("SENDING: " + msg);
+                bool success = false;
+                try
+                {
+                    currentPort.WriteLine(msg);
+                    SendMessageToForm("SENDING: " + msg);
+                    success = true;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally {
+                    if (!success) restartConnection();
+                }
             }
+            else
+            {
+                throw new Exception();
+            }   
+        }
+
+        private void restartConnection()
+        {
+            try
+            {
+                currentPort.Close();
+            }
+            catch (Exception) {}            
         }
 
         void currentPort_DataReceived(object sender, SerialDataReceivedEventArgs e)

@@ -49,32 +49,35 @@ namespace ArcadeControllerCom
             {
                 Thread.Sleep(10);
 
-                NamedPipeServerStream pipeServer =
+                NamedPipeServerStream outPipe =
                 new NamedPipeServerStream("javaINpipe", PipeDirection.Out, 4);
 
-                pipeServer.WaitForConnection();
+                outPipe.WaitForConnection();
                 try
                 {
-                    StreamWriter sw = new StreamWriter(pipeServer);
+                    StreamWriter sw = new StreamWriter(outPipe);
                     sw.AutoFlush = true;
 
                     string message = getMessageToSend();
-                    if(!string.IsNullOrEmpty(message))
+                    if (!string.IsNullOrEmpty(message))
                     {
-                        sw.WriteLine(message);  
+                        sw.WriteLine(message);
                     }
-                    else 
+                    else
                     {
                         sw.WriteLine("");
                     }
 
-                    pipeServer.Disconnect();
+                    outPipe.Disconnect();
                 }
                 catch (IOException e)
                 {
 
                 }
-                pipeServer.Close();
+                finally {
+                    outPipe.Close();
+                }
+                
             }
 
         }
