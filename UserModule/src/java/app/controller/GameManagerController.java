@@ -14,6 +14,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import app.model.GameManagerModel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,68 +42,88 @@ public class GameManagerController extends HttpServlet
         if(action != null){
 
             User user = (User)req.getSession().getAttribute("user");
-            if(action.equals("new")){
+            switch (action) {
+                case "new":
+                    
+                    boolean success = false;
+                    try{
+                        GameManagerModel model = new GameManagerModel();
+                        Game game = model.insertNewGame(user.getUserID());
+                        req.getSession().setAttribute("game", game);
+                        success = true;
+                    }
+                    catch(SQLException e){
+                        req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                    }
+                    finally{
+                        if(success) res.sendRedirect("/UserModule/" + components.get(0));
+                        else res.sendRedirect("/UserModule/GameListController");
+                    }   
+                    break;
+                    
+                case "edit":
+                    
+                    String redirect = "/UserModule/GameListController";
+                    try{
+                        int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
+                        GameManagerModel model = new GameManagerModel();
+                        Game game = model.getGameByID(gameID, user.getUserID());
+                        
+                        req.getSession().setAttribute("game", game);
 
-
-                GameManagerModel model = new GameManagerModel();
-                Game game = model.insertNewGame(user.getUserID());
-                req.getSession().setAttribute("game", game);
-
-                res.sendRedirect("/UserModule/" + components.get(0));
-            }
-
-            else if(action.equals("edit")){
-               int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
-               GameManagerModel model = new GameManagerModel();
-               Game game = model.getGameByID(gameID, user.getUserID());
-               if(game != null){
-                   req.getSession().setAttribute("game", game);
-
-                   if(game.isInEditMode()){
-                       res.sendRedirect("/UserModule/statistics");  
-                   }
-                   else{
-                       HashMap gameState = game.getStates();
-                       for(String item : gameComponents.getComponents().keySet()){
-                           if(gameState.get(item).equals("incomplete")){
-                               res.sendRedirect("/UserModule/" + item);  
-                           }
-                       }
-                       res.sendRedirect("/UserModule/details");
-                   }
-               }
+                        if(game.isInEditMode()){
+                            redirect = "/UserModule/statistics";
+                        }
+                        else{
+                            HashMap gameState = game.getStates();
+                            for(String item : gameComponents.getComponents().keySet()){
+                                if(gameState.get(item).equals("incomplete")){
+                                    redirect = "/UserModule/" + item;
+                                }
+                            }
+                            redirect = "/UserModule/details";
+                        }
+                    }
+                    catch(SQLException e){
+                        req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                    }
+                    catch(NumberFormatException e){
+                        req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler bei Typumwandlung" ));
+                    }
+                    finally{
+                        res.sendRedirect(redirect);
+                    }
+                    break;   
             }
         }
 
-        System.out.println("component: " + caller);
-        if(components != null){
-            if(components.contains( caller )){
+        if(components.contains( caller )){
 
-                Game game = (Game) req.getSession().getAttribute("game");
+            Game game = (Game) req.getSession().getAttribute("game");
 
-                int index;
-                if(game.isInEditMode()){
-                    index = components.indexOf( caller );
-                }
-                else{
-                    index = components.indexOf( caller ) + 1;
-                }
+            int index;
+            if(game.isInEditMode()){
+                index = components.indexOf( caller );
+            }
+            else{
+                index = components.indexOf( caller ) + 1;
+            }
 
-
-
-                if(index < components.size()){
-                    String next = components.get( index );
-                    res.sendRedirect("/UserModule/" + next);
-                }
-                else{
-                    //Game game = (Game)req.getSession().getAttribute("game");
-
+            if(index < components.size()){
+                String next = components.get( index );
+                res.sendRedirect("/UserModule/" + next);
+            }
+            else{
+                try{
                     GameManagerModel model = new GameManagerModel();
                     model.toggleLive(1, game);
                     model.toggleEditMode(1, game);
-
                     req.getSession().setAttribute("game", null);
-                    //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);
+                }
+                catch(SQLException e){
+                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                }
+                finally{
                     res.sendRedirect("/UserModule/GameListController");
                 }
             }

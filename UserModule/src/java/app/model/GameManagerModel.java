@@ -23,7 +23,7 @@ public class GameManagerModel {
         return path; 
     }
     
-    public Game insertNewGame(int userID){
+    public Game insertNewGame(int userID) throws SQLException{
         
         Game game = new Game();
         GameComponents gc = new GameComponents();
@@ -48,29 +48,25 @@ public class GameManagerModel {
             mkDir(baseDir + "/assets");
             mkDir(baseDir + "/tmp");
         }
-        catch(SQLException e){}
-
         return game;
     }
     
-    public boolean toggleLive(int toggle, Game g){
+    public boolean toggleLive(int toggle, Game g) throws SQLException{
        
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET live = '"+toggle+"' WHERE ID = "+ g.getGameID());
         }
-        catch(SQLException e){}
-        
+
         return true;
     }
     
     
-    public boolean toggleEditMode(int toggle, Game g){
+    public boolean toggleEditMode(int toggle, Game g) throws SQLException{
         
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET editMode = '"+toggle+"' WHERE ID = "+ g.getGameID());
         }
-        catch(SQLException e){}
-        
+
         return true;
     }        
             
@@ -79,41 +75,32 @@ public class GameManagerModel {
     
     }
     
-    public Game getGameByID(int gameID, int userID) {
+    public Game getGameByID(int gameID, int userID) throws SQLException, IllegalArgumentException{
         Game g = new Game();
         
         try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits,gameDuration,gameStarts,permanentStore,isEmulatorGame,editMode,editState FROM games WHERE ID='"+gameID+"' AND userID ='"+userID+"'");
-            
-                if(rs.next()){
-                    g.setGameID(gameID);
-                    g.setTitle(rs.getString("title"));
-                    g.setDescription(rs.getString("description"));
-                    g.JSONToButtonLayout(rs.getString("buttonConfig"));
-                    g.setCredits(rs.getString("credits"));
-                    g.setGameDuration(rs.getInt("gameDuration"));
-                    g.setGameStarts(rs.getInt("gameStarts"));
-                    g.setPermanentStore(rs.getInt("permanentStore"));
-                    g.setEmulationGame(rs.getInt("isEmulatorGame"));
-                    g.JSONToState(rs.getString("editState"));
-                    
-                    int editMode = rs.getInt("editMode");
-                    if(editMode == 1){
-                        g.setInEditMode(true);
-                    }
-                    else{
-                        g.setInEditMode(false);
-                    }
-                    
-                }
-                else{
-                    g = null;
-                }
-         }
-         catch(SQLException e){}
+            if(!rs.next()) throw new IllegalArgumentException();
 
+            g.setGameID(gameID);
+            g.setTitle(rs.getString("title"));
+            g.setDescription(rs.getString("description"));
+            g.JSONToButtonLayout(rs.getString("buttonConfig"));
+            g.setCredits(rs.getString("credits"));
+            g.setGameDuration(rs.getInt("gameDuration"));
+            g.setGameStarts(rs.getInt("gameStarts"));
+            g.setPermanentStore(rs.getInt("permanentStore"));
+            g.setEmulationGame(rs.getInt("isEmulatorGame"));
+            g.JSONToState(rs.getString("editState"));
+
+            int editMode = rs.getInt("editMode");
+            if(editMode == 1){
+                g.setInEditMode(true);
+            }
+            else{
+                g.setInEditMode(false);
+            }
+        }
         return g;
-        
     }
-    
 }
