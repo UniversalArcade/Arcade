@@ -6,6 +6,7 @@ int buttonFunctions[BUTTON_SIZE];
 
 boolean enterPressed = false;
 boolean handshaked = false;
+boolean emulatorGame = false;
 int enterCount = 0;
 
 int buttonPins[BUTTON_SIZE] = {
@@ -71,7 +72,11 @@ void loop() {
         }
         else
         {
-          Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode  
+          Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode
+          if(emulatorGame){
+            Keyboard.press(KEY_1);
+            Keyboard.press(KEY_5);
+          }
         }
       }
       else if (buttons[i].risingEdge()) // when button is released 
@@ -86,7 +91,11 @@ void loop() {
         }
         else
         {
-          Keyboard.release(buttonFunctions[i]);   // release corresponding keycode  
+          Keyboard.release(buttonFunctions[i]);   // release corresponding keycode
+          if(emulatorGame){
+            Keyboard.release(KEY_1);
+            Keyboard.release(KEY_5);
+          }  
         }
       }
     }
@@ -97,7 +106,8 @@ void loop() {
       if(enterCount == 30000){
         Serial.println("spFunc:1");
         releaseAllKeys();
-        initStartUpButtonConfig();        
+        initStartUpButtonConfig();
+        emulatorGame = false;        
         enterPressed = false;
         enterCount = 0;
       }
@@ -121,6 +131,12 @@ void serialDelegate(){
     }
     else if(firstChar == 'b'){
       releaseAllKeys();
+      emulatorGame = false;
+      serialButtonInput();
+    }
+    else if(firstChar == 'e'){
+      releaseAllKeys();
+      emulatorGame = true;
       serialButtonInput();
     }
   }
