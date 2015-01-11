@@ -2,7 +2,7 @@
 
 const int BUTTON_SIZE = 11; // Amount of buttons
 const int DEBOUNCE_TIME = 10; // Amount of time the buttons should take to debounce
-
+int buttonFunctions[BUTTON_SIZE];
 
 boolean enterPressed = false;
 boolean handshaked = false;
@@ -23,24 +23,12 @@ int buttonPins[BUTTON_SIZE] = {
 };
 
 
-// TODO M2 : Build dynamic allocation via serial input
-int buttonFunctions[BUTTON_SIZE] = {
-  KEY_0, // Button 5
-  KEY_0, // Button 3
-  KEY_D, // Button 1
-  KEY_A, // LEFT
-  KEY_ENTER, // Right
-  KEY_ENTER, // DOWN
-  KEY_ENTER, // UP
-  KEY_ENTER, // Button 0
-  KEY_ENTER, // Button 2
-  KEY_ENTER, // Button 4
-  KEY_ESC, // Button Menu
-};
+
+
 
 
 // Debounce all the pins
-// TODO M3: build a factory for this
+
 Bounce buttons[BUTTON_SIZE] = {
   Bounce(buttonPins[0], DEBOUNCE_TIME),
   Bounce(buttonPins[1], DEBOUNCE_TIME),
@@ -56,8 +44,23 @@ Bounce buttons[BUTTON_SIZE] = {
 };
 
 void setup() {
+  initStartUpButtonConfig(); 
   initPullups();
   Serial.begin(115200);
+}
+
+void initStartUpButtonConfig(){
+  buttonFunctions[0] = KEY_0; // Button 5
+  buttonFunctions[1] = KEY_0; // Button 3
+  buttonFunctions[2] = KEY_D; // Button 1
+  buttonFunctions[3] = KEY_A; // LEFT
+  buttonFunctions[4] = KEY_ENTER; // Right
+  buttonFunctions[5] = KEY_ENTER; // DOWN
+  buttonFunctions[6] = KEY_ENTER; // UP
+  buttonFunctions[7] = KEY_ENTER; // Button 0
+  buttonFunctions[8] = KEY_ENTER; // Button 2
+  buttonFunctions[9] = KEY_ENTER; // Button 4
+  buttonFunctions[10] = KEY_ESC; // Button Menu  
 }
 
 void loop() {
@@ -98,11 +101,14 @@ void loop() {
   
       if(enterCount == 30000){
         Serial.println("spFunc:1");
+        initStartUpButtonConfig();        
         enterPressed = false;
         enterCount = 0;
       }
     }
  }
+
+
 
 
 void serialDelegate(){
