@@ -11,9 +11,7 @@ public class StatisticsController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-            
             req.getRequestDispatcher("/WEB-INF/Pages/Game/statistics.jsp").forward(req, res);
-
     }
     
     @Override
