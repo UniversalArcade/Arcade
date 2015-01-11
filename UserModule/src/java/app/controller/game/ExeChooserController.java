@@ -54,6 +54,7 @@ public class ExeChooserController extends HttpServlet
                         try{
                             ExeChooserModel model = new ExeChooserModel();
                             game = model.getFileStructureAsJSON(game);
+                            //System.out.println("JSON:" + game.getFilePathJSON());
                         }
                         catch(SQLException e){
                             req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));

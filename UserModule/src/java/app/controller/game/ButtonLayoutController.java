@@ -17,17 +17,13 @@ public class ButtonLayoutController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	 
             res.setContentType("text/html");
 
             ButtonLayout buttonLayout = new ButtonLayout();
             req.setAttribute("buttons", new ButtonLayout());
-
-            String action = req.getParameter("action");
-            System.out.println("action: " + action);
-
+           
+            String action = req.getParameter("action");  
             if( action != null && action.equals("update") ){
-
                 Game game = (Game) req.getSession().getAttribute("game");
 
                 int buttonAmount = 10; 
@@ -36,6 +32,7 @@ public class ButtonLayoutController extends HttpServlet
 
                 for(int i = 1; i <= buttonAmount; i++){
                     String button = req.getParameter("button" + i);
+                   
                     if (button == null){
                         valid = false;
                         break;
@@ -50,9 +47,8 @@ public class ButtonLayoutController extends HttpServlet
                         buttonLayout.addButtonForIllegalTest(button); 
                     }
                 }
-
+              
                 if(valid){
-                    
                     boolean success = false;
                     try{
                         buttonLayout.testForIllegalCombinations();
@@ -71,7 +67,6 @@ public class ButtonLayoutController extends HttpServlet
                         if(success) res.sendRedirect("/UserModule/gameManager?component=buttonlayout");
                         else req.getRequestDispatcher("/WEB-INF/Pages/Game/buttonLayout.jsp").forward(req, res);
                     }
-                    
                 }
                 else{
                     req.getRequestDispatcher("/WEB-INF/Pages/Game/buttonLayout.jsp").forward(req, res);
@@ -80,6 +75,7 @@ public class ButtonLayoutController extends HttpServlet
             else{
                 req.getRequestDispatcher("/WEB-INF/Pages/Game/buttonLayout.jsp").forward(req, res);
             }        
+           
     }
     
     @Override

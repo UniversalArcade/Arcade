@@ -23,22 +23,35 @@
                     <tr>
                         <td width="15%"><img src="img/ButtonSelector/ButtonSelector${i}.jpg" /></td>
                       <td width="85%"> 
+                          
+                         
+                            <select name="${game.emulationGame > 0 ? "" : "button"}${game.emulationGame > 0 ? "" : i}" size="1"  ${game.emulationGame > 0 ? " disabled" : ""}>                
+                              <option value="unused"> Unbenutzt </option>
+                              <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
+                                  <optgroup label="${device}">
+                                      <c:forEach var="item" items="${buttons.buttons[device]}" varStatus="bb">
+                                          <option value="${item}" ${item == ((game.buttonLayout.get(i-1)).keySet().toArray())[0] ? 'selected' : ''}> 
+                                              <c:out value="${item}" />  
+                                          </option>
+                                      </c:forEach>
+                                  </optgroup>
+                              </c:forEach>
+                          </select>
+                          
+                              
+                            <c:if test="${game.emulationGame > 0 ? true : false}" >
+                              <input type="hidden" name="button${i}" value="${((game.buttonLayout.get(i-1)).keySet().toArray())[0]}" />    
+                            </c:if> 
+                              
+                          <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie hier die Tastenbelegung aus, die ausgeführt werden soll.',20,-30);"
+                          accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a> 
+                          <br>
+                       
                         
-                        <select name="button${i}" size="1">                
-                            <option value="unused"> Unbenutzt </option>
-                            <c:forEach var="device" items="${buttons.devices}" varStatus="bb">
-                                <optgroup label="${device}">
-                                    <c:forEach var="item" items="${buttons.buttons[device]}" varStatus="bb">
-                                        <option value="${item}" ${item == ((game.buttonLayout.get(i-1)).keySet().toArray())[0] ? 'selected' : ''}> 
-                                            <c:out value="${item}" />  
-                                        </option>
-                                    </c:forEach>
-                                </optgroup>
-                            </c:forEach>
-                        </select>
-                        <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie hier die Tastenbelegung aus, die ausgeführt werden soll.',20,-30);"
-                        accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
-                        <br><input type="text" name="function${i}" value="${ ((game.buttonLayout.get(i-1)).values().toArray())[0]}" size="12"/>    
+                       
+                        
+                        
+                        <input type="text" name="function${i}" value="${ ((game.buttonLayout.get(i-1)).values().toArray())[0]}" size="12"/>    
                         <a onmouseover="InfoBoxAnzeigen(event,'Tragen Sie hier den Namen der Funktion ein. Soll zum Bsp. mit Joystick UP die Aktion springen ausgeführt werden ,tragen Sie hier springen ein. Die Bezeichnung erscheint später in der Spieledetailansicht.',20,-30);"
                    accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                       </td>

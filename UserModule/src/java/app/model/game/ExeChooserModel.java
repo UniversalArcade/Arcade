@@ -11,10 +11,12 @@ import app.helper.SQLHelper;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONArray;
 import org.json.*;
 import org.json.simple.JSONObject;
@@ -24,6 +26,16 @@ import org.json.simple.JSONObject;
  * @author Martin
  */
 public class ExeChooserModel {
+    
+    private ArrayList<String> listableFileTypes;
+    
+    public ExeChooserModel(){
+        listableFileTypes = new ArrayList();
+        listableFileTypes.add("exe");
+        listableFileTypes.add("com");
+        listableFileTypes.add("bat");
+        listableFileTypes.add("hta");
+    }
     
     public boolean updateExePath(String path, Game g) throws SQLException{
         
@@ -66,12 +78,15 @@ public class ExeChooserModel {
         // get all the files from a directory
         File[] fList = directory.listFiles();
         
+        
         for (File file : fList) {
             if (file.isFile()) {
-                Map f = new LinkedHashMap();
-                f.put("type", "file");
-                f.put("name", file.getName());
-                files.add(f);
+                if(listableFileTypes.contains( FilenameUtils.getExtension(file.getName()).toLowerCase())){
+                    Map f = new LinkedHashMap();
+                    f.put("type", "file");
+                    f.put("name", file.getName());
+                    files.add(f);
+                }
             } 
             
             else if (file.isDirectory()) {
