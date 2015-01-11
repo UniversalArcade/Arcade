@@ -17,7 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 
 public class GameUploadModel {
     
-     public void uploadGame(HttpServletRequest req, Game g) throws ZipException, FileUploadBase.SizeLimitExceededException, FileUploadException, Exception {
+     public void uploadGame(HttpServletRequest req, Game g) throws ZipException, FileUploadBase.SizeLimitExceededException, FileUploadException, SQLException, Exception {
         
         //int maxFileSize, int maxMemSize, String saveFolder, String tempFolder
         FileUpload upload = new FileUpload(2* 500000 * 1024, 5000 * 1024, "C:/Users/Public/Arcade/Games/" + g.getGameID(), "C:/Users/Public/Arcade/Games/" + g.getGameID() + "/tmp/");
@@ -52,9 +52,6 @@ public class GameUploadModel {
                 try(SQLHelper sql = new SQLHelper()){
                     sql.execNonQuery("UPDATE `games` SET editState='"+state+"', editMode='"+(g.isInEditMode() ? 1:0)+"', live='"+g.getLife()+"' WHERE ID = "+ g.getGameID());  
                 }
-                catch(SQLException e){}
-                  
-                
             }   
          //} 
         

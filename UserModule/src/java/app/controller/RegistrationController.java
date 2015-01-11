@@ -12,11 +12,7 @@ import app.helper.SecurityHelper;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-//import Helper.SecurityHelper;
-import java.security.MessageDigest;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.MessagingException;
 
 public class RegistrationController extends HttpServlet
@@ -76,26 +72,23 @@ public class RegistrationController extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
                 
-        String url = req.getParameter("unique");       
-        if( url == null){
-            req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);
-        }                
-        else
-        {
-            RegistrationModel model = new RegistrationModel();
+            boolean success = false;
             try{
-                model.activateUser(url);
+                RegistrationModel model = new RegistrationModel();
+                model.activateUser( req.getParameter("unique") );
                 req.getSession().setAttribute("message", new Message("Ihre Email-Adresse wurde bestätigt. Sie können sich nun einloggen!"));
-                res.sendRedirect("/UserModule/login");  
+                success = true;
             }
             catch(IllegalArgumentException e){
                 req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "fehlerhafte ID"));
-                req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);
             }
             catch(SQLException e){
                 req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler: " + e.getMessage()));
-                req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);
             }
-        }           
+            catch(NullPointerException e){ }
+            finally{
+                if(success) res.sendRedirect("/UserModule/login");  
+                else req.getRequestDispatcher("/WEB-INF/Pages/register.jsp").forward(req, res);
+            } 
     }
 }

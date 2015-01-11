@@ -23,96 +23,90 @@ public class GameManagerController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  try{
-                GameComponents gameComponents = new GameComponents();
-                
-              
-                List<String> components = new ArrayList();
-                components.add("details");
-                components.add("coverupload");
-                components.add("buttonlayout");
-                components.add("gameupload");
-                components.add("exechooser");
-                
-                String caller = req.getParameter("component");
-                String action = req.getParameter("action");
-                
-                
-                if(action != null){
-                    
-                    User user = (User)req.getSession().getAttribute("user");
-                    if(action.equals("new")){
-                        
-                        
-                        GameManagerModel model = new GameManagerModel();
-                        Game game = model.insertNewGame(user.getUserID());
-                        req.getSession().setAttribute("game", game);
-                        
-                        res.sendRedirect("/UserModule/" + components.get(0));
-                    }
-                    
-                    else if(action.equals("edit")){
-                       int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
-                       GameManagerModel model = new GameManagerModel();
-                       Game game = model.getGameByID(gameID, user.getUserID());
-                       if(game != null){
-                           req.getSession().setAttribute("game", game);
-                           
-                           if(game.isInEditMode()){
-                               res.sendRedirect("/UserModule/statistics");  
-                           }
-                           else{
-                               HashMap gameState = game.getStates();
-                               for(String item : gameComponents.getComponents().keySet()){
-                                   if(gameState.get(item).equals("incomplete")){
-                                       res.sendRedirect("/UserModule/" + item);  
-                                   }
-                               }
-                               res.sendRedirect("/UserModule/details");
+    	  
+        GameComponents gameComponents = new GameComponents();
+
+
+        List<String> components = new ArrayList();
+        components.add("details");
+        components.add("coverupload");
+        components.add("buttonlayout");
+        components.add("gameupload");
+        components.add("exechooser");
+
+        String caller = req.getParameter("component");
+        String action = req.getParameter("action");
+
+
+        if(action != null){
+
+            User user = (User)req.getSession().getAttribute("user");
+            if(action.equals("new")){
+
+
+                GameManagerModel model = new GameManagerModel();
+                Game game = model.insertNewGame(user.getUserID());
+                req.getSession().setAttribute("game", game);
+
+                res.sendRedirect("/UserModule/" + components.get(0));
+            }
+
+            else if(action.equals("edit")){
+               int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
+               GameManagerModel model = new GameManagerModel();
+               Game game = model.getGameByID(gameID, user.getUserID());
+               if(game != null){
+                   req.getSession().setAttribute("game", game);
+
+                   if(game.isInEditMode()){
+                       res.sendRedirect("/UserModule/statistics");  
+                   }
+                   else{
+                       HashMap gameState = game.getStates();
+                       for(String item : gameComponents.getComponents().keySet()){
+                           if(gameState.get(item).equals("incomplete")){
+                               res.sendRedirect("/UserModule/" + item);  
                            }
                        }
-                    }
+                       res.sendRedirect("/UserModule/details");
+                   }
+               }
+            }
+        }
+
+        System.out.println("component: " + caller);
+        if(components != null){
+            if(components.contains( caller )){
+
+                Game game = (Game) req.getSession().getAttribute("game");
+
+                int index;
+                if(game.isInEditMode()){
+                    index = components.indexOf( caller );
                 }
-                
-                System.out.println("component: " + caller);
-                if(components != null){
-                    if(components.contains( caller )){
-                        
-                        Game game = (Game) req.getSession().getAttribute("game");
-                        
-                        int index;
-                        if(game.isInEditMode()){
-                            index = components.indexOf( caller );
-                        }
-                        else{
-                            index = components.indexOf( caller ) + 1;
-                        }
-                        
-                        
-                        
-                        if(index < components.size()){
-                            String next = components.get( index );
-                            res.sendRedirect("/UserModule/" + next);
-                        }
-                        else{
-                            //Game game = (Game)req.getSession().getAttribute("game");
-                            
-                            GameManagerModel model = new GameManagerModel();
-                            model.toggleLive(1, game);
-                            model.toggleEditMode(1, game);
-                            
-                            req.getSession().setAttribute("game", null);
-                            //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);
-                            res.sendRedirect("/UserModule/GameListController");
-                        }
-                    }
+                else{
+                    index = components.indexOf( caller ) + 1;
                 }
-                
-                
-                
-  
-          }
-          catch(Exception e){}  
+
+
+
+                if(index < components.size()){
+                    String next = components.get( index );
+                    res.sendRedirect("/UserModule/" + next);
+                }
+                else{
+                    //Game game = (Game)req.getSession().getAttribute("game");
+
+                    GameManagerModel model = new GameManagerModel();
+                    model.toggleLive(1, game);
+                    model.toggleEditMode(1, game);
+
+                    req.getSession().setAttribute("game", null);
+                    //req.getRequestDispatcher("/WEB-INF/Pages/newGame.jsp").forward(req, res);
+                    res.sendRedirect("/UserModule/GameListController");
+                }
+            }
+        }
     }
     
     @Override

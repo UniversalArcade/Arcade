@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ButtonLayoutModel {
     
-     public boolean updateButtonLayout(Game g){
+     public boolean updateButtonLayout(Game g) throws SQLException{
         
         g.updateState("buttonlayout", "complete");
         String state = g.stateToJSON();
@@ -15,12 +15,8 @@ public class ButtonLayoutModel {
         
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttonLayout+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-         }
-         catch(SQLException e){}
-        
-          
-        
-        
+        }
+
         return true;
     }
     

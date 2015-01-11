@@ -20,19 +20,14 @@ public class DetailsModel {
    
     
     
-    public boolean updateDetails(Game g){
+    public void updateDetails(Game g) throws SQLException{
         
         g.updateState("details", "complete");
         String state = g.stateToJSON();
         
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET title = '"+g.getTitle()+"', description = '"+g.getDescription()+"', credits = '"+g.getCredits()+"', permanentStore = '"+g.getPermanentStore()+"', isEmulatorGame='"+g.getEmulationGame()+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-         }
-         catch(SQLException e){}
-        
-        
-          
-        return true;
+        }
     }
     
 }

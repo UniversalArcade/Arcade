@@ -25,7 +25,7 @@ import org.json.simple.JSONObject;
  */
 public class ExeChooserModel {
     
-    public boolean updateExePath(String path, Game g){
+    public boolean updateExePath(String path, Game g) throws SQLException{
         
         if(path != null && path != ""){
             g.updateState("exechooser", "complete");
@@ -34,24 +34,19 @@ public class ExeChooserModel {
             g.updateState("exechooser", "incomplete");
         }
         String state = g.stateToJSON();
-        
-       
+
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-         }
-         catch(SQLException e){}
-        
-          
-        
+        }
         
         return true;
     }
     
-    public Game getFileStructureAsJSON(Game g){
+    public Game getFileStructureAsJSON(Game g) throws SQLException{
         JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\game");
         g.setFilePathJSON(jsonarr);
         
-       try(SQLHelper sql = new SQLHelper()){
+        try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT executePath FROM games WHERE ID = "+ g.getGameID());
             if(rs.next())
             {
@@ -60,12 +55,9 @@ public class ExeChooserModel {
                 
                 g.setFullFilePath(obj.toJSONString());
             }
-         }
-         catch(SQLException e){}
-
+        }
         return g;
     }
-    
     
     public JSONArray listfJSON(String directoryName) {
         JSONArray files = new JSONArray();
@@ -73,6 +65,7 @@ public class ExeChooserModel {
 
         // get all the files from a directory
         File[] fList = directory.listFiles();
+        
         for (File file : fList) {
             if (file.isFile()) {
                 Map f = new LinkedHashMap();
@@ -86,7 +79,6 @@ public class ExeChooserModel {
                 folder.put("type", "folder");
                 folder.put("name", file.getName());
                 folder.put("child", listfJSON(file.getAbsolutePath()));
-                //folder.put(file.getName(), listfJSON(file.getAbsolutePath()));
                 files.add(folder);
             }
         }

@@ -4,20 +4,16 @@ package app.model;
 
 import app.beans.Game;
 import app.beans.GameComponents;
-import app.beans.User;
 import app.helper.SQLHelper;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 
 public class GameManagerModel {
     
-    
-
     public String mkDir(String path){
         File folder = new File(path);
     	if(!folder.exists()){

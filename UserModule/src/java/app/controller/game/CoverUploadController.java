@@ -20,45 +20,50 @@ public class CoverUploadController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  try{
-                res.setContentType("text/html");
-                String action = req.getParameter("action");
-                System.out.println("action: " + action);
-                
-                if( action != null ){
+            res.setContentType("text/html");
+            String action = req.getParameter("action");
+            System.out.println("action: " + action);
+
+            if( action != null && action.equals("update") ){
+
+                Game game = (Game) req.getSession().getAttribute("game");
+
+                Message message = new Message();
+
+                String contentType = req.getContentType();
+                if ( (contentType.contains("multipart/form-data")) ) {
                     
-                    Game game = (Game) req.getSession().getAttribute("game");
-                    
-                    Message message = new Message();
-                    
-                    if( action.equals("update") ){
-                        
-                        String contentType = req.getContentType();
-                        if ( (contentType.indexOf("multipart/form-data") >= 0) ) {
-                             CoverUploadModel model = new CoverUploadModel();
-                             
-                             try{
-                                model.uploadImage(req, game);
-                                message.addMessage(Message.Type.SUCCESS, "Cover erfolgreich hochgeladen");
-                                System.out.println("ALLES GUT");
-                                res.sendRedirect("/UserModule/gameManager?component=coverupload");
-                             }
-                             catch (FileUploadBase.SizeLimitExceededException e ){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); }
-                             catch (FileUploadException e){ message.addMessage(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"); } 
-                             catch (SQLException e) { message.addMessage(Message.Type.ERROR, "Datenbankfehler: " + e.getMessage()); }
-                             catch (Exception e) { message.addMessage(Message.Type.ERROR, "Fehler beim upload "); }
-                             
-                             finally{
-                                 req.getSession().setAttribute("message",message);
-                             }
-                        }else{
-                            req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
-                        } 
-                    }
-                }
+                     boolean success = false;
+                     try{
+                        CoverUploadModel model = new CoverUploadModel();
+                        model.uploadImage(req, game);
+                        message.addMessage(Message.Type.SUCCESS, "Cover erfolgreich hochgeladen");
+                        success = true;
+                     }
+                     catch (FileUploadBase.SizeLimitExceededException e ){
+                         req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"));                                 
+                     }
+                     catch (FileUploadException e){ 
+                         req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datei zu groß! maximale Dateigröße: 2MB"));
+                     } 
+                     catch (SQLException e) { 
+                         req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler: " + e.getMessage()));
+                     }
+                     catch (Exception e) { 
+                         req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler beim upload "));
+                     }
+                     finally{
+                         if(success) res.sendRedirect("/UserModule/gameManager?component=coverupload"); 
+                         else req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
+                     }
+                }else{
+                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Fehler : falscher ContentType"));
+                    req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
+                } 
+            }
+            else{
                 req.getRequestDispatcher("/WEB-INF/Pages/Game/coverUpload.jsp").forward(req, res);
-          }
-          catch(Exception e){}  
+            }
     }
     
     @Override

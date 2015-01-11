@@ -29,7 +29,7 @@ import org.apache.commons.fileupload.FileUploadException;
  */
 public class CoverUploadModel {
     
-    public void uploadImage(HttpServletRequest req, Game g) throws FileUploadBase.SizeLimitExceededException, FileUploadException,  Exception{
+    public void uploadImage(HttpServletRequest req, Game g) throws FileUploadBase.SizeLimitExceededException, FileUploadException, SQLException, Exception{
         int width = 500;
         int height = 800;
 
@@ -52,8 +52,6 @@ public class CoverUploadModel {
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET editState='"+state+"' WHERE ID = "+ g.getGameID());  
         }
-        //catch(SQLException e){}
-        //catch(Exception e){}
 
         fileStatus.delete();
     }

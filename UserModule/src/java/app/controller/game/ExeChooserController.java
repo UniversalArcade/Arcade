@@ -8,6 +8,7 @@ import app.model.game.ExeChooserModel;
 
 
 import java.io.*;
+import java.sql.SQLException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -17,44 +18,54 @@ public class ExeChooserController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  try{
-                res.setContentType("text/html");
+            res.setContentType("text/html");
 
-                String action = req.getParameter("action");
-              
-                Game game = (Game) req.getSession().getAttribute("game");
-               
+            String action = req.getParameter("action");
 
-                if( action != null ){
-                    if( action.equals("update") ){
-                        String path = req.getParameter("exePath");
+            Game game = (Game) req.getSession().getAttribute("game");
 
-                        ExeChooserModel model = new ExeChooserModel();
 
-                        if (model.updateExePath(path, game) ){
-                            req.getSession().setAttribute("message", new Message("Exe erfolgreich ausgewählt"));
-                            res.sendRedirect("/UserModule/gameManager?component=exechooser");
+            if( action != null && action.equals("update")){
+                
+                String path = req.getParameter("exePath");
+
+                boolean success = false;
+                try{
+                    ExeChooserModel model = new ExeChooserModel();
+                    model.updateExePath(path, game);
+                    req.getSession().setAttribute("message", new Message("Exe erfolgreich ausgewählt"));
+                    success = true;
+                }
+                catch(SQLException e){
+                    req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                }
+                finally{
+                    if(success) res.sendRedirect("/UserModule/gameManager?component=exechooser");
+                    else req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);
+                }
+            }
+            else{
+               if(game != null){
+
+                   if(game.getEmulationGame() == 1){
+                       res.sendRedirect("/UserModule/gameManager?component=exechooser");
+                   }
+                   else{
+                        try{
+                            ExeChooserModel model = new ExeChooserModel();
+                            game = model.getFileStructureAsJSON(game);
                         }
-                    }
-                }
-                else{
-                   
-                   if(game != null){
-                       
-                       if(game.getEmulationGame() == 1){
-                           res.sendRedirect("/UserModule/gameManager?component=exechooser");
-                       }
-                       else{
-                           System.out.println("Aufruf Model");
-                           ExeChooserModel model = new ExeChooserModel();
-                           game = model.getFileStructureAsJSON(game);
-                           System.out.println("JSON:" + game.getFilePathJSON());
-                       }
-                   }     
-                }
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);
-          }
-          catch(Exception e){}  
+                        catch(SQLException e){
+                            req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                        }
+                        req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);
+                   }
+               }
+               else{
+                   req.getRequestDispatcher("/WEB-INF/Pages/Game/exeChooser.jsp").forward(req, res);
+               }
+               
+            }
     }
     
     @Override

@@ -57,8 +57,10 @@ public class RegistrationModel {
         return c;
     }
 
-    public void activateUser(String URLString) throws IllegalArgumentException, SQLException{
+    public void activateUser(String URLString) throws IllegalArgumentException, SQLException, NullPointerException{
        
+        if(URLString == null || URLString.length() == 0 ) throw new NullPointerException();
+        
         try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT id FROM user WHERE registerActivationString='"+URLString+"' AND isregistred=0"  );            
             if( !rs.next() ) throw new IllegalArgumentException();                            

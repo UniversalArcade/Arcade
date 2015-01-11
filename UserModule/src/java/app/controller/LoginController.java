@@ -27,27 +27,35 @@ public class LoginController extends HttpServlet
             cust.setPassword(SHAPW);
 
             if(cust.getErrors().isEmpty()){
-                LoginModel login = new LoginModel();
-
+                
+                boolean success = false;    
                 try{
+                    LoginModel login = new LoginModel();
                     req.getSession().setAttribute("user", login.login(cust) );
-                    res.sendRedirect("/UserModule/GameListController");
+                    success = true;
                 }
                 catch(IllegalArgumentException e){ 
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "User existiert nicht oder Passwort falsch"));
-                    req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
                 }
                 catch(SecurityException e){
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Ihr Account wurde noch nicht bestätigt. Bitte prüfen Sie Ihre Emails."));
-                    req.setAttribute("customer", cust);
-                    req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
                 }
                 catch(SQLException e){
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
-                    req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
                 }
-            }          
+                finally{
+                    if(success) res.sendRedirect("/UserModule/GameListController");
+                    else{
+                        req.setAttribute("customer", cust);
+                        req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+                    }
+                }
+            }
+            else{
+                req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+            }
        }
+    
      @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {

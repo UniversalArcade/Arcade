@@ -1,5 +1,6 @@
 package app.beans;
 
+import app.exceptions.IllegalButtonCombinationException;
 import java.awt.TrayIcon;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ButtonLayout implements Serializable{
         buttonConfig.add(button);
     }
     
-    public Message testForIllegalCombinations(){
+    public void testForIllegalCombinations() throws IllegalButtonCombinationException{
         setUpIllegalButtonCombinations();
         Message errors = new Message();
         boolean found = false;
@@ -67,9 +68,8 @@ public class ButtonLayout implements Serializable{
         }
         
         if(found){
-            return errors;
+            throw new IllegalButtonCombinationException( errors );
         }
-        return null;
     }
     
     private class IllegalButtonCombo{
