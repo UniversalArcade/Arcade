@@ -1,5 +1,3 @@
-//TODO:  Observer Pattern
-
 package GameProcessor;
 
 import java.io.IOException;

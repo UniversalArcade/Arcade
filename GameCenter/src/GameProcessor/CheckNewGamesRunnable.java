@@ -37,19 +37,15 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
     
     public LinkedList<Integer> getAllGameIDs(){
         
-        SQLHelper sql = new SQLHelper();
         LinkedList<Integer> idList = new LinkedList();
-      
-        sql.openCon();
+        try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1 ORDER BY ID DESC");
-            //String path = "";
-            try {
-                while( rs.next() ){
-                    idList.add( rs.getInt( "ID" ) );
-                }
-            } catch (SQLException ex) {}   
-        sql.closeCon();
-        
+            while( rs.next() ){
+                idList.add( rs.getInt( "ID" ) );
+            }
+        }
+        catch (SQLException ex) {}   
+      
         return idList;
     }
 }

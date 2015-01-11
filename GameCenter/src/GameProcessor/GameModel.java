@@ -7,13 +7,10 @@ import helper.OutPipe;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import org.json.simple.JSONArray;
@@ -27,33 +24,24 @@ public class GameModel implements Observer{
     private Thread executionThread;
     private ControllerCom controllerCom;
     private static final Logger log = Logger.getLogger( GameModel.class.getName() );
-    
     private InPipe inpipe;
-    private OutPipe outPipe;
-    
+    private OutPipe outPipe;    
     private String buttonFuncString;
     
-    SQLHelper sql;
+   
     public GameModel(){
-        
-        
-        sql = new SQLHelper();
-        buttonFuncString = "";
-        //controllerCom = new ControllerCom();
-        
-        
+
+        buttonFuncString = "";        
         inpipe = new InPipe();
         inpipe.addObserver(this);
         Thread inpipeThread = new Thread(inpipe);
         inpipeThread.setDaemon(true);
         inpipeThread.start();
         
-        outPipe = new OutPipe();
-        //outPipe.addObserver(this);
+        outPipe = new OutPipe();        
         Thread outPipeThread = new Thread( outPipe );
         outPipeThread.setDaemon(true);
-        outPipeThread.start();
-        
+        outPipeThread.start();        
     }
     
     public String getGameInfoByID(int gameID){
@@ -63,32 +51,28 @@ public class GameModel implements Observer{
         
         JSONObject data = new JSONObject();
         
-        SQLHelper sql = new SQLHelper();        
-        sql.openCon();
+        try(SQLHelper sql = new SQLHelper()){
+             ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits FROM games WHERE ID='"+gameID+"'");
             
-            ResultSet rs = sql.execQuery("SELECT title,description,buttonConfig,credits FROM games WHERE ID='"+gameID+"'");
-            try {
-                if(rs.next()){
-                    data.put("title", rs.getString("title"));
-                    data.put("description", rs.getString("description"));
-                    data.put("credits", rs.getString("credits"));
-                    
-                    String buttonList = rs.getString("buttonConfig");
+            if(rs.next()){
+                data.put("title", rs.getString("title"));
+                data.put("description", rs.getString("description"));
+                data.put("credits", rs.getString("credits"));
 
-                    JSONArray buttonsArray = new JSONArray();
-                    for(String b : buttonList.split(";")){
-                        buttonsArray.add(b);
-                    } 
+                String buttonList = rs.getString("buttonConfig");
 
-                    data.put("buttonConfig", buttonsArray);                        
-                }
-                else{
-                    //error
-                }
-            } catch (SQLException ex) {}
-           
-        sql.closeCon();
-        
+                JSONArray buttonsArray = new JSONArray();
+                for(String b : buttonList.split(";")){
+                    buttonsArray.add(b);
+                } 
+
+                data.put("buttonConfig", buttonsArray);                        
+            }
+            else{
+                //error
+            }
+        }
+        catch (SQLException ex) {} 
         
         return data.toJSONString();
     }
@@ -97,20 +81,15 @@ public class GameModel implements Observer{
         
         LinkedList<Integer> idList = new LinkedList();
       
-        sql.openCon();
+        try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT ID FROM games WHERE live=1 ORDER BY ID DESC");
-            //String path = "";
-            try {
-                while( rs.next() ){
-                    idList.add( rs.getInt( "ID" ) );
-                }
-            } catch (SQLException ex) {
-                log.log(Level.SEVERE, "no valid resultset", ex);
-            }   
-        sql.closeCon();
+
+            while( rs.next() ){
+                idList.add( rs.getInt( "ID" ) );
+            }
+        }
+        catch (SQLException ex) {} 
         
-        System.out.println("IDLISTE: " + idList);
-       
         return idList;
     }
     
@@ -118,17 +97,15 @@ public class GameModel implements Observer{
         
         HashMap<String,String> map = new HashMap();
         
-        sql.openCon();
+        try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery("SELECT ID, title FROM games WHERE live=1 ORDER BY ID DESC");
-            try {
-                while( rs.next() ){
-                    map.put(String.valueOf(rs.getInt( "ID" )), rs.getString( "title" ));
-                }
-            } catch (SQLException ex) {
-                log.log(Level.SEVERE, "no valid resultset", ex);
-            }   
-        sql.closeCon();
-        
+          
+            while( rs.next() ){
+                map.put(String.valueOf(rs.getInt( "ID" )), rs.getString( "title" ));
+            }
+        }
+        catch (SQLException ex) {} 
+
         return map;
     }
     
@@ -138,11 +115,10 @@ public class GameModel implements Observer{
         int permanentStore = 1;
         
         StringBuilder path = new StringBuilder();
-        sql.openCon();
+        
+        try(SQLHelper sql = new SQLHelper()){
             ResultSet rs = sql.execQuery( "SELECT title, SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig, permanentStore FROM generell, games WHERE games.ID = "+ id );
-            
-            try {
-                if( rs.next() ){
+            if( rs.next() ){
                     buttonLayout = rs.getString("buttonConfig");
                     permanentStore = rs.getInt("permanentStore");
                     path.append( rs.getString( "SpieleRoot" ) );    
@@ -156,72 +132,64 @@ public class GameModel implements Observer{
                         path.append( "/Games/" + id + "/game/" );
                         path.append( rs.getString( "ExecutePath" ) );
                     }
+                    
+                    if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
 
-                    log.info("found path: " + path);
-                }
-            } catch (SQLException ex) {
-                log.log(Level.SEVERE, "no valid resultset", ex);
-            }   
-        sql.closeCon();
-        
-        
-        if(path.length() > 0){ // TODO : bessere validierung (String kann auch nur aus SpieleRoot bestehen)
+                if(gt != null){
+                    System.out.println("NOT NULL!");
 
-            if(gt != null){
-                System.out.println("NOT NULL!");
-                
-                if(gt.getGameID() != id){
-                    killGameThread();
+                    if(gt.getGameID() != id){
+                        killGameThread();
+                    }
+
+                    //if( ! (gt.isAlive()) ){
+                    if( ! (executionThread == null || executionThread.isAlive()) ){
+                        System.out.println("ITS ALIVE!!");
+                         gt = new GameRunnable( path.toString(), permanentStore );
+                         gt.addObserver(this);
+                         gt.setGameID(id);
+                         executionThread = new Thread( gt );
+                         executionThread.start();
+                    }
                 }
-                
-                //if( ! (gt.isAlive()) ){
-                if( ! (executionThread == null || executionThread.isAlive()) ){
-                    System.out.println("ITS ALIVE!!");
+                else{
                      gt = new GameRunnable( path.toString(), permanentStore );
                      gt.addObserver(this);
                      gt.setGameID(id);
                      executionThread = new Thread( gt );
                      executionThread.start();
                 }
-            }
-            else{
-                 gt = new GameRunnable( path.toString(), permanentStore );
-                 gt.addObserver(this);
-                 gt.setGameID(id);
-                 executionThread = new Thread( gt );
-                 executionThread.start();
-            }
-            
-            System.out.println("bLay" + buttonLayout);
-            ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
-            System.out.println("bLay2" + buttons);
 
-            StringBuilder buttonFunc = new StringBuilder();
-            StringBuilder controlmsg = new StringBuilder();
-            controlmsg.append("btSET:");
-            for(HashMap hm: buttons){
-                controlmsg.append(hm.keySet().toArray()[0]);
-                controlmsg.append(",");
-                buttonFunc.append(hm.values().toArray()[0]);
-                buttonFunc.append(",");
-            }
-           
-            String buttonConfig = controlmsg.toString();
-            buttonConfig = buttonConfig.replace("unused", "0");
-            
-            
-            System.out.println("btn3: " + buttonConfig);
-            outPipe.setMessage(buttonConfig);
-            
-            
-            
-            buttonFuncString = buttonFunc.toString();
-            System.out.println("ButtonFunc: " + buttonFunc.toString());
-            
-            // TODO Zeit nehmen beenden
-            // TODO bei return true (task ausgeführt und beendet) : MYSQL update der Aufrufanzahl und Aufrufdauer
-            // TODO return false loggen
-        }    
+                System.out.println("bLay" + buttonLayout);
+                ArrayList<HashMap<String,String>> buttons = (ArrayList<HashMap<String,String>>) JSONValue.parse(buttonLayout);
+                System.out.println("bLay2" + buttons);
+
+                StringBuilder buttonFunc = new StringBuilder();
+                StringBuilder controlmsg = new StringBuilder();
+                controlmsg.append("btSET:");
+                for(HashMap hm: buttons){
+                    controlmsg.append(hm.keySet().toArray()[0]);
+                    controlmsg.append(",");
+                    buttonFunc.append(hm.values().toArray()[0]);
+                    buttonFunc.append(",");
+                }
+
+                String buttonConfig = controlmsg.toString();
+                buttonConfig = buttonConfig.replace("unused", "0");
+
+
+                System.out.println("btn3: " + buttonConfig);
+                outPipe.setMessage(buttonConfig);
+
+
+
+                buttonFuncString = buttonFunc.toString();
+                System.out.println("ButtonFunc: " + buttonFunc.toString());
+
+                }
+            }  
+        }
+        catch (SQLException ex) {}
     }
     
     private void killGameThread()
@@ -274,7 +242,7 @@ public class GameModel implements Observer{
                     //gt.interrupt();
                     killGameThread();
                 }
-                outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                //outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
                 break;
             case("showOverlay"):
                 showOverlay();
