@@ -95,8 +95,12 @@ namespace ArcadeControllerCom
                         switch (split[0])
                         {
                             case "btSET":
-                                processButtonSet(split[1]);
+                                processButtonSet(split[1], "b");
                                    
+                                break;
+                            case "btSETemu":
+                                processButtonSet(split[1], "e");
+
                                 break;
                             default:
                                 break;
@@ -106,7 +110,7 @@ namespace ArcadeControllerCom
             }
         }
 
-        private bool processButtonSet(string input) 
+        private bool processButtonSet(string input, String firstChar) 
         {
             if (!string.IsNullOrEmpty(input))
             {
@@ -114,7 +118,7 @@ namespace ArcadeControllerCom
                 string[] parts = input.Split(',');
 
 
-                string concatCommand = "b";
+                string concatCommand = firstChar;
 
                 foreach(string button in parts)
                 {
