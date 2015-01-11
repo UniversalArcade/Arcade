@@ -43,7 +43,6 @@ public class InPipe extends Observable implements Runnable {
     
     private void processIncomingCommand(String input)
     {
-        System.out.println("INPUT: " + input);
         if(input != null && input.length() > 0)
         {
             String[] parts = input.split(":");
@@ -79,8 +78,6 @@ public class InPipe extends Observable implements Runnable {
 
                                     break;
                                  case("1"):
-                                     System.out.println("SENDE CONNEST");
-                                     
                                      setChanged(); //Observable
                                      notifyObservers("ConnEstablished");                                        
                                      break;

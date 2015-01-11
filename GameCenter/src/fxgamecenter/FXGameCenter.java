@@ -76,8 +76,6 @@ public class FXGameCenter extends Application implements Observer{
         imageSlider.addObserver( bg );
 
         primaryStage.show();
-        
-        
     }
     
 

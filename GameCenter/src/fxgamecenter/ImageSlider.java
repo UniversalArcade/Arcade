@@ -142,8 +142,6 @@ public class ImageSlider extends Observable implements Runnable, Observer{
             t.setText(text);
             t.setFill(color);
             t.setFont(Font.font(null, FontWeight.BOLD, 20));
-            //Bounds b = t.getBoundsInLocal();
-            //System.out.println("bounds:" + b);
             textInfoGroup.getChildren().add(t);
         }
         
