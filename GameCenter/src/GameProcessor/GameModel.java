@@ -113,6 +113,7 @@ public class GameModel extends Observable implements Observer{
         
         String buttonLayout = "";
         int permanentStore = 1;
+        boolean isEmulatorGame = false;
         
         StringBuilder path = new StringBuilder();
         
@@ -121,9 +122,12 @@ public class GameModel extends Observable implements Observer{
             if( rs.next() ){
                     buttonLayout = rs.getString("buttonConfig");
                     permanentStore = rs.getInt("permanentStore");
+                    isEmulatorGame = rs.getBoolean("isEmulatorGame");
+                    
                     path.append( rs.getString( "SpieleRoot" ) );    
                     
-                    if(rs.getBoolean("isEmulatorGame" )){
+                    
+                    if(isEmulatorGame){
                         path.append( "/Mame/MameStarter.exe " );
                         path.append( rs.getString( "title" ) + " ");
                         path.append( id );
@@ -164,7 +168,14 @@ public class GameModel extends Observable implements Observer{
 
                 StringBuilder buttonFunc = new StringBuilder();
                 StringBuilder controlmsg = new StringBuilder();
-                controlmsg.append("btSET:");
+                
+                
+                if(isEmulatorGame){
+                    controlmsg.append("btSETemu:");
+                }                    
+                else{
+                    controlmsg.append("btSET:");
+                }                
                 for(HashMap hm: buttons){
                     controlmsg.append(hm.keySet().toArray()[0]);
                     controlmsg.append(",");
