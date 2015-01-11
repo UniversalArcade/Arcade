@@ -135,17 +135,17 @@ public class GameModel implements Observer{
     public void executeGameByID(int id){
         
         String buttonLayout = "";
+        int permanentStore = 1;
         
         StringBuilder path = new StringBuilder();
         sql.openCon();
-            ResultSet rs = sql.execQuery( "SELECT title, SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig FROM generell, games WHERE games.ID = "+ id );
-            //String path = "";
+            ResultSet rs = sql.execQuery( "SELECT title, SpieleRoot, ExecutePath, isEmulatorGame, buttonConfig, permanentStore FROM generell, games WHERE games.ID = "+ id );
+            
             try {
                 if( rs.next() ){
                     buttonLayout = rs.getString("buttonConfig");
-                    
-                    path.append( rs.getString( "SpieleRoot" ) );
-                     
+                    permanentStore = rs.getInt("permanentStore");
+                    path.append( rs.getString( "SpieleRoot" ) );    
                     
                     if(rs.getBoolean("isEmulatorGame" )){
                         path.append( "/Mame/MameStarter.exe " );
@@ -177,7 +177,7 @@ public class GameModel implements Observer{
                 //if( ! (gt.isAlive()) ){
                 if( ! (executionThread == null || executionThread.isAlive()) ){
                     System.out.println("ITS ALIVE!!");
-                     gt = new GameRunnable( path.toString() );
+                     gt = new GameRunnable( path.toString(), permanentStore );
                      gt.addObserver(this);
                      gt.setGameID(id);
                      executionThread = new Thread( gt );
@@ -185,7 +185,7 @@ public class GameModel implements Observer{
                 }
             }
             else{
-                 gt = new GameRunnable( path.toString() );
+                 gt = new GameRunnable( path.toString(), permanentStore );
                  gt.addObserver(this);
                  gt.setGameID(id);
                  executionThread = new Thread( gt );

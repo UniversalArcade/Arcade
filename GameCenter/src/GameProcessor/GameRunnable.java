@@ -13,17 +13,33 @@ public class GameRunnable extends Observable implements Runnable{
      private boolean processStarted;
      private String executionPath;
      private int gameID;
+     private String permanentStore;
      
-     
-     public GameRunnable( String executionPath ){
+     public GameRunnable( String executionPath, int permanentStore){
          this.executionPath = executionPath;
+         this.setPermanentStore(permanentStore);
+     }
+     
+     private void setPermanentStore(int permanentStore){
+        switch(permanentStore){
+            case 0: 
+                this.permanentStore = "ArcadeStore";
+                break;
+            case 1:
+                this.permanentStore = "ArcadeNonStore";
+                break;
+        }
+     }
+     
+     private String getPermanentStore(){
+         return this.permanentStore;
      }
      
      @Override
      public void run(){
          
         //processStarted = false; 
-        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:ArcadeStore /nosbiectrl /silent");
+        ProcessBuilder builder = new ProcessBuilder("C:/Users/Public/Arcade/starter.exe", executionPath, "/box:"+ getPermanentStore() +" /nosbiectrl /silent");
         try {
             p = builder.start(); // start the Game
             
