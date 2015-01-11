@@ -22,11 +22,6 @@ int buttonPins[BUTTON_SIZE] = {
   19  // Button Menu
 };
 
-
-
-
-
-
 // Debounce all the pins
 
 Bounce buttons[BUTTON_SIZE] = {
@@ -101,6 +96,7 @@ void loop() {
   
       if(enterCount == 30000){
         Serial.println("spFunc:1");
+        releaseAllKeys();
         initStartUpButtonConfig();        
         enterPressed = false;
         enterCount = 0;
@@ -109,7 +105,13 @@ void loop() {
  }
 
 
-
+void releaseAllKeys(){
+    int i;
+    for(i=0; i < BUTTON_SIZE; i = i + 1) // for all buttons do:
+    {  
+      Keyboard.release(buttonFunctions[i]);
+    }
+}
 
 void serialDelegate(){
   if(Serial.available() > 0){
@@ -118,6 +120,7 @@ void serialDelegate(){
       doHandShake();
     }
     else if(firstChar == 'b'){
+      releaseAllKeys();
       serialButtonInput();
     }
   }
