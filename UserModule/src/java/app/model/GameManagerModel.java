@@ -1,6 +1,4 @@
-
 package app.model;
-
 
 import app.beans.Game;
 import app.beans.GameComponents;
@@ -8,9 +6,6 @@ import app.helper.SQLHelper;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
-
 
 public class GameManagerModel {
     
@@ -51,23 +46,19 @@ public class GameManagerModel {
         return game;
     }
     
-    public boolean toggleLive(int toggle, Game g) throws SQLException{
+    public void toggleLive(int toggle, Game g) throws SQLException{
        
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET live = '"+toggle+"' WHERE ID = "+ g.getGameID());
         }
-
-        return true;
     }
     
     
-    public boolean toggleEditMode(int toggle, Game g) throws SQLException{
+    public void toggleEditMode(int toggle, Game g) throws SQLException{
         
         try(SQLHelper sql = new SQLHelper()){
             sql.execNonQuery("UPDATE `games` SET editMode = '"+toggle+"' WHERE ID = "+ g.getGameID());
         }
-
-        return true;
     }        
             
    
