@@ -23,7 +23,7 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
                 Thread.sleep(5000);
                  
                 newIDs = getAllGameIDs();
-                if(!newIDs.equals(oldIDs)){
+                if(newIDs != null && !newIDs.equals(oldIDs)){
                     this.setChanged();
                     this.notifyObservers("ChangedIDs");
                     oldIDs = (LinkedList<Integer>)newIDs.clone();
@@ -41,7 +41,10 @@ public class CheckNewGamesRunnable extends Observable implements Runnable{
                 idList.add( rs.getInt( "ID" ) );
             }
         }
-        catch (SQLException ex) {}   
+        catch (SQLException ex) {
+            this.setChanged();
+            this.notifyObservers("dbConnLost");
+        }   
       
         return idList;
     }

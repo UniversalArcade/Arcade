@@ -101,6 +101,14 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                         }
                     });
                     break;
+                case "dbConnLost":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Warte auf verbindung zur Datenbank...","db_red.png", Color.RED);
+                        }
+                    });
+                    break;
                 case "ConnLost":
                     Platform.runLater(new Runnable(){
                         @Override
@@ -180,77 +188,79 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     }
     
     public void init(){
-        state = State.SLIDER;
-        imagesVisible = 5; // 5
-        //moveAniDuration = 500;
-        enterPressed = false; 
-        imgThresh = 20;
-        imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
-        imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
-        images = new LinkedList();
         
-        moveImagesTransition = new ParallelTransition();
-        //make shure there are enough images to display, if not: fill array with already existing ids
+        if(ids != null && ids.size() > 0){
         
-       
-        
-        
-         
-        moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-                updateElements();
-            }
-        });
-        
-        
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            state = State.SLIDER;
+            imagesVisible = 5; // 5
+            //moveAniDuration = 500;
+            enterPressed = false; 
+            imgThresh = 20;
+            imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
+            imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
+            images = new LinkedList();
 
-            @Override
-            public void handle(KeyEvent key) {
-                
-                if(getMoveAnimationStatus() == Animation.Status.STOPPED){
-                    if(key.getCode() == KeyCode.D){
-                        updateTransition( -1 );
-                    }
-                    else if(key.getCode() == KeyCode.A){
-                        updateTransition( 1 );
-                    }
-                    else if(key.getCode() == KeyCode.ENTER){
-                        if(!enterPressed){
-                            
-                            setChanged();
-                            notifyObservers(2);
-                            
-                            //loadDetailsPage();
-                            gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
-                            //imageSlider.onKeyEnter();
-                            enterPressed = true;
+            moveImagesTransition = new ParallelTransition();
+            //make shure there are enough images to display, if not: fill array with already existing ids
+
+
+
+
+
+            moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+                    updateElements();
+                }
+            });
+
+
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+                @Override
+                public void handle(KeyEvent key) {
+
+                    if(getMoveAnimationStatus() == Animation.Status.STOPPED){
+                        if(key.getCode() == KeyCode.D){
+                            updateTransition( -1 );
+                        }
+                        else if(key.getCode() == KeyCode.A){
+                            updateTransition( 1 );
+                        }
+                        else if(key.getCode() == KeyCode.ENTER){
+                            if(!enterPressed){
+
+                                setChanged();
+                                notifyObservers(2);
+
+                                //loadDetailsPage();
+                                gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
+                                //imageSlider.onKeyEnter();
+                                enterPressed = true;
+                            }
                         }
                     }
                 }
-            }
-        });
-        
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+            });
 
-             @Override
-             public void handle(KeyEvent key) {
-                if(key.getCode() == KeyCode.ENTER){
-                    enterPressed = false;
-                } 
-             }
-        });
-        
-         Platform.runLater(new Runnable(){
-                        @Override
-                        public void run() {
-                            prepareStartUpImages();
-                            prepareTransition();
-                            
-                        }
-                    });
-        
+            scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+                 @Override
+                 public void handle(KeyEvent key) {
+                    if(key.getCode() == KeyCode.ENTER){
+                        enterPressed = false;
+                    } 
+                 }
+            });
+
+             Platform.runLater(new Runnable(){
+                            @Override
+                            public void run() {
+                                prepareStartUpImages();
+                                prepareTransition();
+                            }
+                        });
+        }
     }
     
     private void loadDetailsPage(){
