@@ -6,7 +6,8 @@ int buttonFunctions[BUTTON_SIZE];
 
 boolean enterPressed = false;
 boolean handshaked = false;
-boolean emulatorGame = false;
+boolean emulatorGame = true;
+boolean keysPressable = true;
 int enterCount = 0;
 
 int buttonPins[BUTTON_SIZE] = {
@@ -45,6 +46,7 @@ void setup() {
   Serial.begin(115200);
 }
 
+/* Old Standardlayout 
 void initStartUpButtonConfig(){
   buttonFunctions[0] = KEY_0; // Button 5
   buttonFunctions[1] = KEY_0; // Button 3
@@ -58,6 +60,22 @@ void initStartUpButtonConfig(){
   buttonFunctions[9] = KEY_ENTER; // Button 4
   buttonFunctions[10] = KEY_ESC; // Button Menu  
 }
+*/
+
+void initStartUpButtonConfig(){
+  buttonFunctions[0] = KEY_W; // Button 5
+  buttonFunctions[1] = KEY_S; // Button 3
+  buttonFunctions[2] = KEY_A; // Button 1
+  buttonFunctions[3] = KEY_D; // LEFT
+  buttonFunctions[4] = KEY_J; // Right
+  buttonFunctions[5] = KEY_U; // DOWN
+  buttonFunctions[6] = KEY_K; // UP
+  buttonFunctions[7] = KEY_I; // Button 0
+  buttonFunctions[8] = KEY_L; // Button 2
+  buttonFunctions[9] = KEY_O; // Button 4
+  buttonFunctions[10] = KEY_ESC; // Button Menu  
+}
+
 
 void loop() {
     serialDelegate();
@@ -72,10 +90,12 @@ void loop() {
         }
         else
         {
-          Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode
-          if(emulatorGame){
-            Keyboard.press(KEY_1);
-            Keyboard.press(KEY_5);
+          if(keysPressable){
+            Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode
+            if(emulatorGame){
+              Keyboard.press(KEY_1);
+              Keyboard.press(KEY_5);
+            }
           }
         }
       }
@@ -107,7 +127,7 @@ void loop() {
         Serial.println("spFunc:1");
         releaseAllKeys();
         initStartUpButtonConfig();
-        emulatorGame = false;        
+        emulatorGame = true;        
         enterPressed = false;
         enterCount = 0;
       }
@@ -121,6 +141,8 @@ void releaseAllKeys(){
     {  
       Keyboard.release(buttonFunctions[i]);
     }
+     Keyboard.release(KEY_1);
+     Keyboard.release(KEY_5);
 }
 
 void serialDelegate(){
@@ -130,11 +152,13 @@ void serialDelegate(){
       doHandShake();
     }
     else if(firstChar == 'b'){
+      keysPressable = false;
       releaseAllKeys();
       emulatorGame = false;
       serialButtonInput();
     }
     else if(firstChar == 'e'){
+      keysPressable = false;
       releaseAllKeys();
       emulatorGame = true;
       serialButtonInput();
@@ -195,6 +219,7 @@ void serialButtonInput(){
      }
      Serial.println("");
    }
+   keysPressable = true;
 }
 
 // Pulls up the button pins
