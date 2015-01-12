@@ -152,6 +152,8 @@ public class GameModel extends Observable implements Observer{
                          gt.setGameID(id);
                          executionThread = new Thread( gt );
                          executionThread.start();
+                         setChanged();
+                         notifyObservers("gameStarted");
                     }
                 }
                 else{
@@ -160,6 +162,8 @@ public class GameModel extends Observable implements Observer{
                      gt.setGameID(id);
                      executionThread = new Thread( gt );
                      executionThread.start();
+                     setChanged();
+                     notifyObservers("gameStarted");
                 }
 
                
@@ -238,22 +242,22 @@ public class GameModel extends Observable implements Observer{
         String toDo = (String)arg;
         switch(toDo)
         {
-            case("stopGame"):
-                killOverlay();
-                
+            case("stopGame"):                                
+                killOverlay();                
                 if(gt != null && executionThread != null && executionThread.isAlive()){
-                    //gt.killProcess();
-                    //gt.interrupt();
                     killGameThread();
                 }
-                //outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                setChanged();
+                notifyObservers("focus");
                 break;
             case("showOverlay"):
                 showOverlay();
                 break;
-            case("gameStopped"):
+            case("gameStopped"):                
                 killOverlay();
-                outPipe.setMessage("btSET:0,0,D,A,ENTER,ENTER,ENTER,ENTER,ENTER,ENTER,");
+                outPipe.setMessage("btSETemu:0,0,D,A,J,U,K,I,L,O,");
+                setChanged();
+                notifyObservers("focus");
                 break;
             case("ConnLost"):
                 setChanged();

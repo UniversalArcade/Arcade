@@ -59,7 +59,9 @@ public class ImageSlider extends Observable implements Runnable, Observer{
     private Scene scene;
     private GameModel gameModel;
     private HashMap<String,String> titles;
+    private HashMap<KeyCode,Boolean> keysPressed;
     private String currentTitle;
+    
 
     public ImageSlider(Scene scene, Group group, Group textInfoGroup, Group gameTitleGroup, int moveAniDuration){
         this.scene = scene;
@@ -71,6 +73,12 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         gameModel.addObserver(this);
         this.ids = new LinkedList();
         this.titles = new HashMap();
+        this.keysPressed = new HashMap();
+        keysPressed.put(KeyCode.A,false);
+        keysPressed.put(KeyCode.D,false);
+        keysPressed.put(KeyCode.ENTER,false);
+        
+        
         this.setGameData();
         
         CheckNewGamesRunnable ght = new CheckNewGamesRunnable();
@@ -125,6 +133,17 @@ public class ImageSlider extends Observable implements Runnable, Observer{
                         }
                     });
                     break;
+                case "focus":                    
+                    setChanged();
+                    notifyObservers(3);
+                    keysPressed.replace(KeyCode.ENTER,false);
+                    keysPressed.replace(KeyCode.A,false);
+                    keysPressed.replace(KeyCode.D,false);
+                    break; 
+                case "gameStarted":
+                    setChanged();
+                    notifyObservers(4);
+                    break;  
                 default:
                     break;
             }
@@ -135,7 +154,7 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         textInfoGroup.getChildren().clear();
         
         if(icon != null && icon.length() > 0){
-            ImageView imageView = new ImageView( new Image("file:C:\\Users\\Public\\Arcade\\img\\" + icon,true) );
+            ImageView imageView = new ImageView( new Image("file:img/" + icon,true) );
             imageView.setFitHeight(64); // 500
             imageView.setFitWidth(64);
             imageView.setX(20);
@@ -187,6 +206,17 @@ public class ImageSlider extends Observable implements Runnable, Observer{
         init();
     }
     
+    private void startGame(){
+         
+        if(!keysPressed.get(KeyCode.ENTER)){
+            setChanged();
+            notifyObservers(2);
+
+            gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
+            keysPressed.replace(KeyCode.ENTER, true);
+        }
+    }
+    
     public void init(){
         
         if(ids != null && ids.size() > 0){
@@ -202,64 +232,107 @@ public class ImageSlider extends Observable implements Runnable, Observer{
 
             moveImagesTransition = new ParallelTransition();
             //make shure there are enough images to display, if not: fill array with already existing ids
-
-
-
-
-
+            
             moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event) {
                     updateElements();
                 }
             });
-
-
+            
+           
             scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
                 @Override
                 public void handle(KeyEvent key) {
-
+                    
                     if(getMoveAnimationStatus() == Animation.Status.STOPPED){
-                        if(key.getCode() == KeyCode.D){
+                        
+                        switch(key.getCode()){
+                            case D:
+                                keysPressed.replace(KeyCode.D, true);
+                                break;
+                            case A:
+                                 keysPressed.replace(KeyCode.A, true);
+                                break;
+                            case J: 
+                                startGame();
+                                break;
+                            case U: 
+                                startGame();
+                                break;  
+                            case I: 
+                                startGame();
+                                break;
+                            case K: 
+                                startGame();
+                                break;
+                            case O: 
+                                startGame();
+                                break;
+                            case L: 
+                                startGame();
+                                break;
+                            case ENTER: 
+                                startGame();
+                                break;
+                        }
+                        
+                        if(keysPressed.get(KeyCode.D)){
                             updateTransition( -1 );
                         }
-                        else if(key.getCode() == KeyCode.A){
+                        
+                        if(keysPressed.get(KeyCode.A)){
                             updateTransition( 1 );
-                        }
-                        else if(key.getCode() == KeyCode.ENTER){
-                            if(!enterPressed){
-
-                                setChanged();
-                                notifyObservers(2);
-
-                                //loadDetailsPage();
-                                gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
-                                //imageSlider.onKeyEnter();
-                                enterPressed = true;
-                            }
                         }
                     }
                 }
             });
 
             scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
+                    
                  @Override
                  public void handle(KeyEvent key) {
-                    if(key.getCode() == KeyCode.ENTER){
-                        enterPressed = false;
-                    } 
+
+                    switch(key.getCode()){
+                        case D:
+                            keysPressed.replace(KeyCode.D, false);
+                            break;
+                        case A:
+                            keysPressed.replace(KeyCode.A, false);
+                            break;
+                        case J: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case U: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;  
+                        case I: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case K: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case O: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case L: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case ENTER: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;    
+                    }
                  }
             });
 
-             Platform.runLater(new Runnable(){
-                            @Override
-                            public void run() {
-                                prepareStartUpImages();
-                                prepareTransition();
-                            }
-                        });
+            Platform.runLater(new Runnable(){
+                @Override
+                public void run() {
+                    prepareStartUpImages();
+                    prepareTransition();
+                }
+            });
         }
     }
     
