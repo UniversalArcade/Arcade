@@ -31,8 +31,35 @@ namespace ArcadeControllerCom
             inPipe = new InPipe();
             inPipe.sendMessage += new EventHandler<MessageEventArgs>(OnMessageFromPipe);
 
-            //init();
-            //fileIOtest();
+            this.SizeChanged += new EventHandler(form1_sizeEventHandler);
+            this.Enabled = false;
+
+            init();
+
+        }
+
+        private void form1_sizeEventHandler(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                this.Enabled = false;
+                this.Visible = false;
+            }
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if (!this.IsHandleCreated)
+            {
+                CreateHandle();
+                value = false;
+            }
+            base.SetVisibleCore(value);
+        }
+
+        protected override bool ShowWithoutActivation
+        {
+            get { return true; } // prevents form creation from stealing focus
         }
 
         private void OnMessageFromPipe(object sender, MessageEventArgs e)
@@ -97,12 +124,15 @@ namespace ArcadeControllerCom
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.WindowState = FormWindowState.Minimized;
-            init();
+            //this.WindowState = FormWindowState.Minimized;
+           
+            //init();
         }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            this.Enabled = true;
+            this.Visible = true;
             this.WindowState = FormWindowState.Normal;
         }
 
@@ -112,10 +142,11 @@ namespace ArcadeControllerCom
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
+        {            
             serialCom.RequestStop();
             inPipe.RequestStop();
             outPipe.RequestStop();
+            Environment.Exit(0);
         }
     }
 }

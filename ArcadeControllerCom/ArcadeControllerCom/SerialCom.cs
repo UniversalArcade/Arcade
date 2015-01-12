@@ -208,7 +208,7 @@ namespace ArcadeControllerCom
                         processReturnedButtonConfig(command[1]);
                         break;
                     default:
-                        SendMessageToForm("Error:");
+                        SendMessageToForm("Error: Unbekannte Message: " + data);
                         break;
                 }
 
