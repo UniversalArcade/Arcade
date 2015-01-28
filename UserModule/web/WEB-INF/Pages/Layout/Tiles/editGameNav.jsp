@@ -17,7 +17,7 @@
     <c:if test="${game.inEditMode}">
                 <li>
                     <p>
-                        <a class="${statasticsClass}" href="statistics">Statistik</a>
+                        <a class="${statasticsClass}" href="statistics">Status</a>
                     </p>
                 </li>
      </c:if>

@@ -5,12 +5,13 @@
 <jsp:useBean id="game" class="app.beans.Game" scope="session"/>
 
 <tiles:insert template="../Layout/gameLayout.jsp">
-    <tiles:put name="title" value="Statistiken zu ${game.title}"/> 
-    <tiles:put name="siteName" value="statistics"/> 
+    <tiles:put name="title" value="Status zu ${game.title}"/> 
+    <tiles:put name="siteName" value="Status"/> 
   <tiles:put name="body">
       <p>
           TODO: dein spiel ist live / nicht live (ändern)
-          
+          <input name="liveToggle" type="checkbox"  ${game.life == 1 ? "checked" : "" }/>
+          <c:out value="${game.errors['title']}"/> 
       </p> 
 
     <p>
@@ -20,7 +21,7 @@
         Zeit gespielt: <c:out value="${game.gameDuration}" />
     </p>
 
-    
+     <td colspan="2"><input type="submit" name="send" value="${game.inEditMode ? "bearbeiten" : "weiter"}" />
 
   </tiles:put>
 </tiles:insert>

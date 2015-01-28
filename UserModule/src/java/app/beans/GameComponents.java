@@ -15,7 +15,7 @@ public class GameComponents implements Serializable{
         components.put("coverupload", "Cover");
         components.put("buttonlayout", "Button Layout");
         components.put("gameupload", "Game upload");
-        components.put("exechooser", "Choose exe file");
+        components.put("exechooser", "Choose start file");
     }
     
     public LinkedHashMap<String, String> getComponents() {

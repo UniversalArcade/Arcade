@@ -39,7 +39,12 @@ public class RegistrationController extends HttpServlet
                 boolean PWH =  SecurityHelper.checkPW(nonSHA, nonSHAPW);
                 if(!PWH){
                    cust.addError("mail", "");               
-                   messageObjekt.addMessage(Message.Type.ERROR, "Das eingegeben Passwort stimmt nicht überein.");
+                   messageObjekt.addMessage(Message.Type.ERROR, "Das eingegebene Passwort stimmt nicht überein.");
+                }
+                boolean PWL = SecurityHelper.checkPWCorrect(nonSHA);
+                if(!PWL){
+                   cust.addError("mail", "");               
+                   messageObjekt.addMessage(Message.Type.ERROR, "Das Passwort muss zwischen 8-30 Zeichen lang sein und min 1 Sonderzeichen(!?@#$%^&+=) sowie min 1 Zahl enthalten.");
                 }
                 req.getSession().setAttribute("message",messageObjekt);
                 System.out.println(cust.getErrors());

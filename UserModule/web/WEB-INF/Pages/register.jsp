@@ -32,7 +32,7 @@
                 
              <td width="85%"><input type="password" name="password" value="${customer.password}" size="30"/>
                     <c:out value="${customer.errors['password']}"/>
-                     <a onmouseover="InfoBoxAnzeigen(event,'Das Passwort muss zwischen <br>6-30 Zeichen lang sein und mindestens ein Sonderzeichen und eine Zahl enthalten.',20,-30);"
+                     <a onmouseover="InfoBoxAnzeigen(event,'Das Passwort muss zwischen <br>6-30 Zeichen lang sein und mindestens ein Sonderzeichen(!?@#$%^&+=) und eine Zahl enthalten.',20,-30);"
                    accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
                </td>      
             </tr>

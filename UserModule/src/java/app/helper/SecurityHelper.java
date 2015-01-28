@@ -40,6 +40,15 @@ public class SecurityHelper {
     return "";
     }
     
+    public static boolean checkPWCorrect(String PW){
+      String pattern = "(?=.*[0-9])(?=.*[!?@#$%^&+=])(?=\\S+$).{8,30}";
+      if(PW.matches(pattern)){
+          return true;
+      }
+      else{
+          return false;
+      }
+    }
     
     public static boolean checkPW(String PW, String PWH){
         System.out.println(""+PW + PWH);
