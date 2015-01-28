@@ -16,14 +16,10 @@ import org.json.simple.JSONValue;
 public class Game implements Serializable {
     
     private boolean inEditMode;
-
-    
     private int gameID, permanentStore, emulationGame, gameDuration, gameStarts, life;
-
-    
+    private String title, credits, description, fullFilePath;
 
    
-    private String title, credits, description;
     private JSONArray filePathJSON;
     private HashMap error;
     //private LinkedHashMap buttonLayout;
@@ -42,6 +38,15 @@ public class Game implements Serializable {
         buttonLayout = new ArrayList();
         //error.keySet().to
     }
+    
+    public String getFullFilePath() {
+        return fullFilePath;
+    }
+
+    public void setFullFilePath(String fullFilePath) {
+        this.fullFilePath = fullFilePath;
+    }
+    
     
     public int getLife() {
         return life;
@@ -169,7 +174,10 @@ public class Game implements Serializable {
         this.description = description;
     }
     
-
+    public void addError(String key, String value){
+        error.put(key, value);
+    }
+    
     public HashMap getErrors(){
         return error;
     }

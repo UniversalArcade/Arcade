@@ -9,10 +9,17 @@ import app.beans.Game;
 import app.helper.SQLHelper;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONArray;
 import org.json.*;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -20,7 +27,17 @@ import org.json.*;
  */
 public class ExeChooserModel {
     
-    public boolean updateExePath(String path, Game g){
+    private ArrayList<String> listableFileTypes;
+    
+    public ExeChooserModel(){
+        listableFileTypes = new ArrayList();
+        listableFileTypes.add("exe");
+        listableFileTypes.add("com");
+        listableFileTypes.add("bat");
+        listableFileTypes.add("hta");
+    }
+    
+    public boolean updateExePath(String path, Game g) throws SQLException{
         
         if(path != null && path != ""){
             g.updateState("exechooser", "complete");
@@ -29,22 +46,30 @@ public class ExeChooserModel {
             g.updateState("exechooser", "incomplete");
         }
         String state = g.stateToJSON();
+
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
+        }
         
-        SQLHelper sql = new SQLHelper();
-        
-        sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET executePath = '"+path+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-        sql.closeCon();
-        
-        return success;
+        return true;
     }
     
-    public Game getFileStructureAsJSON(Game g){
+    public Game getFileStructureAsJSON(Game g) throws SQLException{
         JSONArray jsonarr = listfJSON("C:\\Users\\Public\\Arcade\\Games\\" + g.getGameID() + "\\game");
         g.setFilePathJSON(jsonarr);
+        
+        try(SQLHelper sql = new SQLHelper()){
+            ResultSet rs = sql.execQuery("SELECT executePath FROM games WHERE ID = "+ g.getGameID());
+            if(rs.next())
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("file", rs.getString("executePath"));
+                
+                g.setFullFilePath(obj.toJSONString());
+            }
+        }
         return g;
     }
-    
     
     public JSONArray listfJSON(String directoryName) {
         JSONArray files = new JSONArray();
@@ -52,12 +77,16 @@ public class ExeChooserModel {
 
         // get all the files from a directory
         File[] fList = directory.listFiles();
+        
+        
         for (File file : fList) {
             if (file.isFile()) {
-                Map f = new LinkedHashMap();
-                f.put("type", "file");
-                f.put("name", file.getName());
-                files.add(f);
+                if(listableFileTypes.contains( FilenameUtils.getExtension(file.getName()).toLowerCase())){
+                    Map f = new LinkedHashMap();
+                    f.put("type", "file");
+                    f.put("name", file.getName());
+                    files.add(f);
+                }
             } 
             
             else if (file.isDirectory()) {
@@ -65,7 +94,6 @@ public class ExeChooserModel {
                 folder.put("type", "folder");
                 folder.put("name", file.getName());
                 folder.put("child", listfJSON(file.getAbsolutePath()));
-                //folder.put(file.getName(), listfJSON(file.getAbsolutePath()));
                 files.add(folder);
             }
         }

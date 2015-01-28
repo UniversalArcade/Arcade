@@ -11,10 +11,7 @@ public class StatisticsController extends HttpServlet
     public void processRequest(HttpServletRequest req, HttpServletResponse res)
        throws ServletException, IOException
        {
-    	  try{                
-                req.getRequestDispatcher("/WEB-INF/Pages/Game/statistics.jsp").forward(req, res);
-          }
-          catch(Exception e){}  
+            req.getRequestDispatcher("/WEB-INF/Pages/Game/statistics.jsp").forward(req, res);
     }
     
     @Override
@@ -35,9 +32,6 @@ public class StatisticsController extends HttpServlet
             this.processRequest(req,res);
         }
         else{
-            
-            new Message(Message.Type.ERROR, "Kein Zugriff" );
-            
             req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Kein Zugriff" ));
             req.getRequestDispatcher("/login").forward(req, res);
         }  

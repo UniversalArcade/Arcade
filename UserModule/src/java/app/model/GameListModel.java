@@ -13,28 +13,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GameListModel {
-    SQLHelper sql;
     
-    public GameListModel(){
-        sql = new SQLHelper();
-    }
     
-    public GamesList listGames(User u) {
+    public GamesList listGames(User u){
         
         GamesList gl = new GamesList();
         
-        sql.openCon();
-            
+        try(SQLHelper sql = new SQLHelper()){
+        
             ResultSet rs = sql.execQuery("SELECT ID, title FROM games WHERE userID='"+u.getUserID()+"'");
-            try {
-                while(rs.next()){
-                    gl.addGame(rs.getInt("ID"),rs.getString("title"));
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(GameListModel.class.getName()).log(Level.SEVERE, null, ex);
+            while(rs.next()){
+                gl.addGame(rs.getInt("ID"),rs.getString("title"));
             }
-           
-        sql.closeCon();
+        }
+        catch(SQLException e){}
         
         return gl;
         

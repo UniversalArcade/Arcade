@@ -13,10 +13,6 @@ $TopLeftBGy = $iGUIHeight / 2 - $BGHeight / 2
 
 
 $values = StringSplit($CmdLine[1],',')
-;$values = StringSplit("Hoch,Runter,Links,Rechts,1Unten,1Oben,2Unten,2Oben,3Unten,3Oben",',')
-;$values = StringSplit(",,Left,Right,Shoot,Dodge,Atom Bomb,,,",',')
-;$values = StringSplit("Jump,Duck,Left,Right,Shoot,Dodge,Atom Bomb,Blaster,EXPLOSION!,Too long Text",',')
-;$values = StringSplit(",,,,,,,,,",',')
 
 Global $vUser32DLL = DllOpen("User32.dll")
 $tSize = DllStructCreate($tagSIZE)
@@ -52,47 +48,25 @@ $hFormat = _GDIPlus_StringFormatCreate()
 $hFamily = _GDIPlus_FontFamilyCreate("Arial")
 $hFont = _GDIPlus_FontCreate($hFamily, 18)
 $tLayout = _GDIPlus_RectFCreate(0, 0, 0, 0)
-$buttonWhite = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonWhite.png")
-$buttonRed = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonRed.png")
-$buttonGreen = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonGreen.png")
-$buttonYellow = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonYellow.png")
-$buttonInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/ButtonInactive.png")
-$joystick = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Joystick.png")
-$joystickInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/JoystickInactive.png")
-$arrowUp = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
-$arrowDown = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
-$arrowLeft = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
-$arrowRight = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/graphics/Arrow.png")
+$buttonWhite = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/ButtonWhite.png")
+$buttonRed = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/ButtonRed.png")
+$buttonGreen = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/ButtonGreen.png")
+$buttonYellow = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/ButtonYellow.png")
+$buttonInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/ButtonInactive.png")
+$joystick = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/Joystick.png")
+$joystickInactive = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/JoystickInactive.png")
+$arrowUp = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/Arrow.png")
+$arrowDown = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/Arrow.png")
+$arrowLeft = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/Arrow.png")
+$arrowRight = _GDIPlus_BitmapCreateFromFile(@ScriptDir & "/img/Arrow.png")
 
 $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @SEC, $hFont, $tLayout, $hFormat)
-;While Sleep(20)
-	_Erase() ; zum cleanen, da sonst das alte nur übermalt wird, kannst aus lust ja mal weglassen, dan siehst dus
-	;_GDIPlus_GraphicsDrawStringEx($hGraphics, @HOUR & ":" & @MIN & ":" & @SEC, $hFont, $aInfo[0], $hFormat, $hBrush)
-	; hier "malst" du dan alles was du haben willst
 
-	;_GDIPlus_GraphicsFillRect($hGraphics,100,100,200,200,$hBrush)
-	;_GDIPlus_GraphicsFillRect($hGraphics,300,300,200,200,$hBrush)
-	 ;Local $hPen = _GDIPlus_PenCreate(0xFFABCDEF, 4) ;color format AARRGGBB (hex)
-
-
-	;_GDIPlus_GraphicsDrawEllipse($hGraphics, 130, 100, 200, 200, $hPen)
+	_Erase()
 	$thresh = 10;
 	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx-$thresh,$TopLeftBGy-$thresh,$BGWidth+$thresh*2,$BGHeight+$thresh*2,$hBrushBackgroundFrame);
 
 	_GDIPlus_GraphicsFillRect($hGraphics,$TopLeftBGx,$TopLeftBGy,$BGWidth,$BGHeight,$hBrushBackground);
-	;_GDIPlus_DrawImagePoints($hGraphics,$bgWood,$TopLeftBGx,$TopLeftBGy ,$TopLeftBGx + $BGWidth,$TopLeftBGy,$TopLeftBGx,$TopLeftBGy + $BGHeight)
-
-	;_GDIPlus_GraphicsFillEllipse($hGraphics, 200, 200, 200, 200, $hBrush)
-	;_GDIPlus_GraphicsFillEllipse($hGraphics, 500, 500, 200, 200, $hBrush)
-	;_GDIPlus_GraphicsDrawStringEx($hGraphics, @HOUR & ":" & @MIN & ":" & @SEC, $hFont, $aInfo[0], $hFormat, $hBrush)
-	;Top Button Red
-	;_GDIPlus_DrawImagePoints($hGraphics,$buttonRed,100,100,300,100,100,300)
-	;Bottom Button Red
-	;_GDIPlus_DrawImagePoints($hGraphics,$buttonRed,100,100,300,100,100,300)
-
-
-
-
 
 	#Region JOYSTICK
 
@@ -104,7 +78,6 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 	$joystartY = $iGUIHeight / 2  - $joysizeHeight / 2 + 80;
 
 	$joyStickToDisplay = Null
-	;$values[0] != ""
 	If StringLen($values[1]) > 0 Or StringLen($values[2]) > 0 Or StringLen($values[3]) > 0 Or StringLen($values[4]) > 0  Then
 		_GDIPlus_DrawImagePoints($hGraphics,$joystick,$joystartX,$joystartY ,$joystartX + $joysizeWidth,$joystartY,$joystartX,$joystartY + $joysizeHeight)
 
@@ -263,7 +236,7 @@ $aInfo = _GDIPlus_GraphicsMeasureString($hGraphics, @HOUR & ":" & @MIN & ":" & @
 
 
 	_WinAPI_UpdateLayeredWindow($hWnd, $hDC_Window, 0, $pSize, $hDC_Buffer, $pSource, 0, $pBlend, 2) ; immer ganz zum schluss, updatet das dann
-;WEnd
+
 
 while Sleep(20)
 	WEnd

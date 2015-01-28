@@ -4,7 +4,5 @@ If $CmdLine[0] > 0 Then
 	while 1
 		Sleep(1)
 	WEnd
-Else
-    MsgBox(64, "Fehler", "Es wurde kein Spiel als Parameter übergeben")
 EndIf
 

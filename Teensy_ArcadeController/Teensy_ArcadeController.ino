@@ -2,10 +2,12 @@
 
 const int BUTTON_SIZE = 11; // Amount of buttons
 const int DEBOUNCE_TIME = 10; // Amount of time the buttons should take to debounce
-
+int buttonFunctions[BUTTON_SIZE];
 
 boolean enterPressed = false;
 boolean handshaked = false;
+boolean emulatorGame = true;
+boolean keysPressable = true;
 int enterCount = 0;
 
 int buttonPins[BUTTON_SIZE] = {
@@ -22,25 +24,8 @@ int buttonPins[BUTTON_SIZE] = {
   19  // Button Menu
 };
 
-
-// TODO M2 : Build dynamic allocation via serial input
-int buttonFunctions[BUTTON_SIZE] = {
-  KEY_0, // Button 5
-  KEY_0, // Button 3
-  KEY_D, // Button 1
-  KEY_A, // LEFT
-  KEY_ENTER, // Right
-  KEY_ENTER, // DOWN
-  KEY_ENTER, // UP
-  KEY_ENTER, // Button 0
-  KEY_ENTER, // Button 2
-  KEY_ENTER, // Button 4
-  KEY_ESC, // Button Menu
-};
-
-
 // Debounce all the pins
-// TODO M3: build a factory for this
+
 Bounce buttons[BUTTON_SIZE] = {
   Bounce(buttonPins[0], DEBOUNCE_TIME),
   Bounce(buttonPins[1], DEBOUNCE_TIME),
@@ -56,9 +41,41 @@ Bounce buttons[BUTTON_SIZE] = {
 };
 
 void setup() {
+  initStartUpButtonConfig(); 
   initPullups();
   Serial.begin(115200);
 }
+
+/* Old Standardlayout 
+void initStartUpButtonConfig(){
+  buttonFunctions[0] = KEY_0; // Button 5
+  buttonFunctions[1] = KEY_0; // Button 3
+  buttonFunctions[2] = KEY_D; // Button 1
+  buttonFunctions[3] = KEY_A; // LEFT
+  buttonFunctions[4] = KEY_ENTER; // Right
+  buttonFunctions[5] = KEY_ENTER; // DOWN
+  buttonFunctions[6] = KEY_ENTER; // UP
+  buttonFunctions[7] = KEY_ENTER; // Button 0
+  buttonFunctions[8] = KEY_ENTER; // Button 2
+  buttonFunctions[9] = KEY_ENTER; // Button 4
+  buttonFunctions[10] = KEY_ESC; // Button Menu  
+}
+*/
+
+void initStartUpButtonConfig(){
+  buttonFunctions[0] = KEY_W; // Button 5
+  buttonFunctions[1] = KEY_S; // Button 3
+  buttonFunctions[2] = KEY_A; // Button 1
+  buttonFunctions[3] = KEY_D; // LEFT
+  buttonFunctions[4] = KEY_J; // Right
+  buttonFunctions[5] = KEY_U; // DOWN
+  buttonFunctions[6] = KEY_K; // UP
+  buttonFunctions[7] = KEY_I; // Button 0
+  buttonFunctions[8] = KEY_L; // Button 2
+  buttonFunctions[9] = KEY_O; // Button 4
+  buttonFunctions[10] = KEY_ESC; // Button Menu  
+}
+
 
 void loop() {
     serialDelegate();
@@ -73,7 +90,13 @@ void loop() {
         }
         else
         {
-          Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode  
+          if(keysPressable){
+            Keyboard.press(buttonFunctions[i]);     // execute corresponding keycode
+            if(emulatorGame){
+              Keyboard.press(KEY_1);
+              Keyboard.press(KEY_5);
+            }
+          }
         }
       }
       else if (buttons[i].risingEdge()) // when button is released 
@@ -88,7 +111,11 @@ void loop() {
         }
         else
         {
-          Keyboard.release(buttonFunctions[i]);   // release corresponding keycode  
+          Keyboard.release(buttonFunctions[i]);   // release corresponding keycode
+          if(emulatorGame){
+            Keyboard.release(KEY_1);
+            Keyboard.release(KEY_5);
+          }  
         }
       }
     }
@@ -98,12 +125,25 @@ void loop() {
   
       if(enterCount == 30000){
         Serial.println("spFunc:1");
+        releaseAllKeys();
+        initStartUpButtonConfig();
+        emulatorGame = true;        
         enterPressed = false;
         enterCount = 0;
       }
     }
  }
 
+
+void releaseAllKeys(){
+    int i;
+    for(i=0; i < BUTTON_SIZE; i = i + 1) // for all buttons do:
+    {  
+      Keyboard.release(buttonFunctions[i]);
+    }
+     Keyboard.release(KEY_1);
+     Keyboard.release(KEY_5);
+}
 
 void serialDelegate(){
   if(Serial.available() > 0){
@@ -112,6 +152,15 @@ void serialDelegate(){
       doHandShake();
     }
     else if(firstChar == 'b'){
+      keysPressable = false;
+      releaseAllKeys();
+      emulatorGame = false;
+      serialButtonInput();
+    }
+    else if(firstChar == 'e'){
+      keysPressable = false;
+      releaseAllKeys();
+      emulatorGame = true;
       serialButtonInput();
     }
   }
@@ -170,6 +219,7 @@ void serialButtonInput(){
      }
      Serial.println("");
    }
+   keysPressable = true;
 }
 
 // Pulls up the button pins

@@ -7,31 +7,25 @@ import app.beans.User;
 
 import app.helper.SQLHelper;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginModel {
-    SQLHelper sql;
-    
-    public LoginModel(){
-        sql = new SQLHelper();
-    }
-    
-    public User login(Costumer c) throws Exception{
+   
+   
+    public User login(Costumer c) throws SQLException, IllegalArgumentException, SecurityException{
         
         User user = new User();
-        
-        sql.openCon();
-            
-            ResultSet rs = sql.execQuery("SELECT id, userlvl,isregistred FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
-        
-            if(rs.next()){
-                user.setUserID( rs.getInt("id") );
-                user.setUserLvl( rs.getInt("userlvl") );
-                user.setRegistred(rs.getInt("isregistred"));
-                 System.out.println("Registred Status:" + user.getRegistred());
+            try(SQLHelper sql = new SQLHelper()){
+                ResultSet rs = sql.execQuery("SELECT id, userlvl,isregistred FROM user WHERE mail='"+c.getMail()+"' AND password='"+c.getPassword()+"'");
+                if(!rs.next()) throw new IllegalArgumentException();
+                else
+                {
+                    if(rs.getInt("isregistred") == 0) throw new SecurityException();
+                    user.setRegistred(rs.getInt("isregistred"));
+                    user.setUserID( rs.getInt("id") );
+                    user.setUserLvl( rs.getInt("userlvl") );
+                }
             }
-           
-        sql.closeCon();
-        
         return user;
     }
 }
