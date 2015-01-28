@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
  
 public class MailHelper {
     
-	public static void sendMail(String subject, String recipent, String content) {
+	public static void sendMail(String subject, String recipent, String content) throws MessagingException{
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -28,27 +28,20 @@ public class MailHelper {
 					return new PasswordAuthentication("hawarcadestation","Hawarcade22!");
 				}
 			});
- 
-		try {
- 
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("HAWArcadeStation@googlemail.com"));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(recipent));
-			message.setSubject(subject);
-			message.setContent(content, "text/html");
- 
-			Transport.send(message);
- 
-			//System.out.println("Done");
- 
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
+
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress("HAWArcadeStation@googlemail.com"));
+                message.setRecipients(Message.RecipientType.TO,
+                                InternetAddress.parse(recipent));
+                message.setSubject(subject);
+                message.setContent(content, "text/html");
+
+                Transport.send(message);
 	}
         
         public static Boolean checkFormat(String mail){
-            String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@haw-hamburg.de";
+            //String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@haw-hamburg.de";
+            String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@web.de";
             Boolean valid = mail.matches(EMAIL_REGEX);
             return valid;
         }

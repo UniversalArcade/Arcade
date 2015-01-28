@@ -2,23 +2,22 @@ package app.model.game;
 
 import app.beans.Game;
 import app.helper.SQLHelper;
+import java.sql.SQLException;
 
 
 public class ButtonLayoutModel {
     
-     public boolean updateButtonLayout(Game g){
+     public boolean updateButtonLayout(Game g) throws SQLException{
         
         g.updateState("buttonlayout", "complete");
         String state = g.stateToJSON();
         String buttonLayout = g.buttonLayoutToJSON(); 
         
-        
-         SQLHelper sql = new SQLHelper();
-        sql.openCon();
-          boolean success = sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttonLayout+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
-        sql.closeCon();
-        
-        return success;
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("UPDATE `games` SET buttonConfig = '"+buttonLayout+"', editState='"+state+"' WHERE ID = "+ g.getGameID());
+        }
+
+        return true;
     }
     
 }

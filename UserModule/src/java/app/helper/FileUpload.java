@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -28,7 +30,7 @@ public class FileUpload {
         this.tempFolder = tempFolder;
     }
  
-    public File uploadFile(HttpServletRequest req){
+    public File uploadFile(HttpServletRequest req) throws SizeLimitExceededException, FileUploadException, Exception{
         
         File file = null;
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -43,7 +45,7 @@ public class FileUpload {
         // maximum file size to be uploaded.
         upload.setSizeMax( maxFileSize );
       
-        try{ 
+        
             // Parse the request to get file items.
             List fileItems = upload.parseRequest(req);
 
@@ -52,6 +54,7 @@ public class FileUpload {
             //System.out.println("fileUPload filepath: " + filePath);
             while ( i.hasNext() ) {
                FileItem fi = (FileItem)i.next();
+               
                if ( !fi.isFormField() ){
                     // Get the uploaded file parameters
                     String fieldName = fi.getFieldName();
@@ -78,11 +81,7 @@ public class FileUpload {
             
             //fileStatus.setFileName(file.getAbsolutePath());
             //fileStatus.setFilePath(filePath);  
-        }catch(Exception ex) {
-            file = null;
-            //TODO : LOGGER
-            System.out.println(ex);
-        }   
+        
         return file;
     }
 }

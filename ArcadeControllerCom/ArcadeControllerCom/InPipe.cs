@@ -55,26 +55,29 @@ namespace ArcadeControllerCom
             while(!_shouldStop)
             {
                 Thread.Sleep(10);
-                NamedPipeServerStream pipeServer =
+                NamedPipeServerStream inPipe =
                 new NamedPipeServerStream("javaOUTpipe", PipeDirection.InOut, 4);
               
 
-                pipeServer.WaitForConnection();
+                inPipe.WaitForConnection();
 
                 try
                 {
-                    StreamReader sr = new StreamReader(pipeServer);
+                    StreamReader sr = new StreamReader(inPipe);
 
                     string inputFromPipe = sr.ReadLine();
                     processInput(inputFromPipe);
 
-                    pipeServer.Disconnect();
+                    inPipe.Disconnect();
                 }
                 catch (IOException e)
                 {
 
                 }
-                pipeServer.Close();
+                finally {
+                    inPipe.Close();
+                }
+                
             }
 
         }
@@ -92,8 +95,12 @@ namespace ArcadeControllerCom
                         switch (split[0])
                         {
                             case "btSET":
-                                processButtonSet(split[1]);
+                                processButtonSet(split[1], "b");
                                    
+                                break;
+                            case "btSETemu":
+                                processButtonSet(split[1], "e");
+
                                 break;
                             default:
                                 break;
@@ -103,7 +110,7 @@ namespace ArcadeControllerCom
             }
         }
 
-        private bool processButtonSet(string input) 
+        private bool processButtonSet(string input, String firstChar) 
         {
             if (!string.IsNullOrEmpty(input))
             {
@@ -111,7 +118,7 @@ namespace ArcadeControllerCom
                 string[] parts = input.Split(',');
 
 
-                string concatCommand = "b";
+                string concatCommand = firstChar;
 
                 foreach(string button in parts)
                 {

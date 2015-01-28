@@ -64,6 +64,10 @@
         <servlet-name>StatisticsController</servlet-name>
         <servlet-class>app.controller.game.StatisticsController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getImageController</servlet-name>
+        <servlet-class>app.controller.getImageController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GameController</servlet-name>
         <url-pattern>/GameController</url-pattern>
@@ -72,7 +76,7 @@
         <servlet-name>RegistrationController</servlet-name>
         <url-pattern>/RegistrationController</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ProfilController</servlet-name>
         <url-pattern>/ProfilController</url-pattern>
     </servlet-mapping>
@@ -115,6 +119,10 @@
     <servlet-mapping>
         <servlet-name>StatisticsController</servlet-name>
         <url-pattern>/statistics</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getImageController</servlet-name>
+        <url-pattern>/getImage</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

@@ -1,9 +1,12 @@
 
 package fxgamecenter;
 
+import GameProcessor.CheckNewGamesRunnable;
 import GameProcessor.GameModel;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Observer;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -13,8 +16,10 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -23,11 +28,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 
 import javafx.util.Duration;
 
-public class ImageSlider extends Observable implements Runnable{
+public class ImageSlider extends Observable implements Runnable, Observer{
+
     
     public enum State{
         SLIDER, DETAILS
@@ -44,23 +54,151 @@ public class ImageSlider extends Observable implements Runnable{
     private FadeTransition fadeIncoming, fadeOutgoing;
     private TranslateTransition translateTransition, moveSliderGroupToTop;
     private ScaleTransition scaleBigTransition, scaleNormalTransition;
-    
-    private Timeline outerGlowAnimation;
-    private Group imageGroup;
-    
+    private Timeline outerGlowAnimation, titleTimeline;
+    private Group imageGroup, textInfoGroup, gameTitleGroup;
     private Scene scene;
     private GameModel gameModel;
+    private HashMap<String,String> titles;
+    private HashMap<KeyCode,Boolean> keysPressed;
+    private String currentTitle;
     
-    public ImageSlider(Scene scene, Group group, int moveAniDuration, GameModel gameModel){
+
+    public ImageSlider(Scene scene, Group group, Group textInfoGroup, Group gameTitleGroup, int moveAniDuration){
         this.scene = scene;
+        this.textInfoGroup = textInfoGroup;
         this.imageGroup = group;
+        this.gameTitleGroup = gameTitleGroup;
         this.moveAniDuration = moveAniDuration;
-        this.gameModel = gameModel;
+        this.gameModel = new GameModel();
+        gameModel.addObserver(this);
         this.ids = new LinkedList();
+        this.titles = new HashMap();
+        this.keysPressed = new HashMap();
+        keysPressed.put(KeyCode.A,false);
+        keysPressed.put(KeyCode.D,false);
+        keysPressed.put(KeyCode.ENTER,false);
+        
+        
+        this.setGameData();
+        
+        CheckNewGamesRunnable ght = new CheckNewGamesRunnable();
+        ght.addObserver(this);
+        
+        //setTextInfo("Datenbank update","db.png");
+        
+        Thread checkThread = new Thread(ght);
+        checkThread.setDaemon(true);
+        checkThread.start();
+        
+        currentTitle = "";
     }
     
-    public void setGameIds(LinkedList<Integer> idList){
-        ids = idList;
+    @Override
+    public void update(Observable o, Object arg) {
+ 
+        String toDo = (String)arg;
+        if(toDo != null && toDo.length() > 0){
+            switch(toDo){
+                case "ChangedIDs":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setGameData();
+                            init();
+                            setTextInfo("Datenbank update","db.png", Color.YELLOW);
+                        }
+                    });
+                    break;
+                case "dbConnLost":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Warte auf verbindung zur Datenbank...","db_red.png", Color.RED);
+                        }
+                    });
+                    break;
+                case "ConnLost":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Verbindung zum Controller verloren, bitte warten...","joystick_red.png", Color.RED);
+                        }
+                    });
+                    break;
+                case "ConnEstablished":
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run() {
+                            setTextInfo("Verbindung zum Controller hergestellt","joystick_green.png", Color.GREEN);
+                        }
+                    });
+                    break;
+                case "focus":                    
+                    setChanged();
+                    notifyObservers(3);
+                    keysPressed.replace(KeyCode.ENTER,false);
+                    keysPressed.replace(KeyCode.A,false);
+                    keysPressed.replace(KeyCode.D,false);
+                    break; 
+                case "gameStarted":
+                    setChanged();
+                    notifyObservers(4);
+                    break;  
+                default:
+                    break;
+            }
+        }
+    }
+    
+    public void setTextInfo(String text, String icon, Color color){
+        textInfoGroup.getChildren().clear();
+        
+        if(icon != null && icon.length() > 0){
+            ImageView imageView = new ImageView( new Image("file:img/" + icon,true) );
+            imageView.setFitHeight(64); // 500
+            imageView.setFitWidth(64);
+            imageView.setX(20);
+            imageView.setY(20);
+            textInfoGroup.getChildren().add(imageView);
+        }
+        
+        if(text != null && text.length() > 0){
+            Text t = new Text();
+            t.setX(64 + 20 + 20);
+            t.setY(20 + 40);
+            t.setText(text);
+            t.setFill(color);
+            t.setFont(Font.font(null, FontWeight.BOLD, 20));
+            textInfoGroup.getChildren().add(t);
+        }
+        
+        Timeline fade = new Timeline(); 
+        fade.getKeyFrames().addAll(
+            new KeyFrame(Duration.ZERO, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FadeTransition fadeText = new FadeTransition(Duration.millis(2000), textInfoGroup);
+                    fadeText.setFromValue(0.0f);
+                    fadeText.setToValue(1.0f);
+                    fadeText.play();
+                }  
+            }),
+            new KeyFrame(Duration.seconds(10), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FadeTransition fadeText = new FadeTransition(Duration.millis(2000), textInfoGroup);
+                    fadeText.setFromValue(1.0f);
+                    fadeText.setToValue(0.0f);
+                    fadeText.play();
+                }  
+            })    
+        );
+        fade.play();
+    }
+
+    public void setGameData(){
+        ids = gameModel.getAllGameIDs();
+        titles = gameModel.getAllGameTitles(); 
     }
     
     @Override
@@ -68,82 +206,134 @@ public class ImageSlider extends Observable implements Runnable{
         init();
     }
     
+    private void startGame(){
+         
+        if(!keysPressed.get(KeyCode.ENTER)){
+            setChanged();
+            notifyObservers(2);
+
+            gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
+            keysPressed.replace(KeyCode.ENTER, true);
+        }
+    }
+    
     public void init(){
         
+        if(ids != null && ids.size() > 0){
         
-        state = State.SLIDER;
-        imagesVisible = 5; // 5
-        //moveAniDuration = 500;
-        enterPressed = false; 
-        imgThresh = 20;
-        imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
-        imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
-        images = new LinkedList();
-        
-        //ids = gameModel.getAllGameIDs();
-        //ids = new LinkedList();
-        /*
-        for(int i=5; i>0; i--){
-            ids.add(i);
-        }
-        */
-        //ids.add(7);
-        
-        //ids.add(214);
-        //ids.add(215);
-        //ids.add(4);
-        //ids.add(3);
-        //ids.add(2);
-        //ids.add(1);
-        
-        moveImagesTransition = new ParallelTransition();
-        //make shure there are enough images to display, if not: fill array with already existing ids
-        this.prepareStartUpImages();
-        this.prepareTransition();
-         
-        moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-                updateElements();
-            }
-        });
-        
-        
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            state = State.SLIDER;
+            imagesVisible = 5; // 5
+            //moveAniDuration = 500;
+            enterPressed = false; 
+            imgThresh = 20;
+            imgSizeX = (scene.getWidth() - (imagesVisible-1) * imgThresh) / imagesVisible;
+            imgSizeY = (imgSizeX / origImageSize[0]) * origImageSize[1] ; // 350 bei 3
+            images = new LinkedList();
 
-            @Override
-            public void handle(KeyEvent key) {
-                
-                if(getMoveAnimationStatus() == Animation.Status.STOPPED){
-                    if(key.getCode() == KeyCode.D){
-                        updateTransition( -1 );
-                    }
-                    else if(key.getCode() == KeyCode.A){
-                        updateTransition( 1 );
-                    }
-                    else if(key.getCode() == KeyCode.ENTER){
-                        if(!enterPressed){
-                            //loadDetailsPage();
-                            gameModel.executeGameByID( ids.get( (int)(ids.size()/2) ));
-                            System.out.println("ID : " + ids.get( (int)(ids.size()/2) ));
-                            //imageSlider.onKeyEnter();
-                            enterPressed = true;
+            moveImagesTransition = new ParallelTransition();
+            //make shure there are enough images to display, if not: fill array with already existing ids
+            
+            moveImagesTransition.setOnFinished(new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+                    updateElements();
+                }
+            });
+            
+           
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+                @Override
+                public void handle(KeyEvent key) {
+                    
+                    if(getMoveAnimationStatus() == Animation.Status.STOPPED){
+                        
+                        switch(key.getCode()){
+                            case D:
+                                keysPressed.replace(KeyCode.D, true);
+                                break;
+                            case A:
+                                 keysPressed.replace(KeyCode.A, true);
+                                break;
+                            case J: 
+                                startGame();
+                                break;
+                            case U: 
+                                startGame();
+                                break;  
+                            case I: 
+                                startGame();
+                                break;
+                            case K: 
+                                startGame();
+                                break;
+                            case O: 
+                                startGame();
+                                break;
+                            case L: 
+                                startGame();
+                                break;
+                            case ENTER: 
+                                startGame();
+                                break;
+                        }
+                        
+                        if(keysPressed.get(KeyCode.D)){
+                            updateTransition( -1 );
+                        }
+                        
+                        if(keysPressed.get(KeyCode.A)){
+                            updateTransition( 1 );
                         }
                     }
                 }
-            }
-        });
-        
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+            });
 
-             @Override
-             public void handle(KeyEvent key) {
-                if(key.getCode() == KeyCode.ENTER){
-                    enterPressed = false;
-                } 
-             }
-        });
-        
+            scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+                    
+                 @Override
+                 public void handle(KeyEvent key) {
+
+                    switch(key.getCode()){
+                        case D:
+                            keysPressed.replace(KeyCode.D, false);
+                            break;
+                        case A:
+                            keysPressed.replace(KeyCode.A, false);
+                            break;
+                        case J: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case U: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;  
+                        case I: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case K: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case O: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case L: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;
+                        case ENTER: 
+                            keysPressed.replace(KeyCode.ENTER, false);
+                            break;    
+                    }
+                 }
+            });
+
+            Platform.runLater(new Runnable(){
+                @Override
+                public void run() {
+                    prepareStartUpImages();
+                    prepareTransition();
+                }
+            });
+        }
     }
     
     private void loadDetailsPage(){
@@ -157,6 +347,8 @@ public class ImageSlider extends Observable implements Runnable{
     }
     
     public void prepareStartUpImages(){
+        
+        imageGroup.getChildren().clear();
         
         int toAdd = imagesVisible + 2 - ids.size();
         
@@ -217,10 +409,46 @@ public class ImageSlider extends Observable implements Runnable{
         
         ids = tmp;
         tmp = null;
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                updateTitle(titles.get( String.valueOf(ids.get( (int)(ids.size() / 2))) ));
+            }
+        });
+    }
+    
+    private void updateTitle(String newText){
+            
+            
+            Timeline fade = new Timeline(); 
+            fade.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO, new KeyValue(gameTitleGroup.opacityProperty(), 1.0)),
+                new KeyFrame(Duration.millis(moveAniDuration / 2), new KeyValue(gameTitleGroup.opacityProperty(), 0.0)),
+                new KeyFrame(Duration.millis(moveAniDuration / 2), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        gameTitleGroup.getChildren().clear();
+                        
+                        String text = newText;
+                        Text t = new Text();
+                        t.setText(text);
+                        t.setFill(Color.YELLOW);
+                        t.setFont(Font.font("Karmatic Arcade", FontWeight.NORMAL, 50));
+                        Bounds textBounds = t.getBoundsInLocal();
+
+                        t.setX(scene.getWidth() / 2 - textBounds.getWidth() / 2);
+                        t.setY(scene.getHeight() - 100);
+                        gameTitleGroup.getChildren().add(t);
+                    }  
+                }),
+                new KeyFrame(Duration.millis(moveAniDuration + 200), new KeyValue(gameTitleGroup.opacityProperty(), 1.0))
+            );
+            fade.play();
     }
     
     public Image loadImageFromID(int id){
-       // image, backgroundloading
+        //image, backgroundloading
         //return new Image("file:pics/G" + id + ".jpg",true);
         return new Image("file:C:\\Users\\Public\\Arcade\\Games\\" + id + "\\assets\\" + id + ".jpg",true);
         
@@ -233,6 +461,7 @@ public class ImageSlider extends Observable implements Runnable{
         moveSliderGroupToTop.setInterpolator(Interpolator.EASE_BOTH);
         
         outerGlowAnimation = new Timeline();
+        titleTimeline = new Timeline();
         
         translateTransition = new TranslateTransition(Duration.millis(moveAniDuration), imageGroup);
         translateTransition.setFromX(0);   
@@ -276,12 +505,12 @@ public class ImageSlider extends Observable implements Runnable{
                 
                 fadeIncoming.setNode(images.getFirst());
                 fadeOutgoing.setNode(images.get(images.size()-2));
-                
+                updateTitle( titles.get( String.valueOf(ids.get( (int)(ids.size() / 2) - 1)) ) );
                 nextCenter = images.get( (int)(images.size() / 2) -1 );
             }
             else{
                 translateTransition.setToX( imgSizeX * -1 + imgThresh * -1 );
-                
+                updateTitle( titles.get( String.valueOf(ids.get( (int)(ids.size() / 2) + 1)) ) );
                 fadeIncoming.setNode(images.getLast());
                 fadeOutgoing.setNode(images.get(1));
                 
@@ -314,7 +543,7 @@ public class ImageSlider extends Observable implements Runnable{
                     new KeyValue(nowBlurEffect.widthProperty(), 0)
                 )
             );
-            moveImagesTransition.play();           
+            moveImagesTransition.play();
     }
     
     public Animation.Status getMoveAnimationStatus(){
@@ -352,9 +581,6 @@ public class ImageSlider extends Observable implements Runnable{
         newImage.setCache(true);
         newImage.setCacheHint(CacheHint.SPEED);
         imageGroup.setTranslateX(0);
+        
     }
-    
-    
-    
-    
 }
