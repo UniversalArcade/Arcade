@@ -24,28 +24,36 @@ public class LoginController extends HttpServlet
             String nonSHA = req.getParameter("password");
             String SHAPW = SecurityHelper.getSHAHash(nonSHA);
 
-            cust.setPassword(SHAPW);
+            
 
             if(cust.getErrors().isEmpty()){
                 
                 boolean success = false;    
                 try{
+                   
                     LoginModel login = new LoginModel();
+                    cust.setPassword(SHAPW);
                     req.getSession().setAttribute("user", login.login(cust) );
+                    
                     success = true;
+                    
                 }
                 catch(IllegalArgumentException e){ 
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "User existiert nicht oder Passwort falsch"));
+                    
                 }
                 catch(SecurityException e){
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Ihr Account wurde noch nicht bestätigt. Bitte prüfen Sie Ihre Emails."));
+                    
                 }
                 catch(SQLException e){
                     req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                    
                 }
                 finally{
                     if(success) res.sendRedirect("/UserModule/GameListController");
                     else{
+                        cust.setPassword(nonSHA);
                         req.setAttribute("customer", cust);
                         req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
                     }
@@ -53,6 +61,7 @@ public class LoginController extends HttpServlet
             }
             else{
                 req.getRequestDispatcher("/WEB-INF/Pages/login.jsp").forward(req, res);
+                
             }
        }
     
