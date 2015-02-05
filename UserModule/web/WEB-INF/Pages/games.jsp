@@ -11,9 +11,10 @@
         <span style="font-weight:bold; font-size:100%">Spieleverwaltung</span>
     </p>  
     <form method="POST" action="GameListController">
+      <input type="hidden" name="delete" value="update"/>
         <table width="100%" border="0" cellspacing="1" cellpadding="3">  
+          <td><b>Titel</b></td> <td><b>Status On-/Offline</b></td> <td><b>Löschen</b></td>  
             
-            <td><b>Titel</b></td> <td><b>Status On-/Offline</b></td> <td><b>Löschen</b></td>
                 
             <c:forEach var="item" items="${gamesList.games}">           
               <c:choose>  
@@ -22,12 +23,14 @@
                     <p>
                         <tr>
                     <td><a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </td>
-                    </a> <td><img src="img/green.png" width="10" height="10"/></td><td> <input type="submit" name="send " value="löschen" /> </td></tr>
+                    </a> <td><img src="img/green.png" width="10" height="10"/></td><td> <input type="submit" name=${item.gameID} value="löschen" /> </td></tr>
                  </p>
                 </c:when> 
                 <c:otherwise>
                 <p>
-                     <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a> <img src="img/red.png" width="10" height="10"/> <input type="submit" name="send " value="löschen" /> 
+                     <tr>
+                    <td><a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </td>
+                    </a> <td><img src="img/red.png" width="10" height="10"/></td><td> <input type="submit" name=${item.gameID} value="löschen" /> </td></tr>
                  </p>
                 </c:otherwise>
               </c:choose>  

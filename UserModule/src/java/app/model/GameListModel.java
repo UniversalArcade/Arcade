@@ -3,6 +3,7 @@
 package app.model;
 
 
+import app.beans.Game;
 import app.beans.User;
 import app.beans.GamesList;
 
@@ -31,8 +32,11 @@ public class GameListModel {
         return gl;
         
     }
-    
-    public void deleteGame(){
-        
+
+    public void deleteGame(Game g) throws SQLException{
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("DELETE FROM games WHERE ID = "+ g.getGameID());
+        }
     }
+    
 }

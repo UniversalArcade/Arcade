@@ -1,6 +1,7 @@
 
 package app.controller;
 
+import app.beans.Game;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +12,10 @@ import app.beans.GamesList;
 import app.beans.Message;
 import app.helper.Permission;
 import app.model.GameListModel;
+import java.sql.SQLException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 
 
@@ -18,11 +23,20 @@ public class GameListController extends HttpServlet{
 
     
     protected void processRequest(HttpServletRequest req, HttpServletResponse res) 
-            throws ServletException, IOException{
+            throws ServletException, IOException, SQLException{
     
         res.setContentType("text/html");
                 RequestDispatcher view;    
-             
+        
+        String action = req.getParameter("löschen"); 
+        
+          if(action != null && action.equals("löschen")){
+            
+            GameListModel gameListModel = new GameListModel();
+            Game game = (Game)req.getSession().getAttribute("game");
+            gameListModel.deleteGame(game);
+          }    
+        
         User u = (User)req.getSession().getAttribute("user");
             
         GamesList bgl;
@@ -59,7 +73,11 @@ public class GameListController extends HttpServlet{
         Permission permission = new Permission();
         
         if(permission.isValid(req, "user") >= 0){
-            this.processRequest(req,res);
+            try {
+                this.processRequest(req,res);
+            } catch (SQLException ex) {
+                Logger.getLogger(GameListController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else{
             req.getSession().setAttribute("message", new Message(Message.Type.ERROR,"Kein Zugriff"));

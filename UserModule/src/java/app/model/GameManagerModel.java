@@ -62,8 +62,10 @@ public class GameManagerModel {
     }        
             
    
-    public void deleteGame(){
-    
+    public void deleteGame(Game g) throws SQLException{
+        try(SQLHelper sql = new SQLHelper()){
+            sql.execNonQuery("DELETE FROM 'games' WHERE ID = "+ g.getGameID());
+        }
     }
     
     public Game getGameByID(int gameID, int userID) throws SQLException, IllegalArgumentException{
