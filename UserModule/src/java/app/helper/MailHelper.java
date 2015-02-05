@@ -40,8 +40,8 @@ public class MailHelper {
 	}
         
         public static Boolean checkFormat(String mail){
-            //String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@haw-hamburg.de";
-            String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@web.de";
+            String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@haw-hamburg.de";
+            
             Boolean valid = mail.matches(EMAIL_REGEX);
             return valid;
         }

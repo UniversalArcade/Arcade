@@ -6,14 +6,14 @@
 <jsp:useBean id="customer" class="app.beans.Costumer" scope="request"/>
 
 <tiles:insert template="Layout/layout.jsp">
-  <tiles:put name="title" value="registrieren"/>
+  <tiles:put name="title" value="Registrieren"/>
   <tiles:put name="body">
 
 <c:choose>
     <c:when test="${!customer.registrationComplete}">
 
     <p>
-        Registrieren
+        <b> Registrieren </b>
     </p>
 
     <form method="POST" action="RegistrationController">

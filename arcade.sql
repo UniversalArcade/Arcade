@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.6
+-- version 4.2.7.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 15. Dez 2014 um 10:56
--- Server Version: 5.6.16
--- PHP-Version: 5.5.9
+-- Erstellungszeit: 05. Feb 2015 um 16:00
+-- Server Version: 5.6.20
+-- PHP-Version: 5.5.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `games` (
-  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'games id',
+`ID` int(11) unsigned NOT NULL COMMENT 'games id',
   `userID` int(11) unsigned NOT NULL COMMENT 'Id für den Uploader',
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'No Title' COMMENT 'Feld fuer Spielename',
   `executePath` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -40,23 +40,8 @@ CREATE TABLE IF NOT EXISTS `games` (
   `live` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `isEmulatorGame` tinyint(1) unsigned DEFAULT '0',
   `editMode` tinyint(1) unsigned DEFAULT '0',
-  `editState` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=291 ;
-
---
--- Daten für Tabelle `games`
---
-
-INSERT INTO `games` (`ID`, `userID`, `title`, `executePath`, `gameStarts`, `gameDuration`, `description`, `buttonConfig`, `credits`, `permanentStore`, `live`, `isEmulatorGame`, `editMode`, `editState`) VALUES
-(214, 4, 'SpieleID 214', 'putty.exe', 0, 0, 'bescheret', '[{"ENTER":"eins"},{"SHIFT":"zwei"},{"FOO":"drei"},{"Left click":"vier"},{"right click":"funf"},{"ENTER":"sechs"},{"SHIFT":"sieben"},{"FOO":"acht"},{"Left click":"neun"},{"right click":"zehn"}]', 'mitwitt', 0, 1, 0, 0, NULL),
-(215, 4, 'SpieleID 215', 'defender', 0, 0, '123', '[{"ENTER":"eins"},{"SHIFT":"zwei"},{"FOO":"drei"},{"Left click":"vier"},{"right click":"funf"},{"ENTER":"sechs"},{"SHIFT":"sieben"},{"FOO":"acht"},{"Left click":"neun"},{"right click":"zehn"}]', '123', 0, 1, 1, 0, NULL),
-(287, 77, 'Justice League', '/putty.exe', 0, 0, '', '[{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', '', 1, 1, 0, 1, '{"buttonlayout":"complete","gameupload":"complete","details":"complete","exechooser":"complete","coverupload":"complete"}'),
-(288, 77, 'Batman Begins', '/putty.exe', 0, 0, '', '[{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', '', 1, 1, 0, 1, '{"buttonlayout":"complete","gameupload":"complete","details":"complete","exechooser":"complete","coverupload":"complete"}'),
-(289, 77, 'Lord of the Rings', '/putty.exe', 0, 0, '', '[{"ENTER":"Dance"},{"SHIFT":"DANCE harder"},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', '', 1, 1, 0, 1, '{"buttonlayout":"complete","gameupload":"complete","details":"complete","exechooser":"complete","coverupload":"complete"}'),
-(290, 77, 'Lego', '/putty.exe', 0, 0, '', '[{"ENTER":"Brick1"},{"SHIFT":"Brick2"},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', '', 1, 1, 0, 1, '{"buttonlayout":"complete","gameupload":"complete","details":"complete","exechooser":"complete","coverupload":"complete"}'),
-(285, 77, 'GTA', '/putty.exe', 0, 0, '', '[{"ENTER":"Jump"},{"SHIFT":"duck"},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', '', 1, 1, 0, 1, '{"buttonlayout":"complete","gameupload":"complete","details":"complete","exechooser":"complete","coverupload":"complete"}'),
-(286, 77, 'No Title', NULL, 0, 0, NULL, '[{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""},{"unused":""}]', NULL, 0, 0, 0, 0, '{"buttonlayout":"incomplete","gameupload":"incomplete","details":"incomplete","exechooser":"incomplete","coverupload":"incomplete"}');
+  `editState` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=326 ;
 
 -- --------------------------------------------------------
 
@@ -65,8 +50,7 @@ INSERT INTO `games` (`ID`, `userID`, `title`, `executePath`, `gameStarts`, `game
 --
 
 CREATE TABLE IF NOT EXISTS `generell` (
-  `Spieleroot` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Root Ordner Games',
-  PRIMARY KEY (`Spieleroot`)
+  `Spieleroot` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Root Ordner Games'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -86,21 +70,48 @@ CREATE TABLE IF NOT EXISTS `user` (
   `mail` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `salt` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+`id` int(11) unsigned NOT NULL,
   `isregistred` tinyint(1) DEFAULT '0',
   `userlvl` int(3) unsigned NOT NULL DEFAULT '100',
-  `registerActivationString` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=78 ;
+  `registerActivationString` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=103 ;
 
 --
--- Daten für Tabelle `user`
+-- Indexes for dumped tables
 --
 
-INSERT INTO `user` (`mail`, `password`, `salt`, `id`, `isregistred`, `userlvl`, `registerActivationString`) VALUES
-('123', '123', '', 77, 1, 100, NULL),
-('hh-amburg1985@web.de', '123123', '1234', 61, 1, 100, '376194023270423');
+--
+-- Indexes for table `games`
+--
+ALTER TABLE `games`
+ ADD PRIMARY KEY (`ID`);
 
+--
+-- Indexes for table `generell`
+--
+ALTER TABLE `generell`
+ ADD PRIMARY KEY (`Spieleroot`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `games`
+--
+ALTER TABLE `games`
+MODIFY `ID` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'games id',AUTO_INCREMENT=326;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=103;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
