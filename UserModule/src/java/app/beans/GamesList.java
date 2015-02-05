@@ -27,17 +27,26 @@ public class GamesList implements Serializable{
         return games;
      }
     
-    public void addGame(int gameID, String title){
-        games.add( new Game(gameID,title) );
+    public void addGame(int gameID, String title,int live){
+        games.add( new Game(gameID,title,live) );
     }
     
     public class Game{
         private int gameID;
         private String title;
+        private int live;
 
-        public Game(int gameID, String title){
+        public Game(int gameID, String title,int live){
             this.setGameID(gameID);
             this.setTitle(title);
+            this.setLive(live);
+        }
+        public int getLive() {
+            return live;
+        }
+
+        public void setLive(int live) {
+            this.live = live;
         }
         
         public int getGameID() {

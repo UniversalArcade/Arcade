@@ -21,9 +21,9 @@ public class GameListModel {
         
         try(SQLHelper sql = new SQLHelper()){
         
-            ResultSet rs = sql.execQuery("SELECT ID, title FROM games WHERE userID='"+u.getUserID()+"'");
+            ResultSet rs = sql.execQuery("SELECT ID, title ,live FROM games WHERE userID='"+u.getUserID()+"'");
             while(rs.next()){
-                gl.addGame(rs.getInt("ID"),rs.getString("title"));
+                gl.addGame(rs.getInt("ID"),rs.getString("title"),rs.getInt("live"));
             }
         }
         catch(SQLException e){}

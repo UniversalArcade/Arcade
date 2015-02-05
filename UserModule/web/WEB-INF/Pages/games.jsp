@@ -12,11 +12,26 @@
     </p>  
     <form method="POST" action="GameListController">
         <table width="100%" border="0" cellspacing="1" cellpadding="3">  
-
-            <c:forEach var="item" items="${gamesList.games}">
-                 <p>
-                     <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a> LIVE <input type="submit" name="send " value="löschen" /> 
+            
+            <td><b>Titel</b></td> <td><b>Status On-/Offline</b></td> <td><b>Löschen</b></td>
+                
+            <c:forEach var="item" items="${gamesList.games}">           
+              <c:choose>  
+                  
+                <c:when test="${item.live == '1'}">
+                    <p>
+                        <tr>
+                    <td><a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </td>
+                    </a> <td><img src="img/green.png" width="10" height="10"/></td><td> <input type="submit" name="send " value="löschen" /> </td></tr>
                  </p>
+                </c:when> 
+                <c:otherwise>
+                <p>
+                     <a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </a> <img src="img/red.png" width="10" height="10"/> <input type="submit" name="send " value="löschen" /> 
+                 </p>
+                </c:otherwise>
+              </c:choose>  
+                 
             </c:forEach>     
             
 

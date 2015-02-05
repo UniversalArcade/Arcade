@@ -31,6 +31,7 @@ public class Game implements Serializable {
     public Game() {
         error = new HashMap();
         this.setPermanentStore(1);
+        this.setLife(1);
         this.setEmulationGame(0);
         this.setInEditMode(false);
         states = new LinkedHashMap();
