@@ -23,15 +23,17 @@
                     <p>
                         <tr>
                     <td><a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </td>
-                    </a> <td><img src="img/green.png" width="10" height="10"/></td><td> <input type="submit" name=${item.gameID} value="löschen" /> </td></tr>
+                    </a> <td><img src="img/green.png" width="10" height="10"/></td><td> <a href="gameManager?action=delete&gameID=${item.gameID}"><img src="img/garbage.png" width="30" height="30"> </td></tr>
                  </p>
                 </c:when> 
                 <c:otherwise>
                 <p>
                      <tr>
                     <td><a href="gameManager?action=edit&gameID=${item.gameID}"> <c:out value="${item.title}" /> </td>
-                    </a> <td><img src="img/red.png" width="10" height="10"/></td><td> <input type="submit" name=${item.gameID} value="löschen" /> </td></tr>
-                 </p>
+                    </a> <td><img src="img/red.png" width="10" height="10"/></td><td> <a href="gameManager?action=delete&gameID=${item.gameID}"><img src="img/garbage.png" width="30" height="30"></a>  </td></tr>
+                
+                
+                </p>
                 </c:otherwise>
               </c:choose>  
                  

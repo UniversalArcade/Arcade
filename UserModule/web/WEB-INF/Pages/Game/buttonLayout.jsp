@@ -10,7 +10,7 @@
   <tiles:put name="body">
 
          <p>
-                Schritt 4 : Buttonlayout erstellen
+                Schritt 3 : Buttonlayout erstellen
                  <a onmouseover="InfoBoxAnzeigen(event,'Legen Sie hier die Tastenbelegung Ihres Spiels fest. <br>Sie müssen nicht alle Tasten belegen, aber mindestens eine Taste muss eine Funktion besitzen. Nicht erlaubt sind vom System belegte Kombination wie ALT+TAB oder ALT+ENTER usw. Auch nicht gestattet ist das belegen der F1-F12 Tasten.',20,-30);"
                    accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
          </p>

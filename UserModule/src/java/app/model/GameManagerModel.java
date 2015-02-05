@@ -62,9 +62,9 @@ public class GameManagerModel {
     }        
             
    
-    public void deleteGame(Game g) throws SQLException{
+   public void deleteGame(Game g) throws SQLException{
         try(SQLHelper sql = new SQLHelper()){
-            sql.execNonQuery("DELETE FROM 'games' WHERE ID = "+ g.getGameID());
+            sql.execNonQuery("DELETE FROM games WHERE ID = "+ g.getGameID());
         }
     }
     

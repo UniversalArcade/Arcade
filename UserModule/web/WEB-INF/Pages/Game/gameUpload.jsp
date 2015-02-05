@@ -25,7 +25,7 @@
   <tiles:put name="body">
 
          <p>
-           Schritt 1 : Spiel hochladen
+           Schritt 4 : Spiel hochladen
               <a onmouseover="InfoBoxAnzeigen(event,'Wählen Sie hier Ihre Spieledaten aus. Sie müssen gepackt in einer .zip vorliegen und ausgewählt werden.',20,-30);"
               accesskey="" onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
          </p>

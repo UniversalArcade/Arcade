@@ -26,11 +26,12 @@ public class StatisticsController extends HttpServlet
              if(togglebox != null){
                 if(togglebox.equals("on")){
                     game.setLife(1);
-                   
+                    req.getSession().setAttribute("message", new Message(Message.Type.SUCCESS, "Spiel erfolgreich online gestellt."));
                 }
             }
             else {
-                    game.setLife(0);                
+                    game.setLife(0);  
+                    req.getSession().setAttribute("message", new Message(Message.Type.SUCCESS, "Spiel erfolgreich offline gestellt."));
             }
              statModel.toggleLife(req, game);   
           

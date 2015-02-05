@@ -28,14 +28,7 @@ public class GameListController extends HttpServlet{
         res.setContentType("text/html");
                 RequestDispatcher view;    
         
-        String action = req.getParameter("löschen"); 
-        
-          if(action != null && action.equals("löschen")){
-            
-            GameListModel gameListModel = new GameListModel();
-            Game game = (Game)req.getSession().getAttribute("game");
-            gameListModel.deleteGame(game);
-          }    
+      
         
         User u = (User)req.getSession().getAttribute("user");
             

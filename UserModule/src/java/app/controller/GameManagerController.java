@@ -93,7 +93,28 @@ public class GameManagerController extends HttpServlet
                     finally{
                         res.sendRedirect(redirect);
                     }
-                    break;   
+                    break;  
+                case"delete":
+                    redirect = "/UserModule/GameListController";
+                     
+                    try{
+                        int gameID = Integer.parseInt( (String)req.getParameter("gameID") );
+                        GameManagerModel model = new GameManagerModel();
+                        Game game = model.getGameByID(gameID, user.getUserID());
+                        
+                        req.getSession().setAttribute("game", game);
+                        model.deleteGame(game);
+                        
+                    
+                     }
+                     catch(SQLException e){
+                        req.getSession().setAttribute("message", new Message(Message.Type.ERROR, "Datenbankfehler " + e.getMessage()));
+                    }
+                     finally{
+                        req.getSession().setAttribute("message", new Message(Message.Type.SUCCESS, "Spiel erfolgreich gelöscht."));
+                        res.sendRedirect(redirect);
+                    }
+                break;
             }
         }
 
