@@ -8,10 +8,14 @@
     <tiles:put name="title" value="Status zu ${game.title}"/> 
     <tiles:put name="siteName" value="Status"/> 
   <tiles:put name="body">
+    <form method="POST" action="statistics">
+        <input type="hidden" name="toggle" value="update"/>
       <p>
-          TODO: dein spiel ist live / nicht live (ändern)
+          Spiel online/offline stellen
           <input name="liveToggle" type="checkbox"  ${game.life == 1 ? "checked" : "" }/>
-          <c:out value="${game.errors['title']}"/> 
+          
+          <c:out value="${game.errors['title']}"/> <a onmouseover="InfoBoxAnzeigen(event,'Hier können Sie einstellen, ob Ihr Spiel im Frontend dargestellt wird oder nicht.Haken gesetzt bedeute Online.',20,-30);"
+                   accesskey=""onmouseout="InfoBoxAusblenden();" href="javascript:void(0)">?</a>
       </p> 
 
     <p>
